@@ -16,5 +16,21 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Common\Interfaces\DAOs\IArrangementRepository.cs" />
+    <Compile Remove="Common\Interfaces\DAOs\IArrangementTypeRepository.cs" />
+    <Compile Remove="Common\Interfaces\DAOs\IArrangementVariantRepository.cs" />
+    <Compile Remove="Common\Interfaces\DAOs\IBaseRepository.cs" />
+    <Compile Remove="Common\Interfaces\DAOs\ITagRepository.cs" />
+    <Compile Remove="Services\ArrangementVariantService.cs" />
+    <Compile Remove="Services\ArrangementTypeService.cs" />
+    <Compile Remove="Services\ArrangementService.cs" />
+    <Compile Remove="Services\TagService.cs" />
+    <Compile Remove="Validators\ArrangementVariantValidator.cs" />
+    <Compile Remove="Validators\ArrangementValidator.cs" />
+    <Compile Remove="Validators\ArrangementTypeValidator.cs" />
+    <Compile Remove="Validators\TagValidator.cs" />
+  </ItemGroup>
+
 
 </Project>
