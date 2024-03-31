@@ -35,3 +35,54 @@ The template includes [EditorConfig](https://editorconfig.org/) support to help 
 
 ## License
 This project is licensed with the [MIT license](LICENSE).
+
+---
+
+## Branch and Commit Conventions
+
+### Branch Naming Convention:
+- Each branch corresponds to a user history, and the branch name should follow the format:
+  ```
+  PBI-IDENTIFIER-UH-IDENTIFIER
+  ```
+  Example: `PBI-ADM-US01`
+
+- The branches should branch off from the `develop` branch.
+
+### Commit Message Convention:
+- Each commit message should follow the format:
+  ```
+  feat(PBI-IDENTIFIER-UH-IDENTIFIER-TICKETNUMBER): Description of the commit
+  ```
+  Example: `feat(PBI-ADM-US01-01): Implement DAO for administrators`
+
+### Pull Requests (PR):
+- After completing the work related to a ticket, create a Pull Request (PR) from the corresponding branch to `develop`.
+- PR title should briefly describe the changes made.
+- Include a description in the PR explaining the purpose of the changes and any relevant information.
+- Assign reviewers to the PR to ensure code quality and adherence to standards.
+- Once the PR is approved and any necessary changes are made, merge it into `develop`.
+
+### Example Workflow:
+1. **Create a New Ticket Branch:**
+   ```
+   git checkout -b PBI-ADM-US01
+   ```
+
+2. **Work on the Ticket:**
+   Make changes, add commits, and push the branch to the remote repository.
+
+3. **Create a Pull Request:**
+   - Title: Implement DAO for administrators
+   - Description: This PR implements the Data Access Object (DAO) for handling administrative tasks.
+   - Assign reviewers and wait for feedback.
+
+4. **Merge Pull Request:**
+   Once the PR is approved and any requested changes are made, merge it into `develop`.
+
+### Additional Guidelines:
+- Follow the Single Responsibility Principle (SRP) when making commits. Each commit should represent a single logical change.
+- Use clear and descriptive commit messages to provide context and aid in understanding the changes made.
+- Keep commits small and focused to facilitate code review and future maintenance.
+
+By following these conventions, we ensure consistency and traceability in our branching and commit practices, making it easier to manage and collaborate on the project.
