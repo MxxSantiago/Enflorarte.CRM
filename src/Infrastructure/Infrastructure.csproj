@@ -19,5 +19,13 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Dommon\Models\BaseRepository.cs" />
+    <Compile Remove="Data\Dommon\Models\ArrangementVariantConfiguration.cs" />
+    <Compile Remove="Data\Dommon\Models\ArrangementTypeRepository.cs" />
+    <Compile Remove="Data\Dommon\Models\ArrangementRepository.cs" />
+    <Compile Remove="Data\Dommon\Models\TagRepository.cs" />
+  </ItemGroup>
+
 
 </Project>
