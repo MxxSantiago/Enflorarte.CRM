@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Enflorarte.CRM.Application.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Enflorarte.CRM.Application;
@@ -10,6 +11,8 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        services.AddFluentValidationAutoValidation();
+        
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         services.AddScoped<BranchService>();
