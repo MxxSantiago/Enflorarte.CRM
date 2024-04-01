@@ -10,18 +10,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-    public DbSet<Arrangement> Arrangement => Set<Arrangement>();
-    public DbSet<ArrangementType> ArrangementType => Set<ArrangementType>();
-    public DbSet<ArrangementVariant> ArrangementVariant => Set<ArrangementVariant>();
     public DbSet<Branch> Branch => Set<Branch>();
     public DbSet<Client> Client => Set<Client>();
     public DbSet<CommunicationType> CommunicationType => Set<CommunicationType>();
     public DbSet<DeliveryType> DeliveryType => Set<DeliveryType>();
     public DbSet<Flower> Flower => Set<Flower>();
     public DbSet<FlowerVariant> FlowerVariant => Set<FlowerVariant>();
-    public DbSet<Order> Order => Set<Order>();
     public DbSet<Responsible> Responsible => Set<Responsible>();
-    public DbSet<Tag> Tag => Set<Tag>();
     public DbSet<Wrapper> Wrapper => Set<Wrapper>();
     public DbSet<WrapperVariant> WrapperVariant => Set<WrapperVariant>();
 
