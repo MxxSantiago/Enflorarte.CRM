@@ -3,9 +3,10 @@ using Enflorarte.CRM.Infrastructure.Data;
 using Enflorarte.CRM.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Enflorarte.CRM.Application.Common.Interfaces.DAOs;
+using Enflorarte.CRM.Infrastructure.Data.Dommon.Models;
 
 namespace Enflorarte.CRM.Infrastructure;
 
@@ -31,5 +32,15 @@ public static class DependencyInjection
         services.AddTransient<IIdentityService, IdentityService>();
         
         services.AddAuthorization();
+        
+        services.AddScoped<IBranchDAO, BranchDAO>();
+        services.AddScoped<IDeliveryTypeDAO, DeliveryTypeDAO>();
+        services.AddScoped<IWrapperDAO, WrapperDAO>();
+        services.AddScoped<IWrapperVariantDAO, WrapperVariantDAO>();
+        services.AddScoped<IFlowerDAO, FlowerDAO>();
+        services.AddScoped<IFlowerVariantDAO, FlowerVariantDAO>();
+        services.AddScoped<IClientDAO, ClientDAO>();
+        services.AddScoped<ICommunicationTypeDAO, CommunicationTypeDAO>();
+        services.AddScoped<IResponsibleDAO, ResponsibleDAO>();
     }
 }
