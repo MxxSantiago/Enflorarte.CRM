@@ -1,7 +1,9 @@
 import React from "react";
 
-export const Home = () => (
+const Home = () => (
   <div>
     <h1>Hello, world!</h1>
   </div>
 );
+
+export { Home };
