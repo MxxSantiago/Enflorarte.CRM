@@ -1555,7 +1555,12 @@
                 "format": "int32"
               },
               "flower": {
-                "$ref": "#/components/schemas/Flower"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Flower"
+                  }
+                ]
               }
             }
           }
@@ -1597,7 +1602,12 @@
                 "format": "int32"
               },
               "wrapper": {
-                "$ref": "#/components/schemas/Wrapper"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Wrapper"
+                  }
+                ]
               }
             }
           }

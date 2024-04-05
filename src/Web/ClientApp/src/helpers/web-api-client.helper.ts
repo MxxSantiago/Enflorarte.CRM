@@ -37,28 +37,39 @@ function selectClient(entityName: string) {
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
 
-interface masterEntityCreateArgs {
-  name: string;
+export async function getAllEntities(entityName: string) {
+  const result = await executeCrudMethod(entityName, "GetAll");
+  result.forEach((entity) => removeReferenceIdProperties(entity));
+  return result;
 }
 
-interface variantEntityCreateArgs {
-  masterId: number;
-  name: string;
+export function removeReferenceIdProperties(payload: any) {
+  const idProperties = Object.keys(payload)
+    .filter((key) => key.indexOf("Id") !== -1 && key !== "id")
+    .map((key) => key.replace("Id", ""));
+
+  Object.entries(payload).forEach(([key]) => {
+    if (idProperties.includes(key)) {
+      delete payload[key];
+    }
+  });
+
+  return payload;
 }
 
-interface masterEntityUpdateArgs {
-  id: number;
-  name: string;
-}
-
-interface variantEntityUpdateArgs {
-  id: number;
-  masterId: number;
-  name: string;
-}
-
-export function getAllEntities(entityName: string) {
-  return executeCrudMethod(entityName, "GetAll");
+export function createEntityPayload(properties: any) {
+  const payload = {
+    ...Object.entries(properties).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        [key]: key.toLowerCase().indexOf("id") !== -1 ? Number(value) : value,
+      }),
+      {}
+    ),
+    id: 0,
+  };
+  removeReferenceIdProperties(payload);
+  return payload;
 }
 
 export function getEntity(entityName: string, id: number) {
@@ -73,23 +84,15 @@ export function updateEntity(entityName: string, args: any) {
   switch (entityName) {
     case "branch":
     case "client":
-    case "communication":
+    case "communicationType":
     case "deliveryType":
     case "responsible":
     case "wrapper":
     case "flower":
-      return executeCrudMethod(
-        entityName,
-        "Put",
-        args as masterEntityUpdateArgs
-      );
+      return executeCrudMethod(entityName, "Put", args);
     case "flowerVariant":
     case "wrapperVariant":
-      return executeCrudMethod(
-        entityName,
-        "Put",
-        args as variantEntityUpdateArgs
-      );
+      return executeCrudMethod(entityName, "Put", args);
     default:
       throw new Error("Invalid entity name");
   }
@@ -104,18 +107,10 @@ export function createEntity(entityName: string, args: any) {
     case "responsible":
     case "wrapper":
     case "flower":
-      return executeCrudMethod(
-        entityName,
-        "Post",
-        args as masterEntityCreateArgs
-      );
+      return executeCrudMethod(entityName, "Post", args);
     case "flowerVariant":
     case "wrapperVariant":
-      return executeCrudMethod(
-        entityName,
-        "Post",
-        args as variantEntityCreateArgs
-      );
+      return executeCrudMethod(entityName, "Post", args);
     default:
       console.log(entityName);
       throw new Error("Invalid entity name");
@@ -130,7 +125,7 @@ async function executeCrudMethod(
   const client = selectClient(entityName);
   if (typeof client[entityName + "_" + methodName] === "function") {
     if (methodName === "Put") {
-      const { id, ...rest } = args[0];
+      const { id } = args[0];
       return await client[entityName + "_" + methodName](id, ...args);
     }
     return await client[entityName + "_" + methodName](...args);

@@ -1,22 +1,32 @@
 import { Box } from "@chakra-ui/react";
-import { NavMenu } from "./NavMenu";
+import Header from "./Header";
 import Sidebar from "./Sidebar";
+import {
+  headerDesktopHeight,
+  headerMobileHeight,
+  sidebarDesktopWidth,
+  sidebarMobileWidth,
+} from "../constants.ts";
 
 const Layout = ({ children }) => (
   <Box
     display="grid"
-    gridTemplateColumns="auto 1fr"
-    gridTemplateRows="auto"
-    gridTemplateAreas='"sidebar main"'
+    gridTemplateColumns={{
+      base: `${sidebarMobileWidth} calc(100vw - ${sidebarMobileWidth})`,
+      md: `${sidebarDesktopWidth} calc(100vw - ${sidebarDesktopWidth})`,
+    }}
     height="100vh"
-    overflow="hidden"
+    width="100vw"
     userSelect="none"
   >
     <Sidebar />
     <Box>
-      <NavMenu />
+      <Header />
       <Box
-        height={{ base: "calc(100vh - 4rem)", md: "calc(100vh - 6rem)" }}
+        height={{
+          base: `calc(100vh - ${headerMobileHeight})`,
+          md: `calc(100vh - ${headerDesktopHeight})`,
+        }}
         gridArea="main"
         overflowY="auto"
         overflowX="hidden"

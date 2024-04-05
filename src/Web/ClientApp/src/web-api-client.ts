@@ -2168,7 +2168,7 @@ export interface IFlower extends ILookupEntity {
 
 export class FlowerVariant extends LookupEntity implements IFlowerVariant {
     flowerId?: number;
-    flower?: Flower;
+    flower?: Flower | undefined;
 
     constructor(data?: IFlowerVariant) {
         super(data);
@@ -2200,7 +2200,7 @@ export class FlowerVariant extends LookupEntity implements IFlowerVariant {
 
 export interface IFlowerVariant extends ILookupEntity {
     flowerId?: number;
-    flower?: Flower;
+    flower?: Flower | undefined;
 }
 
 export class Responsible extends LookupEntity implements IResponsible {
@@ -2259,7 +2259,7 @@ export interface IWrapper extends ILookupEntity {
 
 export class WrapperVariant extends LookupEntity implements IWrapperVariant {
     wrapperId?: number;
-    wrapper?: Wrapper;
+    wrapper?: Wrapper | undefined;
 
     constructor(data?: IWrapperVariant) {
         super(data);
@@ -2291,7 +2291,7 @@ export class WrapperVariant extends LookupEntity implements IWrapperVariant {
 
 export interface IWrapperVariant extends ILookupEntity {
     wrapperId?: number;
-    wrapper?: Wrapper;
+    wrapper?: Wrapper | undefined;
 }
 
 export interface FileResponse {

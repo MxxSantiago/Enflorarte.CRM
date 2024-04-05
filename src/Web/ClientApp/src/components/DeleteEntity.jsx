@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { deleteEntity } from "../helpers/selectClient.ts";
+import { deleteEntity } from "../helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -7,20 +7,41 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useRef } from "react";
+import { primaryColor, secondaryColor } from "../constants.ts";
 
-function DeleteEntity({ entityName, entity }) {
+function DeleteEntity({ entityName, entity, refreshView }) {
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
-  const handleDelete = async () => await deleteEntity(entityName, entity.id);
+  const handleDelete = async () => {
+    try {
+      await deleteEntity(entityName, entity.id);
+      toast({
+        title: `${entityName} eliminado correctamente`,
+        status: "success",
+        isClosable: true,
+        position: "bottom-right",
+      });
+    } catch (error) {
+      toast({
+        title: error.message,
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
+    }
+    refreshView();
+  };
 
   return (
     <>
       <Button
-        bg="#9B2C2C"
+        bg={secondaryColor}
         _hover={{ bg: "#822727" }}
         color="white"
         onClick={onOpen}
@@ -48,7 +69,7 @@ function DeleteEntity({ entityName, entity }) {
               </Button>
               <Button
                 ml={3}
-                bg="#FC8181"
+                bg={primaryColor}
                 _hover={{ bg: "#f36868" }}
                 color="white"
                 onClick={handleDelete}

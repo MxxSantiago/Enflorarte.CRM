@@ -1,12 +1,15 @@
 import EntityView from "./components/EntityView.jsx";
+import EntityWithVariantView from "./components/EntityWithVariantView.jsx";
 import {
   Branch,
   Client,
   CommunicationType,
   DeliveryType,
   Flower,
+  FlowerVariant,
   Responsible,
   Wrapper,
+  WrapperVariant,
 } from "./web-api-client.ts";
 
 const AppRoutes = [
@@ -14,7 +17,7 @@ const AppRoutes = [
     index: true,
     element: (
       <EntityView
-        titulo="Crear Nueva Sucursal"
+        title="Crear Nueva Sucursal"
         entityName="branch"
         entity={new Branch().toJSON()}
       />
@@ -24,7 +27,7 @@ const AppRoutes = [
     path: "/Sucursal",
     element: (
       <EntityView
-        titulo="Crear Nueva Sucursal"
+        title="Crear Nueva Sucursal"
         entityName="branch"
         entity={new Branch().toJSON()}
       />
@@ -34,7 +37,7 @@ const AppRoutes = [
     path: "/TipoEntrega",
     element: (
       <EntityView
-        titulo="Crear Tipo de Entrega"
+        title="Crear Tipo de Entrega"
         entityName="deliveryType"
         entity={new DeliveryType().toJSON()}
       />
@@ -44,7 +47,7 @@ const AppRoutes = [
     path: "/TipoComunicacion",
     element: (
       <EntityView
-        titulo="Crear Tipo de Comunicación"
+        title="Crear Tipo de Comunicación"
         entityName="communicationType"
         entity={new CommunicationType().toJSON()}
       />
@@ -54,7 +57,7 @@ const AppRoutes = [
     path: "/Responsable",
     element: (
       <EntityView
-        titulo="Crear Nuevo Responsable"
+        title="Crear Nuevo Responsable"
         entityName="responsible"
         entity={new Responsible().toJSON()}
       />
@@ -64,7 +67,7 @@ const AppRoutes = [
     path: "/Cliente",
     element: (
       <EntityView
-        titulo="Crear Nuevo Cliente"
+        title="Crear Nuevo Cliente"
         entityName="client"
         entity={new Client().toJSON()}
       />
@@ -73,20 +76,26 @@ const AppRoutes = [
   {
     path: "/Envolturas",
     element: (
-      <EntityView
-        titulo="Crear Nueva Envoltura"
+      <EntityWithVariantView
+        title="Crear Nueva Envoltura"
+        variantTitle="Crear Nueva Variante"
         entityName="wrapper"
+        variantName="wrapperVariant"
         entity={new Wrapper().toJSON()}
+        variant={new WrapperVariant().toJSON()}
       />
     ),
   },
   {
     path: "/Flor",
     element: (
-      <EntityView
-        titulo="Crear Nueva Flor"
+      <EntityWithVariantView
+        title="Crear Nueva Flor"
+        variantTitle="Crear Nueva Variante"
         entityName="flower"
+        variantName="flowerVariant"
         entity={new Flower().toJSON()}
+        variant={new FlowerVariant().toJSON()}
       />
     ),
   },

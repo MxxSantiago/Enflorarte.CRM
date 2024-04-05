@@ -1,31 +1,70 @@
 import { useState, Fragment, useEffect } from "react";
-import { Box, Heading, Input, Button, VStack, Card } from "@chakra-ui/react";
-import { createEntity } from "../helpers/selectClient.ts";
+import {
+  Box,
+  Heading,
+  Input,
+  Button,
+  VStack,
+  Card,
+  useToast,
+} from "@chakra-ui/react";
+import {
+  createEntity,
+  createEntityPayload,
+} from "../helpers/web-api-client.helper.ts";
+import { primaryColor } from "../constants.ts";
 
-function CreateEntity({ titulo, entityName, entity }) {
+function CreateEntity({ title, entityName, entity, refreshView }) {
+  const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
 
   useEffect(() => setProperties({ ...entity }), [entity]);
 
-  const handleCreate = async () => await createEntity(entityName, properties);
+  const handleCreate = async (event) => {
+    event.preventDefault();
+
+    try {
+      await createEntity(entityName, createEntityPayload(properties));
+      toast({
+        title: `${entityName} creado correctamente`,
+        status: "success",
+        isClosable: true,
+        position: "bottom-right",
+      });
+      setProperties({ ...entity });
+      refreshView();
+    } catch (error) {
+      toast({
+        title: error.message,
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
+    }
+  };
+
+  const isDisabled = () =>
+    Object.entries(properties)
+      .filter(([key]) => key !== "id")
+      .some(([, value]) => value == null || value.trim() === "");
 
   return (
     <Card
-      bg="white"
-      borderRadius="md"
+      as="form"
+      borderRadius="lg"
       p={4}
-      height={{ base: "auto" }}
-      width={{ base: "100%", md: "550px" }}
+      height="100%"
       display="flex"
-      alignItems="center"
+      maxW={{ base: "100%", md: "700px" }}
     >
       <Heading
         mt={0}
         mb={2}
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="bold"
+        textAlign="center"
       >
-        {titulo}
+        {title}
       </Heading>
       <VStack spacing={10}>
         <Box mb={4} display="flex" flexDirection="column">
@@ -33,13 +72,13 @@ function CreateEntity({ titulo, entityName, entity }) {
             .filter((property) => property !== "id")
             .map((property) => (
               <Fragment key={property + entity.id}>
-                <Box mb={2} mt={7} display="flex">
-                  <label htmlFor={property}>{property}</label>
+                <Box mb={1} mt={5} display="flex">
+                  <label htmlFor={property}>{property}:</label>
                 </Box>
                 <Input
                   id={property}
                   size={{ base: "md", md: "lg" }}
-                  width={{ base: "100%", md: "400px" }}
+                  value={properties[property] ?? ""}
                   onChange={(e) =>
                     setProperties({
                       ...properties,
@@ -51,11 +90,13 @@ function CreateEntity({ titulo, entityName, entity }) {
             ))}
         </Box>
         <Button
-          bg="#FC8181"
+          bg={primaryColor}
           _hover={{ bg: "#f36868" }}
           color="white"
           size={{ base: "sm", md: "md" }}
           onClick={handleCreate}
+          type="submit"
+          isDisabled={isDisabled()}
         >
           Agregar
         </Button>

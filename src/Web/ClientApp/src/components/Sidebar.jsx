@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Button, Divider, Image, Stack } from "@chakra-ui/react";
+import { Box, Flex, Button, Image, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import logo from "../assets/LogoFloreria.png";
 import {
@@ -11,64 +11,73 @@ import {
 } from "react-icons/fi";
 import { IoFlowerOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa6";
+import {
+  sidebarDesktopWidth,
+  sidebarMobileWidth,
+  tertiaryColor,
+} from "../constants.ts";
 
 const adminRoutes = [
   {
     name: "Sucursales",
     route: "/Sucursal",
-    icono: <FiHome />,
+    icon: <FiHome />,
   },
   {
     name: "Tipo de Entrega",
     route: "/TipoEntrega",
-    icono: <FiPackage />,
+    icon: <FiPackage />,
   },
   {
     name: "Envolturas",
     route: "/Envolturas",
-    icono: <FiGift />,
+    icon: <FiGift />,
   },
   {
     name: "Flores",
     route: "/Flor",
-    icono: <IoFlowerOutline />,
+    icon: <IoFlowerOutline />,
   },
   {
     name: "Clientes",
     route: "/Cliente",
-    icono: <FaRegUser />,
+    icon: <FaRegUser />,
   },
   {
     name: "Comunicación",
     route: "/TipoComunicacion",
-    icono: <FiPhone />,
+    icon: <FiPhone />,
   },
   {
     name: "Responsables",
     route: "/Responsable",
-    icono: <FiUserCheck />,
+    icon: <FiUserCheck />,
   },
 ];
 
 const Sidebar = () => (
-  <Box bg="red.100" h="100vh" p={4} width={{ base: "60px", md: "180px" }}>
-    <Flex align="center" mb={8} justify="center">
-      <Image src={logo} alt="Logo" boxSize={{ base: "35px", md: "100px" }} />
+  <Box
+    bg={tertiaryColor}
+    h="100vh"
+    py={4}
+    width={{ base: sidebarMobileWidth, md: sidebarDesktopWidth }}
+  >
+    <Flex align="center" mb={12} justify="center">
+      <Image src={logo} boxSize="60%" />
     </Flex>
-    <Divider mb={4} />
-    <Stack spacing={6} align="center">
-      {adminRoutes.map(({ name, route, icono }) => (
+    <Stack spacing={6}>
+      {adminRoutes.map(({ name, route, icon }) => (
         <Button
           key={name}
           width="100%"
           as={Link}
           to={route}
+          borderRadius={0}
           variant="ghost"
-          color="black"
-          leftIcon={icono}
+          leftIcon={icon}
           _hover={{ bg: "red.200", color: "black" }}
           display="flex"
-          justifyContent="flex-start"
+          justifyContent={{ base: "center", md: "flex-start" }}
         >
           <Box fontSize="14px" display={{ base: "none", md: "block" }}>
             {name}
