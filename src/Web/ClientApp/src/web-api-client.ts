@@ -2035,7 +2035,7 @@ export class Client extends BaseEntity implements IClient {
     preferredAddress?: string;
     phoneNumber?: string;
     preferredCommunicationTypeId?: number;
-    preferredCommunicationType?: CommunicationType;
+    preferredCommunicationType?: CommunicationType | undefined;
 
     constructor(data?: IClient) {
         super(data);
@@ -2076,7 +2076,7 @@ export interface IClient extends IBaseEntity {
     preferredAddress?: string;
     phoneNumber?: string;
     preferredCommunicationTypeId?: number;
-    preferredCommunicationType?: CommunicationType;
+    preferredCommunicationType?: CommunicationType | undefined;
 }
 
 export class CommunicationType extends LookupEntity implements ICommunicationType {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Microsoft SQL Server (JetBrains)" uuid="411e1496-db19-4e83-809e-7477527a08d9">
+    <data-source source="LOCAL" name="Microsoft SQL Server (JetBrains)" uuid="3e549289-751a-4b2d-9422-e23b2b61ce1e">
       <driver-ref>sqlserver.jb</driver-ref>
       <synchronize>true</synchronize>
       <configured-by-url>true</configured-by-url>

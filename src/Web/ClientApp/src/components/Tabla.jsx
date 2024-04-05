@@ -5,16 +5,13 @@ import {
   Tbody,
   Tr,
   Th,
-  Td,
   TableContainer,
-  Flex,
   Box,
 } from "@chakra-ui/react";
-import BotonEditar from "./BotonEditar";
-import BotonEliminar from "./BotonEliminar";
-import { getAllEntities } from "../../helpers/selectClient.ts";
+import { getAllEntities } from "../helpers/selectClient.ts";
+import TableItem from "./TableItem.jsx";
 
-function Tabla({ toEdit, entityName }) {
+function Tabla({ entityName }) {
   const [data, setData] = useState({ items: [], loading: true });
 
   useEffect(() => {
@@ -42,15 +39,7 @@ function Tabla({ toEdit, entityName }) {
           </Thead>
           <Tbody>
             {data.items.map((item) => (
-              <Tr key={item.id}>
-                <Td>{item.name}</Td>
-                <Td>
-                  <Flex justifyContent="flex-end" gap="10px">
-                    <BotonEditar texto={"Editar"} to={`${toEdit}/${item.id}`} />
-                    <BotonEliminar texto={"Eliminar"} id={item.id} />
-                  </Flex>
-                </Td>
-              </Tr>
+              <TableItem key={item.id} item={item} entityName={entityName} />
             ))}
           </Tbody>
         </Table>

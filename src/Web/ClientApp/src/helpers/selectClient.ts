@@ -99,7 +99,7 @@ export function createEntity(entityName: string, args: any) {
   switch (entityName) {
     case "branch":
     case "client":
-    case "communication":
+    case "communicationType":
     case "deliveryType":
     case "responsible":
     case "wrapper":
@@ -117,6 +117,7 @@ export function createEntity(entityName: string, args: any) {
         args as variantEntityCreateArgs
       );
     default:
+      console.log(entityName);
       throw new Error("Invalid entity name");
   }
 }
@@ -128,6 +129,10 @@ async function executeCrudMethod(
 ) {
   const client = selectClient(entityName);
   if (typeof client[entityName + "_" + methodName] === "function") {
+    if (methodName === "Put") {
+      const { id, ...rest } = args[0];
+      return await client[entityName + "_" + methodName](id, ...args);
+    }
     return await client[entityName + "_" + methodName](...args);
   } else {
     throw new Error(

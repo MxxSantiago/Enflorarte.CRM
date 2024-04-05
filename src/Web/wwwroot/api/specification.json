@@ -1492,7 +1492,12 @@
                 "format": "int32"
               },
               "preferredCommunicationType": {
-                "$ref": "#/components/schemas/CommunicationType"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CommunicationType"
+                  }
+                ]
               }
             }
           }

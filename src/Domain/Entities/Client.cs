@@ -6,5 +6,5 @@ public class Client : BaseEntity
     public string PreferredAddress { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public int PreferredCommunicationTypeId { get; set; }
-    public CommunicationType PreferredCommunicationType { get; set; } = null!;
+    public CommunicationType? PreferredCommunicationType { get; set; }
 }
