@@ -76,6 +76,10 @@ const Sidebar = () => (
           variant="ghost"
           leftIcon={icon}
           _hover={{ bg: "red.200", color: "black" }}
+          _focus={{
+            bg: "red.200",
+            color: "black",
+          }}
           display="flex"
           justifyContent={{ base: "center", md: "flex-start" }}
         >

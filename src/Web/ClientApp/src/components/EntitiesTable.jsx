@@ -15,6 +15,7 @@ import {
   removeReferenceIdProperties,
 } from "../helpers/web-api-client.helper.ts";
 import TableItem from "./TableItem.jsx";
+import { LANG } from "../helpers/es.ts";
 
 function EntitiesTable({
   entityName,
@@ -63,7 +64,7 @@ function EntitiesTable({
               {Object.keys(removeReferenceIdProperties(entity))
                 .filter((key) => key.toLowerCase().indexOf("id") === -1)
                 .map((key) => (
-                  <Th key={key}>{key}</Th>
+                  <Th key={key}>{LANG(key)}</Th>
                 ))}
             </Tr>
           </Thead>

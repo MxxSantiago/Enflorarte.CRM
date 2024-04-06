@@ -12,6 +12,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { useRef } from "react";
 import { primaryColor, secondaryColor } from "../constants.ts";
+import { LANG } from "../helpers/es.ts";
 
 function DeleteEntity({ entityName, entity, refreshView }) {
   const toast = useToast();
@@ -22,7 +23,7 @@ function DeleteEntity({ entityName, entity, refreshView }) {
     try {
       await deleteEntity(entityName, entity.id);
       toast({
-        title: `${entityName} eliminado correctamente`,
+        title: `${LANG(entityName)} '${entity.name}' eliminado correctamente`,
         status: "success",
         isClosable: true,
         position: "bottom-right",
@@ -30,8 +31,10 @@ function DeleteEntity({ entityName, entity, refreshView }) {
     } catch (error) {
       toast({
         title: `
-          La ${entityName}
-          '${entity.name}' no se pudo eliminar ya que hay variante(s) asociada(s).
+          La ${LANG(entityName)}
+          '${
+            entity.name
+          }' no se pudo eliminar ya que hay recurso(s) asociado(s).
         `,
         status: "error",
         isClosable: true,
@@ -60,7 +63,7 @@ function DeleteEntity({ entityName, entity, refreshView }) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Eliminar {entityName} '{entity.name}'
+              Eliminar {LANG(entityName)} <b>{entity.name}</b>
             </AlertDialogHeader>
             <AlertDialogBody>
               ¿Estás seguro de que quieres eliminar esta entidad? Esta acción no

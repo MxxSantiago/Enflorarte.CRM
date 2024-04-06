@@ -15,6 +15,7 @@ import {
   getAllEntities,
 } from "../helpers/web-api-client.helper.ts";
 import { primaryColor } from "../constants.ts";
+import { LANG } from "../helpers/es.ts";
 
 function CreateEntity({
   title,
@@ -35,10 +36,6 @@ function CreateEntity({
       populateFatherItems();
     }
   }, [lastUpdated]);
-
-  useEffect(() => {
-    console.log(properties);
-  }, [properties]);
 
   const handleCreate = async (event) => {
     event.preventDefault();
@@ -99,7 +96,7 @@ function CreateEntity({
             .map((property) => (
               <Fragment key={property + entity.id}>
                 <Box mb={1} mt={5} display="flex">
-                  <label htmlFor={property}>{property}:</label>
+                  <label htmlFor={property}>{LANG(property)}:</label>
                 </Box>
                 {property.toString().includes("Id") ? (
                   <Select

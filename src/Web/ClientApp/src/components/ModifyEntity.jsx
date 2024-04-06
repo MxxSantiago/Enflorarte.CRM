@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { primaryColor } from "../constants.ts";
+import { LANG } from "../helpers/es.ts";
 
 function ModifyEntity({
   entityName,
@@ -99,7 +100,7 @@ function ModifyEntity({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Modificar {entityName} <b>{entity.name}</b>
+              Modificar {LANG(entityName)} <b>{entity.name}</b>
             </AlertDialogHeader>
             <AlertDialogBody>
               {Object.keys(properties)
@@ -107,7 +108,7 @@ function ModifyEntity({
                 .map((property) => (
                   <Fragment key={property + entity.id}>
                     <Box mb={2} mt={7} display="flex">
-                      <label htmlFor={property}>{property}</label>
+                      <label htmlFor={property}>{LANG(property)}</label>
                     </Box>
                     {property.toString().includes("Id") ? (
                       <Select
