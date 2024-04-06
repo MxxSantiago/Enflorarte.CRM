@@ -7,6 +7,7 @@ import {
   Input,
   Select,
   useToast,
+  Grid,
   VStack,
 } from "@chakra-ui/react";
 import {
@@ -14,7 +15,6 @@ import {
   createEntityPayload,
   getAllEntities,
 } from "../helpers/web-api-client.helper.ts";
-import { primaryColor } from "../constants.ts";
 import { LANG } from "../helpers/es.ts";
 
 function CreateEntity({
@@ -63,7 +63,6 @@ function CreateEntity({
   const populateFatherItems = async () => {
     const data = await getAllEntities(fatherEntityName);
     setFatherEntityData(data);
-    console.log(data);
   };
 
   const isDisabled = () =>
@@ -71,11 +70,16 @@ function CreateEntity({
       .filter(([key]) => key !== "id")
       .some(([, value]) => value == null || value.trim() === "");
 
+  const propertyKeys = Object.keys(properties).filter(
+    (property) => property !== "id"
+  );
+
   return (
     <Card
       as="form"
-      borderRadius="lg"
       p={4}
+      pt={8}
+      variant="outline"
       height="100%"
       display="flex"
       maxW={{ base: "100%", md: "700px" }}
@@ -90,11 +94,21 @@ function CreateEntity({
         {title}
       </Heading>
       <VStack spacing={10}>
-        <Box mb={4} display="flex" flexDirection="column">
+        <Grid
+          gap={6}
+          templateColumns={{
+            base: "1fr",
+            md: propertyKeys.length > 1 ? "1fr 1fr" : "1fr",
+          }}
+          justifyItems={{
+            base: "start",
+            md: propertyKeys.length > 1 ? "start" : "center",
+          }}
+        >
           {Object.keys(properties)
             .filter((property) => property !== "id")
             .map((property) => (
-              <Fragment key={property + entity.id}>
+              <Box key={property + entity.id} width="100%">
                 <Box mb={1} mt={5} display="flex">
                   <label htmlFor={property}>{LANG(property)}:</label>
                 </Box>
@@ -131,14 +145,12 @@ function CreateEntity({
                     }
                   />
                 )}
-              </Fragment>
+              </Box>
             ))}
-        </Box>
+        </Grid>
         <Button
-          bg={primaryColor}
-          _hover={{ bg: "#f36868" }}
-          color="white"
           size={{ base: "sm", md: "md" }}
+          colorScheme="pink"
           onClick={handleCreate}
           type="submit"
           isDisabled={isDisabled()}

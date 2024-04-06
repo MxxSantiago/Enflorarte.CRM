@@ -1,12 +1,14 @@
 import {
-  Flex,
+  Card,
   Text,
   Stack,
   IconButton,
   Menu,
   MenuButton,
   MenuList,
+  Flex,
   MenuItem,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { RiAlignJustify } from "react-icons/ri";
 import ChakraLink from "./ChakraLink.jsx";
@@ -16,15 +18,16 @@ import {
   headerMobileHeight,
   sidebarDesktopWidth,
   sidebarMobileWidth,
-  tertiaryColor,
 } from "../constants.ts";
 import { Link } from "react-router-dom";
+import ToggleTheme from "./ToggleTheme.jsx";
 
 const Header = (props) => (
-  <Flex
-    wrap="wrap"
-    alignItems="center"
-    bg={tertiaryColor}
+  <Card
+    display="flex"
+    borderRadius="none"
+    variant="filled"
+    justifyContent="center"
     w="100%"
     height={{ base: headerMobileHeight, md: headerDesktopHeight }}
     width={{
@@ -40,17 +43,20 @@ const Header = (props) => (
         as={IconButton}
         icon={<RiAlignJustify />}
         ml="auto"
-        variant="outline"
+        variant={{
+          base: "ghost",
+          md: "outline",
+        }}
         colorScheme="pink"
       ></MenuButton>
       <MenuList>
-        <MenuItem as={Link} to="/">
+        <MenuItem as={Link} to="/" _hover={{ color: "currentcolor" }}>
           Pedidos
         </MenuItem>
-        <MenuItem as={Link} to="/">
+        <MenuItem as={Link} to="/" _hover={{ color: "currentcolor" }}>
           Arreglos
         </MenuItem>
-        <MenuItem as={Link} to="/">
+        <MenuItem as={Link} to="/" _hover={{ color: "currentcolor" }}>
           Administracion
         </MenuItem>
         <MenuItem
@@ -58,60 +64,36 @@ const Header = (props) => (
         >
           Cuenta
         </MenuItem>
+        <ToggleTheme width="100%" background="none" borderRadius={0} />
       </MenuList>
     </Menu>
-    <Stack
-      display={{ base: "none", md: "flex" }}
-      direction="row"
-      bg={tertiaryColor}
-    >
-      <Text marginBottom="0" fontSize="lg" marginLeft="2rem">
-        <ChakraLink
-          _hover={{ textDecoration: "none", color: "black" }}
-          color="black"
-          to="/"
-        >
-          Pedidos
-        </ChakraLink>
-      </Text>
-      <Text marginBottom="0" fontSize="lg" marginLeft="3rem">
-        <ChakraLink
-          _hover={{ textDecoration: "none", color: "black" }}
-          color="black"
-          to="/"
-        >
-          Arreglos
-        </ChakraLink>
-      </Text>
-      <Text fontSize="lg" marginBottom={0} marginLeft="3rem">
-        <ChakraLink
-          _hover={{ textDecoration: "none", color: "black" }}
-          color="black"
-          to="/Sucursal"
-        >
-          Administración
-        </ChakraLink>
-      </Text>
-      <Text
-        display="none"
-        fontSize="lg"
-        marginLeft="3rem"
-        marginBottom="0"
-        onClick={() => (window.location.href = "/Identity/Account/Manage")}
-        cursor="pointer"
+    <Flex direction={{ base: "none", md: "row" }} alignItems="center">
+      <Stack
+        display={{ base: "none", md: "flex" }}
+        direction="row"
+        height="fit-content"
       >
-        Cuenta
-      </Text>
-    </Stack>
-    <IconButton
-      display={{ base: "none", md: "flex" }}
-      marginLeft="auto"
-      variant="outline"
-      colorScheme="pink"
-      onClick={() => (window.location.href = "/Identity/Account/Manage")}
-      icon={<FaRegUser />}
-    ></IconButton>
-  </Flex>
+        <Text marginBottom="0" fontSize="lg" marginLeft="2rem">
+          <ChakraLink to="/">Pedidos</ChakraLink>
+        </Text>
+        <Text marginBottom="0" fontSize="lg" marginLeft="3rem">
+          <ChakraLink to="/">Arreglos</ChakraLink>
+        </Text>
+        <Text fontSize="lg" marginBottom={0} marginLeft="3rem">
+          <ChakraLink to="/Sucursal">Administración</ChakraLink>
+        </Text>
+      </Stack>
+      <ButtonGroup display={{ base: "none", md: "flex" }} marginLeft="auto">
+        <ToggleTheme variant="outline" colorScheme="pink" />
+        <IconButton
+          variant="outline"
+          colorScheme="pink"
+          onClick={() => (window.location.href = "/Identity/Account/Manage")}
+          icon={<FaRegUser />}
+        />
+      </ButtonGroup>
+    </Flex>
+  </Card>
 );
 
 export default Header;

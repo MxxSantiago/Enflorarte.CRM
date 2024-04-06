@@ -18,6 +18,8 @@
       return "Envoltura";
     case "wrapper":
       return "Envoltura";
+    case "wrappervariant":
+      return "Variante de envoltura";
     case "client":
       return "Cliente";
     case "clientid":

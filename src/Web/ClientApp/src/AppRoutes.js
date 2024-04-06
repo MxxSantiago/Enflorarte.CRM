@@ -1,3 +1,4 @@
+import React from "react";
 import EntityView from "./components/EntityView.jsx";
 import EntityWithVariantView from "./components/EntityWithVariantView.jsx";
 import {

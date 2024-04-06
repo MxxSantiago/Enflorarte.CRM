@@ -9,17 +9,10 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
 
   const refreshView = () => setLastUpdated(new Date());
 
-  useEffect(() => refreshView(), [title]);
+  useEffect(() => refreshView(), [entityName]);
 
   return (
-    <Flex
-      direction="column"
-      gap={5}
-      px={{ base: 4, md: 8 }}
-      pt={{
-        base: 6,
-      }}
-    >
+    <Flex direction="column" gap={5} px={{ base: 4, md: 6 }} pt={6}>
       <CreateEntity
         entityName={entityName}
         title={title}

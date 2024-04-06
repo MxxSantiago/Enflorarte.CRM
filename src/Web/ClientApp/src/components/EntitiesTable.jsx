@@ -53,9 +53,9 @@ function EntitiesTable({
 
   return (
     <Card
-      borderRadius="lg"
       overflowX="auto"
       maxW={{ base: "100%", md: "700px" }}
+      variant="outline"
     >
       <TableContainer>
         <Table variant="striped" colorScheme="pink">
@@ -64,8 +64,11 @@ function EntitiesTable({
               {Object.keys(removeReferenceIdProperties(entity))
                 .filter((key) => key.toLowerCase().indexOf("id") === -1)
                 .map((key) => (
-                  <Th key={key}>{LANG(key)}</Th>
+                  <Th w={"100%"} key={key}>
+                    {LANG(key)}
+                  </Th>
                 ))}
+              <Th w={"100%"}></Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -83,19 +86,26 @@ function EntitiesTable({
         </Table>
       </TableContainer>
       <Box ml={4} mt={4} mb={3}>
+        {totalItems === 0 ? (
+          <p>No hay {LANG(entityName)}(s) registradas</p>
+        ) : null}
         <Button
+          display={totalItems === 0 ? "none" : "auto"}
+          isDisabled={totalItems === 0 || currentPage === totalPages}
           onClick={() => changePage(currentPage - 1)}
           mr={2}
-          disabled={currentPage === 1}
         >
           {"<"}
         </Button>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(
           (pageNumber) => (
             <Button
+              isDisabled={currentPage === pageNumber}
               key={pageNumber}
               onClick={() => changePage(pageNumber)}
-              colorScheme={pageNumber === currentPage ? "pink" : "gray"}
+              variant={{
+                base: currentPage === pageNumber ? "outline" : "base",
+              }}
               mr={2}
             >
               {pageNumber}
@@ -103,9 +113,10 @@ function EntitiesTable({
           )
         )}
         <Button
+          display={totalItems === 0 ? "none" : "auto"}
           onClick={() => changePage(currentPage + 1)}
           mr={2}
-          disabled={currentPage === totalPages}
+          isDisabled={currentPage === totalPages || totalPages === 1}
         >
           {">"}
         </Button>

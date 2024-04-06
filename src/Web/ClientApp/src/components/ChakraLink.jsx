@@ -1,10 +1,10 @@
-import { Link as ReactRouterLink } from "react-router-dom";
-import { Link } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { Text } from "@chakra-ui/react";
 
-const ChakraLink = ({ to, ...props }) => (
-  <Link as={ReactRouterLink} {...props}>
+const ChakraLink = ({ ...props }) => (
+  <Text as={Link} _hover={{ color: "currentcolor" }} {...props}>
     {props.children}
-  </Link>
+  </Text>
 );
 
 export default ChakraLink;

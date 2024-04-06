@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Button, Image, Stack } from "@chakra-ui/react";
+import { Box, Card, Flex, Button, Image, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import logo from "../assets/LogoFloreria.png";
 import {
@@ -11,11 +11,7 @@ import {
 } from "react-icons/fi";
 import { IoFlowerOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa6";
-import {
-  sidebarDesktopWidth,
-  sidebarMobileWidth,
-  tertiaryColor,
-} from "../constants.ts";
+import { sidebarDesktopWidth, sidebarMobileWidth } from "../constants.ts";
 
 const adminRoutes = [
   {
@@ -56,40 +52,38 @@ const adminRoutes = [
 ];
 
 const Sidebar = () => (
-  <Box
-    bg={tertiaryColor}
+  <Card
     h="100vh"
     py={4}
+    variant="filled"
+    borderRadius="none"
     width={{ base: sidebarMobileWidth, md: sidebarDesktopWidth }}
+    overflowY={{ base: "auto" }}
   >
-    <Flex align="center" mb={12} justify="center">
+    <Flex align="center" mb={6} justify="center">
       <Image src={logo} boxSize="60%" />
     </Flex>
-    <Stack spacing={6}>
+    <Stack spacing={0}>
       {adminRoutes.map(({ name, route, icon }) => (
         <Button
           key={name}
           width="100%"
+          colorScheme="pink"
+          variant="ghost"
           as={Link}
+          _hover={{ color: "currentColor" }}
+          height={16}
           to={route}
           borderRadius={0}
-          variant="ghost"
           leftIcon={icon}
-          _hover={{ bg: "red.200", color: "black" }}
-          _focus={{
-            bg: "red.200",
-            color: "black",
-          }}
           display="flex"
           justifyContent={{ base: "center", md: "flex-start" }}
         >
-          <Box fontSize="14px" display={{ base: "none", md: "block" }}>
-            {name}
-          </Box>
+          <Box display={{ base: "none", md: "block" }}>{name}</Box>
         </Button>
       ))}
     </Stack>
-  </Box>
+  </Card>
 );
 
 export default Sidebar;

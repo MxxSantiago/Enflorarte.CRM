@@ -12,10 +12,21 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useToast,
+  IconButton,
+  Grid,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import { primaryColor } from "../constants.ts";
 import { LANG } from "../helpers/es.ts";
+import { FaRegEdit } from "react-icons/fa";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 
 function ModifyEntity({
   entityName,
@@ -65,7 +76,6 @@ function ModifyEntity({
   const populateFatherItems = async () => {
     const data = await getAllEntities(fatherEntityName);
     setFatherEntityData(data);
-    console.log(data);
   };
 
   const cleanProperties = () => {
@@ -81,17 +91,18 @@ function ModifyEntity({
       .filter(([key]) => key !== "id")
       .some(([, value]) => value == null || value.toString().trim() === "");
 
+  const propertyKeys = Object.keys(properties).filter(
+    (property) => property !== "id"
+  );
+
   return (
     <>
-      <Button
+      <IconButton
+        icon={<FaRegEdit />}
+        colorScheme="pink"
         onClick={onOpen}
-        bg={primaryColor}
-        _hover={{ bg: "#f36868" }}
-        color="white"
-        size={{ base: "sm" }}
-      >
-        Editar
-      </Button>
+        size="sm"
+      />
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -106,7 +117,7 @@ function ModifyEntity({
               {Object.keys(properties)
                 .filter((property) => property !== "id")
                 .map((property) => (
-                  <Fragment key={property + entity.id}>
+                  <Box key={property + entity.id} width="100%">
                     <Box mb={2} mt={7} display="flex">
                       <label htmlFor={property}>{LANG(property)}</label>
                     </Box>
@@ -142,7 +153,7 @@ function ModifyEntity({
                         }
                       />
                     )}
-                  </Fragment>
+                  </Box>
                 ))}
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -151,9 +162,7 @@ function ModifyEntity({
               </Button>
               <Button
                 ml={3}
-                bg={primaryColor}
-                _hover={{ bg: "#f36868" }}
-                color="white"
+                colorScheme="pink"
                 onClick={handleUpdate}
                 isDisabled={isDisabled()}
               >

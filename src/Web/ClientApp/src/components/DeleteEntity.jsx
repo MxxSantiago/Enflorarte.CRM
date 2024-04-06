@@ -1,4 +1,3 @@
-import { Button } from "@chakra-ui/react";
 import { deleteEntity } from "../helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
@@ -8,11 +7,13 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useToast,
+  IconButton,
+  useDisclosure,
+  Button,
 } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
 import { useRef } from "react";
-import { primaryColor, secondaryColor } from "../constants.ts";
 import { LANG } from "../helpers/es.ts";
+import { MdDeleteOutline } from "react-icons/md";
 
 function DeleteEntity({ entityName, entity, refreshView }) {
   const toast = useToast();
@@ -46,15 +47,14 @@ function DeleteEntity({ entityName, entity, refreshView }) {
 
   return (
     <>
-      <Button
-        bg={secondaryColor}
-        _hover={{ bg: "#822727" }}
-        color="white"
+      <IconButton
+        icon={<MdDeleteOutline />}
+        colorScheme="red"
         onClick={onOpen}
         size={{ base: "sm" }}
       >
         Eliminar
-      </Button>
+      </IconButton>
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -73,13 +73,7 @@ function DeleteEntity({ entityName, entity, refreshView }) {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancelar
               </Button>
-              <Button
-                ml={3}
-                bg={primaryColor}
-                _hover={{ bg: "#f36868" }}
-                color="white"
-                onClick={handleDelete}
-              >
+              <Button ml={3} colorScheme="red" onClick={handleDelete}>
                 Aceptar
               </Button>
             </AlertDialogFooter>

@@ -112,7 +112,6 @@ export function createEntity(entityName: string, args: any) {
     case "wrapperVariant":
       return executeCrudMethod(entityName, "Post", args);
     default:
-      console.log(entityName);
       throw new Error("Invalid entity name");
   }
 }

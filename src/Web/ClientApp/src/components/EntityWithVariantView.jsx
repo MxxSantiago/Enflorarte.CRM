@@ -26,10 +26,8 @@ const EntityWithVariantView = ({
     <Grid
       templateColumns={gridTemplateColumns}
       gap={5}
-      px={{ md: 4, lg: 8 }}
-      pt={{
-        md: 6,
-      }}
+      px={{ base: 4, md: 6 }}
+      pt={6}
     >
       <Box order={{ md: 1, lg: 1 }}>
         <CreateEntity

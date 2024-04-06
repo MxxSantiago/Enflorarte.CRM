@@ -1,23 +1,14 @@
 import "bootstrap/dist/css/bootstrap.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration.js";
 import reportWebVitals from "./reportWebVitals.js";
 
-const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
-root.render(
-  <ChakraProvider>
-    <BrowserRouter basename={baseUrl}>
-      <App />
-    </BrowserRouter>
-  </ChakraProvider>
-);
+root.render(<App />);
 
 // Si deseas que tu aplicación funcione sin conexión y se cargue más rápido, puedes cambiar
 // unregister() por register() a continuación. Ten en cuenta que esto conlleva algunos inconvenientes.
