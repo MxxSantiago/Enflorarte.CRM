@@ -2,6 +2,7 @@ import {Fragment, useEffect, useState} from "react";
 import {Box, Button, Card, Heading, Input, Select, useToast, VStack,} from "@chakra-ui/react";
 import {createEntity, createEntityPayload, getAllEntities,} from "../helpers/web-api-client.helper.ts";
 import {primaryColor} from "../constants.ts";
+import {LANG} from "../helpers/es.ts";
 
 function CreateEntity({title, entityName, entity, refreshView, fatherEntityName}) {
     const toast = useToast();
@@ -22,7 +23,6 @@ function CreateEntity({title, entityName, entity, refreshView, fatherEntityName}
             await createEntity(entityName, createEntityPayload(properties));
             toast({
                 title: `${entityName} creado correctamente`,
-                status: "success",
                 isClosable: true,
                 position: "bottom-right",
             });
@@ -40,7 +40,6 @@ function CreateEntity({title, entityName, entity, refreshView, fatherEntityName}
 
     const populateFatherItems = async () => {
         const data = await getAllEntities(fatherEntityName);
-        console.log(data);
         setFatherEntityData(data);
     };
 
@@ -76,13 +75,12 @@ function CreateEntity({title, entityName, entity, refreshView, fatherEntityName}
                         .map((property) => (
                             <Fragment key={property + entity.id}>
                                 <Box mb={1} mt={5} display="flex">
-                                    <label htmlFor={property}>{property}:</label>
+                                    <label htmlFor={property}>{LANG(property)}:</label>
                                 </Box>
                                 {property.toString().includes("Id") ? (
                                     <Select
                                         id={property}
                                         size={{ base: "md", md: "lg"}}>
-                                        console.log(fatherEntityData);
                                         {fatherEntityData.map((fatherEntity) => (
                                             <option key={fatherEntity.id} value={fatherEntity.id}>
                                                 {fatherEntity.name}

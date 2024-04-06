@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import {getAllEntities, removeReferenceIdProperties,} from "../helpers/web-api-client.helper.ts";
 import TableItem from "./TableItem.jsx";
+import {LANG} from "../helpers/es.ts";
 
 function EntitiesTable({entityName, refreshView, lastUpdated, entity}) {
     const [items, setData] = useState([]);
@@ -58,7 +59,7 @@ function EntitiesTable({entityName, refreshView, lastUpdated, entity}) {
                     <Tr>
                         {Object.keys(removeReferenceIdProperties(entity))
                             .filter((key) => key.indexOf("id") === -1)
-                            .map((key) => (<Th key={key}>{key}</Th>))}
+                            .map((key) => (<Th key={key}>{LANG(key)}</Th>))}
                     </Tr>
                 </Thead>
                 <Tbody>

@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="helpers\" />
     <Folder Include="wwwroot\api\" />
   </ItemGroup>
 
