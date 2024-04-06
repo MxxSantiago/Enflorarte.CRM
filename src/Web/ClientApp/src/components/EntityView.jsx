@@ -1,9 +1,10 @@
-import { Box } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
 import EntitiesTable from "./EntitiesTable.jsx";
 import { useEffect, useState } from "react";
+import { CommunicationType } from "../web-api-client.ts";
 
-const EntityView = ({ title, entityName, entity }) => {
+const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
   const [lastUpdated, setLastUpdated] = useState();
 
   const refreshView = () => setLastUpdated(new Date());
@@ -11,7 +12,8 @@ const EntityView = ({ title, entityName, entity }) => {
   useEffect(() => refreshView(), [title]);
 
   return (
-    <Box
+    <Flex
+      direction="column"
       gap={5}
       px={{ base: 4, md: 8 }}
       pt={{
@@ -23,14 +25,17 @@ const EntityView = ({ title, entityName, entity }) => {
         title={title}
         entity={entity}
         refreshView={refreshView}
+        fatherEntity={new CommunicationType().toJSON()}
+        fatherEntityName="communicationType"
       />
       <EntitiesTable
         entity={entity}
         entityName={entityName}
+        fatherEntityName={fatherEntityName}
         refreshView={refreshView}
         lastUpdated={lastUpdated}
       />
-    </Box>
+    </Flex>
   );
 };
 

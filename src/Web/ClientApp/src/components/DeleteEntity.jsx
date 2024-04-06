@@ -29,7 +29,10 @@ function DeleteEntity({ entityName, entity, refreshView }) {
       });
     } catch (error) {
       toast({
-        title: error.message,
+        title: `
+          La ${entityName}
+          '${entity.name}' no se pudo eliminar ya que hay variante(s) asociada(s).
+        `,
         status: "error",
         isClosable: true,
         position: "bottom-right",

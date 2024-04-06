@@ -1,6 +1,9 @@
 import { useRef, useState, Fragment, useEffect } from "react";
-import { Input, Button, Box } from "@chakra-ui/react";
-import { updateEntity } from "../helpers/web-api-client.helper.ts";
+import { Input, Button, Box, Select } from "@chakra-ui/react";
+import {
+  updateEntity,
+  getAllEntities,
+} from "../helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -13,11 +16,24 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { primaryColor } from "../constants.ts";
 
-function ModifyEntity({ entityName, entity, refreshView, lastUpdated }) {
+function ModifyEntity({
+  entityName,
+  entity,
+  refreshView,
+  lastUpdated,
+  fatherEntityName,
+}) {
   const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [fatherEntityData, setFatherEntityData] = useState([]);
   const cancelRef = useRef();
+
+  useEffect(() => {
+    if (fatherEntityName) {
+      populateFatherItems();
+    }
+  }, [lastUpdated]);
 
   const handleUpdate = async () => {
     try {
@@ -45,18 +61,19 @@ function ModifyEntity({ entityName, entity, refreshView, lastUpdated }) {
     }
   };
 
-  const cleanProperties = () => {
-    const cleanedProperties = { ...entity };
-    Object.keys(cleanedProperties).forEach(
-      (key) => (cleanedProperties[key] = "")
-    );
+  const populateFatherItems = async () => {
+    const data = await getAllEntities(fatherEntityName);
+    setFatherEntityData(data);
+    console.log(data);
+  };
 
-    setProperties(cleanedProperties);
+  const cleanProperties = () => {
+    setProperties({ ...entity });
   };
 
   useEffect(() => {
     cleanProperties();
-  }, [entity, lastUpdated]);
+  }, [entity, lastUpdated, isOpen]);
 
   const isDisabled = () =>
     Object.entries(properties)
@@ -92,18 +109,38 @@ function ModifyEntity({ entityName, entity, refreshView, lastUpdated }) {
                     <Box mb={2} mt={7} display="flex">
                       <label htmlFor={property}>{property}</label>
                     </Box>
-                    <Input
-                      id={property}
-                      size={{ base: "md", md: "lg" }}
-                      width={{ base: "100%", md: "400px" }}
-                      value={properties[property] ?? ""}
-                      onChange={(e) =>
-                        setProperties({
-                          ...properties,
-                          [property]: e.target.value,
-                        })
-                      }
-                    />
+                    {property.toString().includes("Id") ? (
+                      <Select
+                        id={property}
+                        size={{ base: "md", md: "lg" }}
+                        value={properties[property] ?? ""}
+                        onChange={(e) =>
+                          setProperties({
+                            ...properties,
+                            [property]: e.target.value,
+                          })
+                        }
+                      >
+                        {fatherEntityData.map((fatherEntity) => (
+                          <option key={fatherEntity.id} value={fatherEntity.id}>
+                            {fatherEntity.name}
+                          </option>
+                        ))}
+                      </Select>
+                    ) : (
+                      <Input
+                        id={property}
+                        size={{ base: "md", md: "lg" }}
+                        width={{ base: "100%", md: "400px" }}
+                        value={properties[property] ?? ""}
+                        onChange={(e) =>
+                          setProperties({
+                            ...properties,
+                            [property]: e.target.value,
+                          })
+                        }
+                      />
+                    )}
                   </Fragment>
                 ))}
             </AlertDialogBody>

@@ -2,10 +2,16 @@ import { Tr, Td, Flex } from "@chakra-ui/react";
 import ModifyEntity from "./ModifyEntity";
 import DeleteEntity from "./DeleteEntity";
 
-const TableItem = ({ item, entityName, refreshView, lastUpdated }) => (
+const TableItem = ({
+  item,
+  entityName,
+  refreshView,
+  lastUpdated,
+  fatherEntityName,
+}) => (
   <Tr key={item.id}>
     {Object.keys(item)
-      .filter((key) => key.indexOf("id") === -1)
+      .filter((key) => key.toLowerCase().indexOf("id") === -1)
       .map((key) => (
         <Td key={key}>{item[key]}</Td>
       ))}
@@ -16,6 +22,7 @@ const TableItem = ({ item, entityName, refreshView, lastUpdated }) => (
           entityName={entityName}
           entity={item}
           refreshView={refreshView}
+          fatherEntityName={fatherEntityName}
         />
         <DeleteEntity
           entityName={entityName}

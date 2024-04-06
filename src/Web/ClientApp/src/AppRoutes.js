@@ -69,6 +69,7 @@ const AppRoutes = [
       <EntityView
         title="Crear Nuevo Cliente"
         entityName="client"
+        fatherEntityName="communicationType"
         entity={new Client().toJSON()}
       />
     ),

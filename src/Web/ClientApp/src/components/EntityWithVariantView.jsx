@@ -55,12 +55,14 @@ const EntityWithVariantView = ({
           refreshView={refreshView}
           fatherEntity={entity}
           fatherEntityName={entityName}
+          lastUpdated={lastUpdated}
         />
       </Box>
       <Box order={{ md: 4, lg: 4 }}>
         <EntitiesTable
           entity={variant}
           entityName={variantName}
+          fatherEntityName={entityName}
           refreshView={refreshView}
           lastUpdated={lastUpdated}
         />
