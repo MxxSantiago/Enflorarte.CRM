@@ -53,6 +53,8 @@ const EntityWithVariantView = ({
           title={variantTitle}
           entity={variant}
           refreshView={refreshView}
+          fatherEntity={entity}
+          fatherEntityName={entityName}
         />
       </Box>
       <Box order={{ md: 4, lg: 4 }}>
