@@ -1,12 +1,6 @@
-import {
-  Thead,
-  Tr,
-  Th,
-} from "@chakra-ui/react";
-import {
-  removeReferenceIdProperties,
-} from "../../core/helpers/web-api-client.helper.ts";
-import { LANG } from "../../core/helpers/translations.helper.ts";
+import { Thead, Tr, Th } from "@chakra-ui/react";
+import { LANG } from "../../../../core/helpers/translations.helper.ts";
+import { removeReferenceIdProperties } from "../../../../core/helpers/web-api-client.helper.ts";
 
 const EntitiesTableHeader = ({ entity }) => (
   <Thead>

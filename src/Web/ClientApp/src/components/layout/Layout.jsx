@@ -25,15 +25,13 @@ const Layout = ({ routes, showSidebar }) => (
   >
     {showSidebar && <Sidebar routes={routes} />}
     <Box width="100%">
-      <Header />
+      <Header showSidebar={showSidebar} />
       <Box
         height={{
           base: `calc(100vh - ${headerMobileHeight})`,
           md: `calc(100vh - ${headerDesktopHeight})`,
         }}
         width="100%"
-        display={showSidebar ? "block" : "flex"}
-        justifyContent={showSidebar ? "none" : "center"}
         gridArea="main"
         overflowY="auto"
         overflowX="hidden"

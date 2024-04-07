@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
-import EntitiesTable from "./entitiesTable";
-import { CommunicationType } from "../web-api-client.ts";
+import { CommunicationType } from "../../../web-api-client.ts";
+import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 
 const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
   const [lastUpdated, setLastUpdated] = useState();

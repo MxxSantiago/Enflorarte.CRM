@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Input, Button, Box, Select } from "@chakra-ui/react";
-import { updateEntity } from "../core/helpers/web-api-client.helper.ts";
+import { updateEntity } from "../../../core/helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -12,7 +12,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import { LANG } from "../core/helpers/translations.helper.ts";
+import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
 
 function ModifyEntity({
@@ -35,7 +35,7 @@ function ModifyEntity({
       });
 
       toast({
-        title: `${entityName} creado correctamente`,
+        title: `${LANG(entityName)} modificada correctamente`,
         status: "success",
         isClosable: true,
         position: "bottom-right",

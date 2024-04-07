@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import theme from "./core/theme.ts";
-import mainRoutes from "./appRoutes.js";
+import mainRoutes from "./AppRoutes.js";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 

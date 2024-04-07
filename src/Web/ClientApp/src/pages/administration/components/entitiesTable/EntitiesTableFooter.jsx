@@ -1,5 +1,5 @@
 import { Tfoot, Button, Box } from "@chakra-ui/react";
-import { LANG } from "../../core/helpers/translations.helper.ts";
+import { LANG } from "../../../../core/helpers/translations.helper.ts";
 
 const EntitiesTableFooter = ({
   totalPages,

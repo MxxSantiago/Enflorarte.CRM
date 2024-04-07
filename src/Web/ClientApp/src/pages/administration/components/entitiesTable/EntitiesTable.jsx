@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Table, TableContainer, Card } from "@chakra-ui/react";
-import { getAllEntities } from "../../core/helpers/web-api-client.helper.ts";
+import { getAllEntities } from "../../../../core/helpers/web-api-client.helper.ts";
 import EntitiesTableBody from "./EntitiesTableBody.jsx";
 import EntitiesTableHeader from "./EntitiesTableHeader.jsx";
 import EntitiesTableFooter from "./EntitiesTableFooter.jsx";

@@ -1,4 +1,5 @@
 import AdministrationLayout from "./pages/administration/AdministrationLayout";
+import ArrangementsLayout from "./pages/arrangements/ArrangementsLayout";
 
 const mainRoutes = [
   {
@@ -9,7 +10,7 @@ const mainRoutes = [
   {
     name: "Arreglos",
     path: "/arrangements/*",
-    element: <AdministrationLayout />,
+    element: <ArrangementsLayout />,
   },
   {
     name: "Administracion",

@@ -14,8 +14,8 @@ import {
   createEntity,
   createEntityPayload,
   getAllEntities,
-} from "../core/helpers/web-api-client.helper.ts";
-import { LANG } from "../core/helpers/translations.helper.ts";
+} from "../../../core/helpers/web-api-client.helper.ts";
+import { LANG } from "../../../core/helpers/translations.helper.ts";
 
 function CreateEntity({
   title,
