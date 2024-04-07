@@ -1,106 +1,21 @@
-import React from "react";
-import EntityView from "./components/EntityView.jsx";
-import EntityWithVariantView from "./components/EntityWithVariantView.jsx";
-import {
-  Branch,
-  Client,
-  CommunicationType,
-  DeliveryType,
-  Flower,
-  FlowerVariant,
-  Responsible,
-  Wrapper,
-  WrapperVariant,
-} from "./web-api-client.ts";
+import AdministrationLayout from "./pages/administration/AdministrationLayout";
 
-const AppRoutes = [
+const mainRoutes = [
   {
-    index: true,
-    element: (
-      <EntityView
-        title="Crear Nueva Sucursal"
-        entityName="branch"
-        entity={new Branch().toJSON()}
-      />
-    ),
+    name: "Pedidos",
+    path: "/orders/*",
+    element: <AdministrationLayout />,
   },
   {
-    path: "/Sucursal",
-    element: (
-      <EntityView
-        title="Crear Nueva Sucursal"
-        entityName="branch"
-        entity={new Branch().toJSON()}
-      />
-    ),
+    name: "Arreglos",
+    path: "/arrangements/*",
+    element: <AdministrationLayout />,
   },
   {
-    path: "/TipoEntrega",
-    element: (
-      <EntityView
-        title="Crear Tipo de Entrega"
-        entityName="deliveryType"
-        entity={new DeliveryType().toJSON()}
-      />
-    ),
-  },
-  {
-    path: "/TipoComunicacion",
-    element: (
-      <EntityView
-        title="Crear Tipo de Comunicación"
-        entityName="communicationType"
-        entity={new CommunicationType().toJSON()}
-      />
-    ),
-  },
-  {
-    path: "/Responsable",
-    element: (
-      <EntityView
-        title="Crear Nuevo Responsable"
-        entityName="responsible"
-        entity={new Responsible().toJSON()}
-      />
-    ),
-  },
-  {
-    path: "/Cliente",
-    element: (
-      <EntityView
-        title="Crear Nuevo Cliente"
-        entityName="client"
-        fatherEntityName="communicationType"
-        entity={new Client().toJSON()}
-      />
-    ),
-  },
-  {
-    path: "/Envolturas",
-    element: (
-      <EntityWithVariantView
-        title="Crear Nueva Envoltura"
-        variantTitle="Crear Nueva Variante"
-        entityName="wrapper"
-        variantName="wrapperVariant"
-        entity={new Wrapper().toJSON()}
-        variant={new WrapperVariant().toJSON()}
-      />
-    ),
-  },
-  {
-    path: "/Flor",
-    element: (
-      <EntityWithVariantView
-        title="Crear Nueva Flor"
-        variantTitle="Crear Nueva Variante"
-        entityName="flower"
-        variantName="flowerVariant"
-        entity={new Flower().toJSON()}
-        variant={new FlowerVariant().toJSON()}
-      />
-    ),
+    name: "Administracion",
+    path: "/administration/*",
+    element: <AdministrationLayout />,
   },
 ];
 
-export default AppRoutes;
+export default mainRoutes;

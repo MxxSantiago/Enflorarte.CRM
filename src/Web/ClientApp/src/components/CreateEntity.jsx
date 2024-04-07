@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -14,8 +14,8 @@ import {
   createEntity,
   createEntityPayload,
   getAllEntities,
-} from "../helpers/web-api-client.helper.ts";
-import { LANG } from "../helpers/es.ts";
+} from "../core/helpers/web-api-client.helper.ts";
+import { LANG } from "../core/helpers/translations.helper.ts";
 
 function CreateEntity({
   title,
@@ -43,7 +43,7 @@ function CreateEntity({
     try {
       await createEntity(entityName, createEntityPayload(properties));
       toast({
-        title: `${entityName} creado correctamente`,
+        title: `${LANG(entityName)} creado correctamente`,
         status: "success",
         isClosable: true,
         position: "bottom-right",

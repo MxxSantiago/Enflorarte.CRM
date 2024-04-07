@@ -1,4 +1,4 @@
-import { deleteEntity } from "../helpers/web-api-client.helper.ts";
+import { deleteEntity } from "../core/helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -12,7 +12,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { LANG } from "../helpers/es.ts";
+import { LANG } from "../core/helpers/translations.helper.ts";
 import { MdDeleteOutline } from "react-icons/md";
 
 function DeleteEntity({ entityName, entity, refreshView }) {

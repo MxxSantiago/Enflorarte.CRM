@@ -1,9 +1,6 @@
-import { useRef, useState, Fragment, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Input, Button, Box, Select } from "@chakra-ui/react";
-import {
-  updateEntity,
-  getAllEntities,
-} from "../helpers/web-api-client.helper.ts";
+import { updateEntity } from "../core/helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -13,39 +10,22 @@ import {
   AlertDialogOverlay,
   useToast,
   IconButton,
-  Grid,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import { LANG } from "../helpers/es.ts";
+import { LANG } from "../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from "@chakra-ui/react";
 
 function ModifyEntity({
   entityName,
   entity,
   refreshView,
   lastUpdated,
-  fatherEntityName,
+  fatherEntityData,
 }) {
   const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [fatherEntityData, setFatherEntityData] = useState([]);
   const cancelRef = useRef();
-
-  useEffect(() => {
-    if (fatherEntityName) {
-      populateFatherItems();
-    }
-  }, [lastUpdated]);
 
   const handleUpdate = async () => {
     try {
@@ -73,14 +53,7 @@ function ModifyEntity({
     }
   };
 
-  const populateFatherItems = async () => {
-    const data = await getAllEntities(fatherEntityName);
-    setFatherEntityData(data);
-  };
-
-  const cleanProperties = () => {
-    setProperties({ ...entity });
-  };
+  const cleanProperties = () => setProperties({ ...entity });
 
   useEffect(() => {
     cleanProperties();
@@ -90,10 +63,6 @@ function ModifyEntity({
     Object.entries(properties)
       .filter(([key]) => key !== "id")
       .some(([, value]) => value == null || value.toString().trim() === "");
-
-  const propertyKeys = Object.keys(properties).filter(
-    (property) => property !== "id"
-  );
 
   return (
     <>

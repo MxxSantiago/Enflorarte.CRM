@@ -8,7 +8,7 @@ import {
   ResponsibleClient,
   WrapperClient,
   WrapperVariantClient,
-} from "../web-api-client.ts";
+} from "../../web-api-client.ts";
 
 function selectClient(entityName: string) {
   switch (entityName.trim()) {

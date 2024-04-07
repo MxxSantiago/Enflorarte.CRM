@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
-import EntitiesTable from "./EntitiesTable.jsx";
-import { useEffect, useState } from "react";
+import EntitiesTable from "./entitiesTable";
 import { CommunicationType } from "../web-api-client.ts";
 
 const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
@@ -12,7 +12,7 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
   useEffect(() => refreshView(), [entityName]);
 
   return (
-    <Flex direction="column" gap={5} px={{ base: 4, md: 6 }} pt={6}>
+    <Flex direction="column" gap={5} px={{ base: 4, md: 6 }} py={6}>
       <CreateEntity
         entityName={entityName}
         title={title}

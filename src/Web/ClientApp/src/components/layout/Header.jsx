@@ -1,6 +1,5 @@
 import {
   Card,
-  Text,
   Stack,
   IconButton,
   Menu,
@@ -11,18 +10,17 @@ import {
   ButtonGroup,
 } from "@chakra-ui/react";
 import { RiAlignJustify } from "react-icons/ri";
-import ChakraLink from "./ChakraLink.jsx";
+import { ChakraLink } from "../shared/index.js";
 import { FaRegUser } from "react-icons/fa6";
 import {
   headerDesktopHeight,
   headerMobileHeight,
-  sidebarDesktopWidth,
-  sidebarMobileWidth,
-} from "../constants.ts";
+} from "../../core/constants.ts";
 import { Link } from "react-router-dom";
 import ToggleTheme from "./ToggleTheme.jsx";
+import mainRoutes from "../../appRoutes.js";
 
-const Header = (props) => (
+const Header = () => (
   <Card
     display="flex"
     borderRadius="none"
@@ -30,12 +28,7 @@ const Header = (props) => (
     justifyContent="center"
     w="100%"
     height={{ base: headerMobileHeight, md: headerDesktopHeight }}
-    width={{
-      base: `calc(100vw - ${sidebarMobileWidth})`,
-      md: `calc(100vw - ${sidebarDesktopWidth})`,
-    }}
-    px={{ base: "1rem", md: "2rem" }}
-    {...props}
+    pr={{ base: "1rem", md: "2rem" }}
   >
     <Menu>
       <MenuButton
@@ -50,15 +43,16 @@ const Header = (props) => (
         colorScheme="pink"
       ></MenuButton>
       <MenuList>
-        <MenuItem as={Link} to="/" _hover={{ color: "currentcolor" }}>
-          Pedidos
-        </MenuItem>
-        <MenuItem as={Link} to="/" _hover={{ color: "currentcolor" }}>
-          Arreglos
-        </MenuItem>
-        <MenuItem as={Link} to="/" _hover={{ color: "currentcolor" }}>
-          Administracion
-        </MenuItem>
+        {mainRoutes.map(({ name, path }) => (
+          <MenuItem
+            key={name}
+            as={Link}
+            to={path}
+            _hover={{ color: "currentcolor" }}
+          >
+            {name}
+          </MenuItem>
+        ))}
         <MenuItem
           onClick={() => (window.location.href = "/Identity/Account/Manage")}
         >
@@ -73,15 +67,17 @@ const Header = (props) => (
         direction="row"
         height="fit-content"
       >
-        <Text marginBottom="0" fontSize="lg" marginLeft="2rem">
-          <ChakraLink to="/">Pedidos</ChakraLink>
-        </Text>
-        <Text marginBottom="0" fontSize="lg" marginLeft="3rem">
-          <ChakraLink to="/">Arreglos</ChakraLink>
-        </Text>
-        <Text fontSize="lg" marginBottom={0} marginLeft="3rem">
-          <ChakraLink to="/Sucursal">Administración</ChakraLink>
-        </Text>
+        {mainRoutes.map(({ name, path }) => (
+          <ChakraLink
+            key={name}
+            marginBottom="0"
+            fontSize="lg"
+            marginLeft="3rem"
+            to={path}
+          >
+            {name}
+          </ChakraLink>
+        ))}
       </Stack>
       <ButtonGroup display={{ base: "none", md: "flex" }} marginLeft="auto">
         <ToggleTheme variant="outline" colorScheme="pink" />

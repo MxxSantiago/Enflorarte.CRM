@@ -1,7 +1,7 @@
 import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
-import EntitiesTable from "./EntitiesTable.jsx";
 import { useEffect, useState } from "react";
+import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 
 const EntityWithVariantView = ({
   title,
@@ -12,22 +12,21 @@ const EntityWithVariantView = ({
   variant,
 }) => {
   const [lastUpdated, setLastUpdated] = useState();
-
-  const refreshView = () => setLastUpdated(new Date());
-
-  useEffect(() => refreshView(), [title]);
-
   const gridTemplateColumns = useBreakpointValue({
     md: "repeat(1, 1fr)",
     lg: "repeat(2, 1fr)",
   });
+
+  const refreshView = () => setLastUpdated(new Date());
+
+  useEffect(() => refreshView(), [title]);
 
   return (
     <Grid
       templateColumns={gridTemplateColumns}
       gap={5}
       px={{ base: 4, md: 6 }}
-      pt={6}
+      py={6}
     >
       <Box order={{ md: 1, lg: 1 }}>
         <CreateEntity

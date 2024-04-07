@@ -1,13 +1,14 @@
 import { Tr, Td, Flex } from "@chakra-ui/react";
-import ModifyEntity from "./ModifyEntity";
-import DeleteEntity from "./DeleteEntity";
+import ModifyEntity from "../ModifyEntity";
+import DeleteEntity from "../DeleteEntity";
 
-const TableItem = ({
+const EntitiesTableItem = ({
   item,
   entityName,
   refreshView,
   lastUpdated,
   fatherEntityName,
+  fatherEntityData,
 }) => (
   <Tr key={item.id}>
     {Object.keys(item)
@@ -23,6 +24,7 @@ const TableItem = ({
           entity={item}
           refreshView={refreshView}
           fatherEntityName={fatherEntityName}
+          fatherEntityData={fatherEntityData}
         />
         <DeleteEntity
           entityName={entityName}
@@ -34,4 +36,4 @@ const TableItem = ({
   </Tr>
 );
 
-export default TableItem;
+export default EntitiesTableItem;
