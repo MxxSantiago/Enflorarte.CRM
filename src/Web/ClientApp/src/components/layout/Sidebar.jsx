@@ -29,24 +29,28 @@ const Sidebar = ({ routes }) => {
         />
       </Flex>
       <Stack spacing={0}>
-        {routes.map(({ name, path, icon }) => (
-          <Button
-            key={name}
-            width="100%"
-            colorScheme="pink"
-            variant={location.pathname.indexOf(path) !== -1 ? "solid" : "ghost"}
-            as={NavLink}
-            _hover={{ color: "currentColor" }}
-            height={16}
-            to={path}
-            borderRadius={0}
-            leftIcon={icon}
-            display="flex"
-            justifyContent={{ base: "center", md: "flex-start" }}
-          >
-            <Box display={{ base: "none", md: "block" }}>{name}</Box>
-          </Button>
-        ))}
+        {routes
+          .filter((r) => !r.ignore)
+          .map(({ name, path, icon }) => (
+            <Button
+              key={name}
+              width="100%"
+              colorScheme="pink"
+              variant={
+                location.pathname.indexOf(path) !== -1 ? "solid" : "ghost"
+              }
+              as={NavLink}
+              _hover={{ color: "currentColor" }}
+              height={16}
+              to={path}
+              borderRadius={0}
+              leftIcon={icon}
+              display="flex"
+              justifyContent={{ base: "center", md: "flex-start" }}
+            >
+              <Box display={{ base: "none", md: "block" }}>{name}</Box>
+            </Button>
+          ))}
       </Stack>
     </Card>
   );

@@ -21,8 +21,10 @@ import {
 } from "react-icons/fi";
 import { IoFlowerOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa6";
+import { Navigate } from "react-router-dom";
 
 const administrationRoutes = [
+  { path: "/", element: <Navigate to="branch" />, ignore: true },
   {
     name: "Sucursales",
     path: "branch",

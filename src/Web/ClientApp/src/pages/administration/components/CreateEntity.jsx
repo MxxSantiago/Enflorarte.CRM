@@ -5,7 +5,6 @@ import {
   Card,
   Heading,
   Input,
-  Select,
   useToast,
   Grid,
   VStack,
@@ -16,6 +15,7 @@ import {
   getAllEntities,
 } from "../../../core/helpers/web-api-client.helper.ts";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
+import AutocompleteSelect from "../../../components/shared/AutocompleteSelect.jsx";
 
 function CreateEntity({
   title,
@@ -28,6 +28,7 @@ function CreateEntity({
   const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
   const [fatherEntityData, setFatherEntityData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState([]);
 
   useEffect(() => setProperties({ ...entity }), [entity]);
 
@@ -36,6 +37,22 @@ function CreateEntity({
       populateFatherItems();
     }
   }, [lastUpdated]);
+
+  const handleSelectedItemChange = (selectedItem, property) => {
+    if (selectedItem.length) {
+      setSelectedItem(selectedItem);
+      setProperties({
+        ...properties,
+        [property]: "" + selectedItem[0]?.value,
+      });
+    } else {
+      setSelectedItem([]);
+      setProperties({
+        ...properties,
+        [property]: "",
+      });
+    }
+  };
 
   const handleCreate = async (event) => {
     event.preventDefault();
@@ -113,25 +130,16 @@ function CreateEntity({
                   <label htmlFor={property}>{LANG(property)}:</label>
                 </Box>
                 {property.toString().includes("Id") ? (
-                  <Select
-                    id={property}
-                    size={{ base: "md", md: "lg" }}
-                    value={properties[property] ?? ""}
-                    onChange={(e) =>
-                      setProperties({
-                        ...properties,
-                        [property]:
-                          e.target.value === "---" ? undefined : e.target.value,
-                      })
-                    }
-                  >
-                    <option>---</option>
-                    {fatherEntityData.map((fatherEntity) => (
-                      <option key={fatherEntity.id} value={fatherEntity.id}>
-                        {fatherEntity.name}
-                      </option>
-                    ))}
-                  </Select>
+                  <>
+                    <AutocompleteSelect
+                      _items={fatherEntityData.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
+                      onChange={(e) => handleSelectedItemChange(e, property)}
+                      selectedItem={selectedItem}
+                    />
+                  </>
                 ) : (
                   <Input
                     id={property}

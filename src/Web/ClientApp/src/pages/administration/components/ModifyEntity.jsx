@@ -14,6 +14,34 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
+import AutocompleteSelect from "../../../components/shared/AutocompleteSelect.jsx";
+
+function getRelatedFatherEntity(fatherEntityData, fatherEntityName, entity) {
+  let fatherIdProperty = `${fatherEntityName}Id`;
+
+  // TODO: Change prefferedCommunicationType to just communicationType
+  if (fatherIdProperty.indexOf("communication") !== -1) {
+    fatherIdProperty =
+      "preferred" +
+      fatherIdProperty.charAt(0).toUpperCase() +
+      fatherIdProperty.slice(1);
+  }
+
+  const fatherId = entity[fatherIdProperty];
+
+  const fatherEntity = fatherEntityData.find((item) => item.id === fatherId);
+
+  if (!fatherEntity) {
+    return [];
+  } else {
+    return [
+      {
+        value: fatherEntity.id,
+        label: fatherEntity.name,
+      },
+    ];
+  }
+}
 
 function ModifyEntity({
   entityName,
@@ -21,9 +49,13 @@ function ModifyEntity({
   refreshView,
   lastUpdated,
   fatherEntityData,
+  fatherEntityName,
 }) {
   const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
+  const [selectedItem, setSelectedItem] = useState(
+    getRelatedFatherEntity(fatherEntityData, fatherEntityName, entity)
+  );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
@@ -55,9 +87,31 @@ function ModifyEntity({
 
   const cleanProperties = () => setProperties({ ...entity });
 
+  const handleSelectedItemChange = (selectedItem, property) => {
+    if (selectedItem.length) {
+      setSelectedItem(selectedItem);
+      setProperties({
+        ...properties,
+        [property]: "" + selectedItem[0]?.value,
+      });
+    } else {
+      setSelectedItem([]);
+      setProperties({
+        ...properties,
+        [property]: "",
+      });
+    }
+  };
+
   useEffect(() => {
     cleanProperties();
   }, [entity, lastUpdated, isOpen]);
+
+  useEffect(() => {
+    setSelectedItem(
+      getRelatedFatherEntity(fatherEntityData, fatherEntityName, entity)
+    );
+  }, [entity, fatherEntityData, fatherEntityName]);
 
   const isDisabled = () =>
     Object.entries(properties)
@@ -91,23 +145,14 @@ function ModifyEntity({
                       <label htmlFor={property}>{LANG(property)}</label>
                     </Box>
                     {property.toString().includes("Id") ? (
-                      <Select
-                        id={property}
-                        size={{ base: "md", md: "lg" }}
-                        value={properties[property] ?? ""}
-                        onChange={(e) =>
-                          setProperties({
-                            ...properties,
-                            [property]: e.target.value,
-                          })
-                        }
-                      >
-                        {fatherEntityData.map((fatherEntity) => (
-                          <option key={fatherEntity.id} value={fatherEntity.id}>
-                            {fatherEntity.name}
-                          </option>
-                        ))}
-                      </Select>
+                      <AutocompleteSelect
+                        _items={fatherEntityData.map((item) => ({
+                          value: item.id,
+                          label: item.name,
+                        }))}
+                        onChange={(e) => handleSelectedItemChange(e, property)}
+                        selectedItem={selectedItem}
+                      />
                     ) : (
                       <Input
                         id={property}

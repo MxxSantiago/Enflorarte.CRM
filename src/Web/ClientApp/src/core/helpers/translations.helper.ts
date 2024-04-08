@@ -6,6 +6,8 @@
       return "Flor";
     case "flower":
       return "Flor";
+    case "flowervariant":
+      return "Variante de flor";
     case "preferredaddress":
       return "Dirección preferida";
     case "phonenumber":
