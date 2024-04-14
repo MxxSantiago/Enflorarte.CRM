@@ -242,16 +242,16 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PreferredAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    PreferredCommunicationTypeId = table.Column<int>(type: "int", nullable: false)
+                    CommunicationTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Client", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Client_CommunicationType_PreferredCommunicationTypeId",
-                        column: x => x.PreferredCommunicationTypeId,
+                        name: "FK_Client_CommunicationType_CommunicationTypeId",
+                        column: x => x.CommunicationTypeId,
                         principalTable: "CommunicationType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -337,9 +337,9 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Client_PreferredCommunicationTypeId",
+                name: "IX_Client_CommunicationTypeId",
                 table: "Client",
-                column: "PreferredCommunicationTypeId");
+                column: "CommunicationTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlowerVariant_FlowerId",

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { Input, Button, Box, Select } from "@chakra-ui/react";
+import { Input, Button, Box } from "@chakra-ui/react";
 import { updateEntity } from "../../../core/helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
@@ -16,21 +16,8 @@ import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
 import AutocompleteSelect from "../../../components/shared/AutocompleteSelect.jsx";
 
-function getRelatedFatherEntity(fatherEntityData, fatherEntityName, entity) {
-  let fatherIdProperty = `${fatherEntityName}Id`;
-
-  // TODO: Change prefferedCommunicationType to just communicationType
-  if (fatherIdProperty.indexOf("communication") !== -1) {
-    fatherIdProperty =
-      "preferred" +
-      fatherIdProperty.charAt(0).toUpperCase() +
-      fatherIdProperty.slice(1);
-  }
-
-  const fatherId = entity[fatherIdProperty];
-
-  const fatherEntity = fatherEntityData.find((item) => item.id === fatherId);
-
+function getRelatedFatherEntity(fatherEntityName, entity) {
+  const fatherEntity = entity && entity[fatherEntityName];
   if (!fatherEntity) {
     return [];
   } else {
@@ -54,7 +41,7 @@ function ModifyEntity({
   const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
   const [selectedItem, setSelectedItem] = useState(
-    getRelatedFatherEntity(fatherEntityData, fatherEntityName, entity)
+    getRelatedFatherEntity(fatherEntityName, entity)
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
@@ -108,9 +95,7 @@ function ModifyEntity({
   }, [entity, lastUpdated, isOpen]);
 
   useEffect(() => {
-    setSelectedItem(
-      getRelatedFatherEntity(fatherEntityData, fatherEntityName, entity)
-    );
+    setSelectedItem(getRelatedFatherEntity(fatherEntityName, entity));
   }, [entity, fatherEntityData, fatherEntityName]);
 
   const isDisabled = () =>
@@ -138,7 +123,10 @@ function ModifyEntity({
             </AlertDialogHeader>
             <AlertDialogBody>
               {Object.keys(properties)
-                .filter((property) => property !== "id")
+                .filter(
+                  (property) =>
+                    property !== "id" && property !== fatherEntityName
+                )
                 .map((property) => (
                   <Box key={property + entity.id} width="100%">
                     <Box mb={2} mt={7} display="flex">

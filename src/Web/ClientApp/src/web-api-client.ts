@@ -2032,10 +2032,10 @@ export interface IBranch extends ILookupEntity {
 
 export class Client extends BaseEntity implements IClient {
     name?: string;
-    preferredAddress?: string;
+    address?: string;
     phoneNumber?: string;
-    preferredCommunicationTypeId?: number;
-    preferredCommunicationType?: CommunicationType | undefined;
+    communicationTypeId?: number;
+    communicationType?: CommunicationType | undefined;
 
     constructor(data?: IClient) {
         super(data);
@@ -2045,10 +2045,10 @@ export class Client extends BaseEntity implements IClient {
         super.init(_data);
         if (_data) {
             this.name = _data["name"];
-            this.preferredAddress = _data["preferredAddress"];
+            this.address = _data["address"];
             this.phoneNumber = _data["phoneNumber"];
-            this.preferredCommunicationTypeId = _data["preferredCommunicationTypeId"];
-            this.preferredCommunicationType = _data["preferredCommunicationType"] ? CommunicationType.fromJS(_data["preferredCommunicationType"]) : <any>undefined;
+            this.communicationTypeId = _data["communicationTypeId"];
+            this.communicationType = _data["communicationType"] ? CommunicationType.fromJS(_data["communicationType"]) : <any>undefined;
         }
     }
 
@@ -2062,10 +2062,10 @@ export class Client extends BaseEntity implements IClient {
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["preferredAddress"] = this.preferredAddress;
+        data["address"] = this.address;
         data["phoneNumber"] = this.phoneNumber;
-        data["preferredCommunicationTypeId"] = this.preferredCommunicationTypeId;
-        data["preferredCommunicationType"] = this.preferredCommunicationType ? this.preferredCommunicationType.toJSON() : <any>undefined;
+        data["communicationTypeId"] = this.communicationTypeId;
+        data["communicationType"] = this.communicationType ? this.communicationType.toJSON() : <any>undefined;
         super.toJSON(data);
         return data;
     }
@@ -2073,10 +2073,10 @@ export class Client extends BaseEntity implements IClient {
 
 export interface IClient extends IBaseEntity {
     name?: string;
-    preferredAddress?: string;
+    address?: string;
     phoneNumber?: string;
-    preferredCommunicationTypeId?: number;
-    preferredCommunicationType?: CommunicationType | undefined;
+    communicationTypeId?: number;
+    communicationType?: CommunicationType | undefined;
 }
 
 export class CommunicationType extends LookupEntity implements ICommunicationType {

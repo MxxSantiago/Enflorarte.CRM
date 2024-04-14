@@ -61,17 +61,17 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("PreferredAddress")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PreferredCommunicationTypeId")
+                    b.Property<int>("CommunicationTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PreferredCommunicationTypeId");
+                    b.HasIndex("CommunicationTypeId");
 
                     b.ToTable("Client");
                 });
@@ -421,13 +421,13 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Client", b =>
                 {
-                    b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", "PreferredCommunicationType")
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", "CommunicationType")
                         .WithMany()
-                        .HasForeignKey("PreferredCommunicationTypeId")
+                        .HasForeignKey("CommunicationTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("PreferredCommunicationType");
+                    b.Navigation("CommunicationType");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.FlowerVariant", b =>

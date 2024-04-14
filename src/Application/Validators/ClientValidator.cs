@@ -14,7 +14,7 @@ public class ClientValidator : AbstractValidator<Client>
             .NotEmpty()
             .Matches(@"^\d{10}$");
 
-        RuleFor(client => client.PreferredAddress)
+        RuleFor(client => client.Address)
             .NotEmpty()
             .MaximumLength(255);
     }

@@ -8,12 +8,13 @@
       return "Flor";
     case "flowervariant":
       return "Variante de flor";
-    case "preferredaddress":
-      return "Dirección preferida";
+    case "address":
+      return "Dirección";
     case "phonenumber":
       return "Teléfono";
-    case "preferredcommunicationtypeid":
-      return "Tipo de comunicación preferida";
+    case "communicationtype":
+    case "communicationtypeid":
+      return "Tipo de comunicación";
     case "link":
       return "Enlace";
     case "wrapperid":

@@ -3,6 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
 import { CommunicationType } from "../../../web-api-client.ts";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
+import { removeReferenceIdProperties } from "../../../core/helpers/web-api-client.helper.ts";
 
 const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
   const [lastUpdated, setLastUpdated] = useState();
@@ -16,7 +17,7 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
       <CreateEntity
         entityName={entityName}
         title={title}
-        entity={entity}
+        entity={removeReferenceIdProperties(entity)}
         refreshView={refreshView}
         fatherEntity={new CommunicationType().toJSON()}
         fatherEntityName="communicationType"

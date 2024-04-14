@@ -37,9 +37,16 @@ function selectClient(entityName: string) {
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
 
-export async function getAllEntities(entityName: string) {
+export async function getAllEntities(
+  entityName: string,
+  removeReferences: boolean = false
+) {
   const result = await executeCrudMethod(entityName, "GetAll");
-  result.forEach((entity) => removeReferenceIdProperties(entity));
+
+  if (removeReferences) {
+    result.forEach((entity) => removeReferenceIdProperties(entity));
+  }
+
   return result;
 }
 
@@ -48,13 +55,27 @@ export function removeReferenceIdProperties(payload: any) {
     .filter((key) => key.indexOf("Id") !== -1 && key !== "id")
     .map((key) => key.replace("Id", ""));
 
-  Object.entries(payload).forEach(([key]) => {
-    if (idProperties.includes(key)) {
-      delete payload[key];
-    }
-  });
+  const payloadCopy = { ...payload };
 
-  return payload;
+  const newPayload = Object.entries(payloadCopy)
+    .filter(([key]) => !idProperties.includes(key))
+    .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+  return newPayload;
+}
+
+export function removeReferenceObjectProperties(payload: any) {
+  const idProperties = Object.keys(payload)
+    .filter((key) => key.endsWith("Id"))
+    .map((key) => key.replace("Id", ""));
+
+  const payloadCopy = { ...payload };
+
+  const newPayload = Object.entries(payloadCopy)
+    .filter(([key]) => !idProperties.includes(key))
+    .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+  return newPayload;
 }
 
 export function createEntityPayload(properties: any) {

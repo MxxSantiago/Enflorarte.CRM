@@ -13,9 +13,13 @@ const EntitiesTableItem = ({
   <Tr key={item.id}>
     {Object.keys(item)
       .filter((key) => key.toLowerCase().indexOf("id") === -1)
-      .map((key) => (
-        <Td key={key}>{item[key]}</Td>
-      ))}
+      .map((key) =>
+        item[key].name ? (
+          <Td key={key}>{item[key].name}</Td>
+        ) : (
+          <Td key={key}>{item[key]}</Td>
+        )
+      )}
     <Td>
       <Flex justifyContent="flex-end" gap="10px">
         <ModifyEntity

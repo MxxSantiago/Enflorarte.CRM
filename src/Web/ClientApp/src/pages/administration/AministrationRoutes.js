@@ -81,7 +81,7 @@ const administrationRoutes = [
         title="Crear Nuevo Cliente"
         entityName="client"
         fatherEntityName="communicationType"
-        entity={new Client().toJSON()}
+        entity={new Client()}
       />
     ),
     icon: <FaRegUser />,

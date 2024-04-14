@@ -1481,17 +1481,17 @@
               "name": {
                 "type": "string"
               },
-              "preferredAddress": {
+              "address": {
                 "type": "string"
               },
               "phoneNumber": {
                 "type": "string"
               },
-              "preferredCommunicationTypeId": {
+              "communicationTypeId": {
                 "type": "integer",
                 "format": "int32"
               },
-              "preferredCommunicationType": {
+              "communicationType": {
                 "nullable": true,
                 "oneOf": [
                   {
