@@ -12,7 +12,7 @@ public class ClientValidator : AbstractValidator<Client>
 
         RuleFor(client => client.PhoneNumber).NotEmpty().Matches(@"^\d{10}$");
 
-        RuleFor(client => client.PreferredAddress)
+        RuleFor(client => client.Address)
             .MaximumLength(255);
     }
 }
