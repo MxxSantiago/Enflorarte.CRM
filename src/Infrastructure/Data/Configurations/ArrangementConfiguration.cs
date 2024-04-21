@@ -20,17 +20,17 @@ public class ArrangementConfiguration : IEntityTypeConfiguration<Arrangement>
         builder.Property(p => p.ReferenceImage).HasMaxLength(255);
         builder.Property(p => p.IsAvailable).IsRequired();
 
-        builder.HasOne(p => p.WrapperVariant)
+        builder.HasOne(p => p.WrapperVariants)
             .WithMany()
             .HasForeignKey(p => p.WrapperVariantId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(p => p.FlowerVariant)
+        builder.HasOne(p => p.FlowerVariants)
             .WithMany()
             .HasForeignKey(p => p.FlowerVariantId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(p => p.ArrangementType)
+        builder.HasOne(p => p.ArrangementTypes)
             .WithMany()
             .HasForeignKey(p => p.ArrangementTypeId)
             .OnDelete(DeleteBehavior.Restrict);

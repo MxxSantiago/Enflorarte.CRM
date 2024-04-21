@@ -7,6 +7,6 @@ namespace Enflorarte.CRM.Application.Services;
 
 public class ArrangementTypeService : BaseService<ArrangementType>
 {
-    public ArrangementTypeService(IArrangamentTypeDAO repository, IValidator<ArrangementType> validator)
+    public ArrangementTypeService(IArrangementTypeDAO repository, IValidator<ArrangementType> validator)
         : base(repository, validator) { }
 }

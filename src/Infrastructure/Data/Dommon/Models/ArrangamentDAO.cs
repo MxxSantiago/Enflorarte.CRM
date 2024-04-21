@@ -3,7 +3,7 @@ using Enflorarte.CRM.Domain.Entities;
 
 namespace Enflorarte.CRM.Infrastructure.Data.Dommon.Models;
 
-public class ArrangamentDAO : BaseDAO<Arrangement>, IArrangamentDAO
+public class ArrangementDAO : BaseDAO<Arrangement>, IArrangementDAO
 {
-    public ArrangamentDAO(ApplicationDbContext context) : base(context) { }
+    public ArrangementDAO(ApplicationDbContext context) : base(context) { }
 }

@@ -13,16 +13,16 @@ public class ArrangementValidator : AbstractValidator<Arrangement>
         RuleFor(arrangement => arrangement.IsTemplate)
             .NotEmpty();
 
-        RuleFor(arrangement => arrangement.ArrangementType)
+        RuleFor(arrangement => arrangement.ArrangementTypes)
             .NotEmpty();
 
         RuleFor(arrangement => arrangement.Tags)
             .NotEmpty();
 
-        RuleFor(arrangement => arrangement.WrapperVariant)
+        RuleFor(arrangement => arrangement.WrapperVariants)
             .NotEmpty();
 
-        RuleFor(arrangement => arrangement.FlowerVariant)
+        RuleFor(arrangement => arrangement.FlowerVariants)
             .NotEmpty();
 
         RuleFor(arrangement => arrangement.Name)

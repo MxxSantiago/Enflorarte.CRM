@@ -2,4 +2,4 @@
 
 namespace Enflorarte.CRM.Application.Common.Interfaces.DAOs;
 
-public interface IArrangamentTypeDAO : IBaseDAO<ArrangementType>;
+public interface IArrangementTypeDAO : IBaseDAO<ArrangementType>;
