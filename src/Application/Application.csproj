@@ -28,7 +28,6 @@
     <Compile Remove="Services\ArrangementService.cs" />
     <Compile Remove="Services\TagService.cs" />
     <Compile Remove="Validators\ArrangementVariantValidator.cs" />
-    <Compile Remove="Validators\ArrangementValidator.cs" />
     <Compile Remove="Validators\ArrangementTypeValidator.cs" />
     <Compile Remove="Validators\TagValidator.cs" />
   </ItemGroup>
