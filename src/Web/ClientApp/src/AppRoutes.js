@@ -1,10 +1,16 @@
-import { Home } from "./components/Home";
+import AdministrationLayout from "./pages/administration/AdministrationLayout";
 
-const AppRoutes = [
+const mainRoutes = [
   {
-    index: true,
-    element: <Home />
+    name: "Pedidos",
+    path: "/orders/*",
+    element: <AdministrationLayout />,
+  },
+  {
+    name: "Administracion",
+    path: "/administration/*",
+    element: <AdministrationLayout />,
   },
 ];
 
-export default AppRoutes;
+export default mainRoutes;

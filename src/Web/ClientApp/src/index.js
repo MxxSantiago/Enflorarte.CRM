@@ -1,26 +1,21 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import "bootstrap/dist/css/bootstrap.css";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration.js";
+import reportWebVitals from "./reportWebVitals.js";
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
-root.render(
-  <BrowserRouter basename={baseUrl}>
-    <App />
-  </BrowserRouter>);
+root.render(<App />);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
+// Si deseas que tu aplicación funcione sin conexión y se cargue más rápido, puedes cambiar
+// unregister() por register() a continuación. Ten en cuenta que esto conlleva algunos inconvenientes.
+// Obtén más información sobre los service workers: https://cra.link/PWA
 serviceWorkerRegistration.unregister();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Si deseas comenzar a medir el rendimiento en tu aplicación, pasa una función
+// para registrar los resultados (por ejemplo: reportWebVitals(console.log))
+// o envíalos a un punto de análisis. Obtén más información: https://bit.ly/CRA-vitals
 reportWebVitals();

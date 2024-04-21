@@ -1481,18 +1481,23 @@
               "name": {
                 "type": "string"
               },
-              "preferredAddress": {
+              "address": {
                 "type": "string"
               },
               "phoneNumber": {
                 "type": "string"
               },
-              "preferredCommunicationTypeId": {
+              "communicationTypeId": {
                 "type": "integer",
                 "format": "int32"
               },
-              "preferredCommunicationType": {
-                "$ref": "#/components/schemas/CommunicationType"
+              "communicationType": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CommunicationType"
+                  }
+                ]
               }
             }
           }
@@ -1550,7 +1555,12 @@
                 "format": "int32"
               },
               "flower": {
-                "$ref": "#/components/schemas/Flower"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Flower"
+                  }
+                ]
               }
             }
           }
@@ -1592,7 +1602,12 @@
                 "format": "int32"
               },
               "wrapper": {
-                "$ref": "#/components/schemas/Wrapper"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Wrapper"
+                  }
+                ]
               }
             }
           }
