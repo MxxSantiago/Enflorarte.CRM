@@ -13,7 +13,4 @@ public class Arrangement : BaseEntity
     public virtual ICollection<FlowerVariant> FlowerVariants { get; set; } = new List<FlowerVariant>();
     public virtual ICollection<ArrangementType> ArrangementTypes { get; set; } = new List<ArrangementType>();
 
-    public int WrapperVariantId { get; set; }
-    public int FlowerVariantId { get; set; }
-    public int ArrangementTypeId { get; set; }
 }

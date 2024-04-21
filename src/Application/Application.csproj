@@ -24,7 +24,6 @@
     <Compile Remove="Common\Interfaces\DAOs\IBaseRepository.cs" />
     <Compile Remove="Common\Interfaces\DAOs\ITagRepository.cs" />
     <Compile Remove="Services\ArrangementVariantService.cs" />
-    <Compile Remove="Services\ArrangementService.cs" />
     <Compile Remove="Services\TagService.cs" />
     <Compile Remove="Validators\ArrangementVariantValidator.cs" />
     <Compile Remove="Validators\TagValidator.cs" />

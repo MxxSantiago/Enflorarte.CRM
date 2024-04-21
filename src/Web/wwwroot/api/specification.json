@@ -6,6 +6,322 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Arrangement": {
+      "get": {
+        "tags": [
+          "Arrangement"
+        ],
+        "operationId": "Arrangement_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Arrangement"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Arrangement"
+        ],
+        "operationId": "Arrangement_Post",
+        "requestBody": {
+          "x-name": "entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Arrangement"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Arrangement/{id}": {
+      "get": {
+        "tags": [
+          "Arrangement"
+        ],
+        "operationId": "Arrangement_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Arrangement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Arrangement"
+        ],
+        "operationId": "Arrangement_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Arrangement"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Arrangement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Arrangement"
+        ],
+        "operationId": "Arrangement_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Arrangement"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ArrangementType": {
+      "get": {
+        "tags": [
+          "ArrangementType"
+        ],
+        "operationId": "ArrangementType_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArrangementType"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ArrangementType"
+        ],
+        "operationId": "ArrangementType_Post",
+        "requestBody": {
+          "x-name": "entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArrangementType"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ArrangementType/{id}": {
+      "get": {
+        "tags": [
+          "ArrangementType"
+        ],
+        "operationId": "ArrangementType_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrangementType"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ArrangementType"
+        ],
+        "operationId": "ArrangementType_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArrangementType"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrangementType"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ArrangementType"
+        ],
+        "operationId": "ArrangementType_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrangementType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Branch": {
       "get": {
         "tags": [
@@ -1431,7 +1747,87 @@
   },
   "components": {
     "schemas": {
-      "Branch": {
+      "Arrangement": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "isTemplate": {
+                "type": "boolean"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "extras": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "referenceImage": {
+                "type": "string"
+              },
+              "isAvailable": {
+                "type": "boolean"
+              },
+              "wrapperVariants": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/WrapperVariant"
+                }
+              },
+              "flowerVariants": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FlowerVariant"
+                }
+              },
+              "arrangementTypes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ArrangementType"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "WrapperVariant": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LookupEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "wrapperId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "wrapper": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Wrapper"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Wrapper": {
         "allOf": [
           {
             "$ref": "#/components/schemas/LookupEntity"
@@ -1468,6 +1864,69 @@
             "format": "int32"
           }
         }
+      },
+      "FlowerVariant": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LookupEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "flowerId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "flower": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Flower"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Flower": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LookupEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ArrangementType": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Branch": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LookupEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       },
       "Client": {
         "allOf": [
@@ -1530,42 +1989,6 @@
           }
         ]
       },
-      "Flower": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/LookupEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "FlowerVariant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/LookupEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "flowerId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "flower": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Flower"
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      },
       "Responsible": {
         "allOf": [
           {
@@ -1574,42 +1997,6 @@
           {
             "type": "object",
             "additionalProperties": false
-          }
-        ]
-      },
-      "Wrapper": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/LookupEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "WrapperVariant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/LookupEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "wrapperId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "wrapper": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Wrapper"
-                  }
-                ]
-              }
-            }
           }
         ]
       }
