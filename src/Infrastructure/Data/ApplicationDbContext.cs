@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Responsible> Responsible => Set<Responsible>();
     public DbSet<Wrapper> Wrapper => Set<Wrapper>();
     public DbSet<WrapperVariant> WrapperVariant => Set<WrapperVariant>();
+    public DbSet<Arrangement> Arrangement => Set<Arrangement>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
