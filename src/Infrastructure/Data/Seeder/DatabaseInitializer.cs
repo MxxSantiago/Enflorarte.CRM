@@ -101,5 +101,41 @@ public class DataSeeder
             new Branch { Id = 3, Name = "Tijuana" },
             new Branch { Id = 4, Name = "Rosarito" }
         );
+
+        modelBuilder.Entity<Arrangement>().HasData(
+            new Arrangement
+            {
+                Id = 1,
+                Name = "Arreglo Primero",
+                IsTemplate = true,
+                Tags = new string[] { "tag1", "tag2" },
+                Extras = new string[] { "extra1", "extra2" },
+                ReferenceImage = "https://ejemplo.com/imagen1.jpg",
+                IsAvailable = true
+            },
+            new Arrangement
+            {
+                Id = 2,
+                Name = "Arreglo Segundo",
+                IsTemplate = false,
+                Tags = new string[] { "tag3", "tag4" },
+                Extras = new string[] { "extra3", "extra4" },
+                ReferenceImage = "https://ejemplo.com/imagen2.jpg",
+                IsAvailable = true
+            }
+        );
+
+        modelBuilder.Entity<ArrangementType>().HasData(
+            new ArrangementType
+            {
+                Id = 1,
+                Name = "Tipo de Arreglo 1"
+            },
+            new ArrangementType
+            {
+                Id = 2,
+                Name = "Tipo de Arreglo 2"
+            }
+        );
     }
 }

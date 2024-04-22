@@ -17,10 +17,109 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Arrangement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Extras")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTemplate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ReferenceImage")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Tags")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Arrangement");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Extras = "[\"extra1\",\"extra2\"]",
+                            IsAvailable = true,
+                            IsTemplate = true,
+                            Name = "Arreglo Primero",
+                            ReferenceImage = "https://ejemplo.com/imagen1.jpg",
+                            Tags = "[\"tag1\",\"tag2\"]"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Extras = "[\"extra3\",\"extra4\"]",
+                            IsAvailable = true,
+                            IsTemplate = false,
+                            Name = "Arreglo Segundo",
+                            ReferenceImage = "https://ejemplo.com/imagen2.jpg",
+                            Tags = "[\"tag3\",\"tag4\"]"
+                        });
+                });
+
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.ArrangementType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ArrangementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArrangementId");
+
+                    b.ToTable("ArrangementType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Tipo de Arreglo 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Tipo de Arreglo 2"
+                        });
+                });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Branch", b =>
                 {
@@ -38,6 +137,28 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Branch");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mexicali"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ensenada"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Tijuana"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Rosarito"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Client", b =>
@@ -47,6 +168,14 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("CommunicationTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -58,19 +187,45 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("PreferredAddress")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("PreferredCommunicationTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PreferredCommunicationTypeId");
+                    b.HasIndex("CommunicationTypeId");
 
                     b.ToTable("Client");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Main St",
+                            CommunicationTypeId = 1,
+                            Name = "John Doe",
+                            PhoneNumber = "1234567890"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "456 Elm St",
+                            CommunicationTypeId = 2,
+                            Name = "Jane Doe",
+                            PhoneNumber = "0987654321"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "789 Oak St",
+                            CommunicationTypeId = 3,
+                            Name = "Alice Smith",
+                            PhoneNumber = "1357924680"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "012 Pine St",
+                            CommunicationTypeId = 4,
+                            Name = "Bob Smith",
+                            PhoneNumber = "2468135790"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.CommunicationType", b =>
@@ -94,6 +249,32 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CommunicationType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Link = "",
+                            Name = "Email"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Link = "",
+                            Name = "Phone"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Link = "",
+                            Name = "SMS"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Link = "",
+                            Name = "WhatsApp"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.DeliveryType", b =>
@@ -112,6 +293,28 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Express"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Standard"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Economy"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Same Day"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Flower", b =>
@@ -130,6 +333,28 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Flower");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Rose"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Tulip"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Daisy"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Sunflower"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.FlowerVariant", b =>
@@ -139,6 +364,9 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ArrangementId")
+                        .HasColumnType("int");
 
                     b.Property<int>("FlowerId")
                         .HasColumnType("int");
@@ -150,9 +378,109 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArrangementId");
+
                     b.HasIndex("FlowerId");
 
                     b.ToTable("FlowerVariant");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FlowerId = 1,
+                            Name = "Red Rose"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FlowerId = 2,
+                            Name = "White Tulip"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FlowerId = 3,
+                            Name = "Yellow Daisy"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FlowerId = 4,
+                            Name = "Orange Sunflower"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FlowerId = 1,
+                            Name = "Pink Rose"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FlowerId = 2,
+                            Name = "Purple Tulip"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            FlowerId = 3,
+                            Name = "Blue Daisy"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            FlowerId = 4,
+                            Name = "Green Sunflower"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            FlowerId = 1,
+                            Name = "Black Rose"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            FlowerId = 2,
+                            Name = "White Tulip"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            FlowerId = 3,
+                            Name = "Yellow Daisy"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            FlowerId = 4,
+                            Name = "Orange Sunflower"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            FlowerId = 1,
+                            Name = "Pink Rose"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            FlowerId = 2,
+                            Name = "Purple Tulip"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            FlowerId = 3,
+                            Name = "Blue Daisy"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            FlowerId = 4,
+                            Name = "Green Sunflower"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Responsible", b =>
@@ -171,6 +499,28 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Responsible");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Jorge"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Maria"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Pedro"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Ana"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Wrapper", b =>
@@ -189,6 +539,28 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Wrapper");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Paper"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Plastic"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Fabric"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Metal"
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.WrapperVariant", b =>
@@ -198,6 +570,9 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ArrangementId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -209,9 +584,109 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArrangementId");
+
                     b.HasIndex("WrapperId");
 
                     b.ToTable("WrapperVariant");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Red",
+                            WrapperId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Blue",
+                            WrapperId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Green",
+                            WrapperId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Yellow",
+                            WrapperId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Purple",
+                            WrapperId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Orange",
+                            WrapperId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Black",
+                            WrapperId = 3
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "White",
+                            WrapperId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Pink",
+                            WrapperId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Brown",
+                            WrapperId = 2
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Gray",
+                            WrapperId = 3
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Beige",
+                            WrapperId = 4
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Cyan",
+                            WrapperId = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Magenta",
+                            WrapperId = 2
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Lime",
+                            WrapperId = 3
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Teal",
+                            WrapperId = 4
+                        });
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Infrastructure.Identity.ApplicationUser", b =>
@@ -416,19 +891,32 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.ArrangementType", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
+                        .WithMany("ArrangementTypes")
+                        .HasForeignKey("ArrangementId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Client", b =>
                 {
-                    b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", "PreferredCommunicationType")
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", "CommunicationType")
                         .WithMany()
-                        .HasForeignKey("PreferredCommunicationTypeId")
+                        .HasForeignKey("CommunicationTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("PreferredCommunicationType");
+                    b.Navigation("CommunicationType");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.FlowerVariant", b =>
                 {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
+                        .WithMany("FlowerVariants")
+                        .HasForeignKey("ArrangementId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Enflorarte.CRM.Domain.Entities.Flower", "Flower")
                         .WithMany()
                         .HasForeignKey("FlowerId")
@@ -440,6 +928,11 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.WrapperVariant", b =>
                 {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
+                        .WithMany("WrapperVariants")
+                        .HasForeignKey("ArrangementId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Enflorarte.CRM.Domain.Entities.Wrapper", "Wrapper")
                         .WithMany()
                         .HasForeignKey("WrapperId")
@@ -498,6 +991,15 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Arrangement", b =>
+                {
+                    b.Navigation("ArrangementTypes");
+
+                    b.Navigation("FlowerVariants");
+
+                    b.Navigation("WrapperVariants");
                 });
 #pragma warning restore 612, 618
         }
