@@ -19,11 +19,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Responsible> Responsible => Set<Responsible>();
     public DbSet<Wrapper> Wrapper => Set<Wrapper>();
     public DbSet<WrapperVariant> WrapperVariant => Set<WrapperVariant>();
+    public DbSet<Arrangement> Arrangement => Set<Arrangement>();
+    public DbSet<ArrangementType> ArrangementType => Set<ArrangementType>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        DataSeeder.SeedData(builder);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

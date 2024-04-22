@@ -42,5 +42,7 @@ public static class DependencyInjection
         services.AddScoped<IClientDAO, ClientDAO>();
         services.AddScoped<ICommunicationTypeDAO, CommunicationTypeDAO>();
         services.AddScoped<IResponsibleDAO, ResponsibleDAO>();
+        services.AddScoped<IArrangementTypeDAO, ArrangementTypeDAO>();
+        services.AddScoped<IArrangementDAO, ArrangementDAO>();
     }
 }

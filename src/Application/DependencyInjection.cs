@@ -24,5 +24,7 @@ public static class DependencyInjection
         services.AddScoped<ClientService>();
         services.AddScoped<CommunicationTypeService>();
         services.AddScoped<ResponsibleService>();
+        services.AddScoped<ArrangementService>();
+        services.AddScoped<ArrangementTypeService>();
     }
 }

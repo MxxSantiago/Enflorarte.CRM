@@ -10,6 +10,434 @@
 
 import followIfLoginRedirect from './components/api-authorization/followIfLoginRedirect';
 
+export class ArrangementClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    arrangement_GetAll(): Promise<Arrangement[]> {
+        let url_ = this.baseUrl + "/api/Arrangement";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangement_GetAll(_response);
+        });
+    }
+
+    protected processArrangement_GetAll(response: Response): Promise<Arrangement[]> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Arrangement.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Arrangement[]>(null as any);
+    }
+
+    arrangement_Post(entity: Arrangement): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Arrangement";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangement_Post(_response);
+        });
+    }
+
+    protected processArrangement_Post(response: Response): Promise<FileResponse> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    arrangement_Get(id: number): Promise<Arrangement> {
+        let url_ = this.baseUrl + "/api/Arrangement/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangement_Get(_response);
+        });
+    }
+
+    protected processArrangement_Get(response: Response): Promise<Arrangement> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Arrangement.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Arrangement>(null as any);
+    }
+
+    arrangement_Put(id: number, entity: Arrangement): Promise<Arrangement> {
+        let url_ = this.baseUrl + "/api/Arrangement/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangement_Put(_response);
+        });
+    }
+
+    protected processArrangement_Put(response: Response): Promise<Arrangement> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Arrangement.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Arrangement>(null as any);
+    }
+
+    arrangement_Delete(id: number): Promise<Arrangement> {
+        let url_ = this.baseUrl + "/api/Arrangement/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangement_Delete(_response);
+        });
+    }
+
+    protected processArrangement_Delete(response: Response): Promise<Arrangement> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Arrangement.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Arrangement>(null as any);
+    }
+}
+
+export class ArrangementTypeClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    arrangementType_GetAll(): Promise<ArrangementType[]> {
+        let url_ = this.baseUrl + "/api/ArrangementType";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangementType_GetAll(_response);
+        });
+    }
+
+    protected processArrangementType_GetAll(response: Response): Promise<ArrangementType[]> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ArrangementType.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ArrangementType[]>(null as any);
+    }
+
+    arrangementType_Post(entity: ArrangementType): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/ArrangementType";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangementType_Post(_response);
+        });
+    }
+
+    protected processArrangementType_Post(response: Response): Promise<FileResponse> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    arrangementType_Get(id: number): Promise<ArrangementType> {
+        let url_ = this.baseUrl + "/api/ArrangementType/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangementType_Get(_response);
+        });
+    }
+
+    protected processArrangementType_Get(response: Response): Promise<ArrangementType> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ArrangementType.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ArrangementType>(null as any);
+    }
+
+    arrangementType_Put(id: number, entity: ArrangementType): Promise<ArrangementType> {
+        let url_ = this.baseUrl + "/api/ArrangementType/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangementType_Put(_response);
+        });
+    }
+
+    protected processArrangementType_Put(response: Response): Promise<ArrangementType> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ArrangementType.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ArrangementType>(null as any);
+    }
+
+    arrangementType_Delete(id: number): Promise<ArrangementType> {
+        let url_ = this.baseUrl + "/api/ArrangementType/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processArrangementType_Delete(_response);
+        });
+    }
+
+    protected processArrangementType_Delete(response: Response): Promise<ArrangementType> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ArrangementType.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ArrangementType>(null as any);
+    }
+}
+
 export class BranchClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -1970,6 +2398,111 @@ export interface IBaseEntity {
     id?: number;
 }
 
+export class Arrangement extends BaseEntity implements IArrangement {
+    name?: string;
+    isTemplate?: boolean;
+    tags?: string[];
+    extras?: string[];
+    referenceImage?: string;
+    isAvailable?: boolean;
+    wrapperVariants?: WrapperVariant[];
+    flowerVariants?: FlowerVariant[];
+    arrangementTypes?: ArrangementType[];
+
+    constructor(data?: IArrangement) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.name = _data["name"];
+            this.isTemplate = _data["isTemplate"];
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
+            }
+            if (Array.isArray(_data["extras"])) {
+                this.extras = [] as any;
+                for (let item of _data["extras"])
+                    this.extras!.push(item);
+            }
+            this.referenceImage = _data["referenceImage"];
+            this.isAvailable = _data["isAvailable"];
+            if (Array.isArray(_data["wrapperVariants"])) {
+                this.wrapperVariants = [] as any;
+                for (let item of _data["wrapperVariants"])
+                    this.wrapperVariants!.push(WrapperVariant.fromJS(item));
+            }
+            if (Array.isArray(_data["flowerVariants"])) {
+                this.flowerVariants = [] as any;
+                for (let item of _data["flowerVariants"])
+                    this.flowerVariants!.push(FlowerVariant.fromJS(item));
+            }
+            if (Array.isArray(_data["arrangementTypes"])) {
+                this.arrangementTypes = [] as any;
+                for (let item of _data["arrangementTypes"])
+                    this.arrangementTypes!.push(ArrangementType.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): Arrangement {
+        data = typeof data === 'object' ? data : {};
+        let result = new Arrangement();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["isTemplate"] = this.isTemplate;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
+        if (Array.isArray(this.extras)) {
+            data["extras"] = [];
+            for (let item of this.extras)
+                data["extras"].push(item);
+        }
+        data["referenceImage"] = this.referenceImage;
+        data["isAvailable"] = this.isAvailable;
+        if (Array.isArray(this.wrapperVariants)) {
+            data["wrapperVariants"] = [];
+            for (let item of this.wrapperVariants)
+                data["wrapperVariants"].push(item.toJSON());
+        }
+        if (Array.isArray(this.flowerVariants)) {
+            data["flowerVariants"] = [];
+            for (let item of this.flowerVariants)
+                data["flowerVariants"].push(item.toJSON());
+        }
+        if (Array.isArray(this.arrangementTypes)) {
+            data["arrangementTypes"] = [];
+            for (let item of this.arrangementTypes)
+                data["arrangementTypes"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IArrangement extends IBaseEntity {
+    name?: string;
+    isTemplate?: boolean;
+    tags?: string[];
+    extras?: string[];
+    referenceImage?: string;
+    isAvailable?: boolean;
+    wrapperVariants?: WrapperVariant[];
+    flowerVariants?: FlowerVariant[];
+    arrangementTypes?: ArrangementType[];
+}
+
 export class LookupEntity extends BaseEntity implements ILookupEntity {
     name?: string;
 
@@ -2000,6 +2533,167 @@ export class LookupEntity extends BaseEntity implements ILookupEntity {
 }
 
 export interface ILookupEntity extends IBaseEntity {
+    name?: string;
+}
+
+export class WrapperVariant extends LookupEntity implements IWrapperVariant {
+    wrapperId?: number;
+    wrapper?: Wrapper | undefined;
+
+    constructor(data?: IWrapperVariant) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.wrapperId = _data["wrapperId"];
+            this.wrapper = _data["wrapper"] ? Wrapper.fromJS(_data["wrapper"]) : <any>undefined;
+        }
+    }
+
+    static override fromJS(data: any): WrapperVariant {
+        data = typeof data === 'object' ? data : {};
+        let result = new WrapperVariant();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["wrapperId"] = this.wrapperId;
+        data["wrapper"] = this.wrapper ? this.wrapper.toJSON() : <any>undefined;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IWrapperVariant extends ILookupEntity {
+    wrapperId?: number;
+    wrapper?: Wrapper | undefined;
+}
+
+export class Wrapper extends LookupEntity implements IWrapper {
+
+    constructor(data?: IWrapper) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): Wrapper {
+        data = typeof data === 'object' ? data : {};
+        let result = new Wrapper();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IWrapper extends ILookupEntity {
+}
+
+export class FlowerVariant extends LookupEntity implements IFlowerVariant {
+    flowerId?: number;
+    flower?: Flower | undefined;
+
+    constructor(data?: IFlowerVariant) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.flowerId = _data["flowerId"];
+            this.flower = _data["flower"] ? Flower.fromJS(_data["flower"]) : <any>undefined;
+        }
+    }
+
+    static override fromJS(data: any): FlowerVariant {
+        data = typeof data === 'object' ? data : {};
+        let result = new FlowerVariant();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["flowerId"] = this.flowerId;
+        data["flower"] = this.flower ? this.flower.toJSON() : <any>undefined;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IFlowerVariant extends ILookupEntity {
+    flowerId?: number;
+    flower?: Flower | undefined;
+}
+
+export class Flower extends LookupEntity implements IFlower {
+
+    constructor(data?: IFlower) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): Flower {
+        data = typeof data === 'object' ? data : {};
+        let result = new Flower();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IFlower extends ILookupEntity {
+}
+
+export class ArrangementType extends BaseEntity implements IArrangementType {
+    name?: string;
+
+    constructor(data?: IArrangementType) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static override fromJS(data: any): ArrangementType {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArrangementType();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IArrangementType extends IBaseEntity {
     name?: string;
 }
 
@@ -2139,70 +2833,6 @@ export class DeliveryType extends LookupEntity implements IDeliveryType {
 export interface IDeliveryType extends ILookupEntity {
 }
 
-export class Flower extends LookupEntity implements IFlower {
-
-    constructor(data?: IFlower) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-    }
-
-    static override fromJS(data: any): Flower {
-        data = typeof data === 'object' ? data : {};
-        let result = new Flower();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IFlower extends ILookupEntity {
-}
-
-export class FlowerVariant extends LookupEntity implements IFlowerVariant {
-    flowerId?: number;
-    flower?: Flower | undefined;
-
-    constructor(data?: IFlowerVariant) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.flowerId = _data["flowerId"];
-            this.flower = _data["flower"] ? Flower.fromJS(_data["flower"]) : <any>undefined;
-        }
-    }
-
-    static override fromJS(data: any): FlowerVariant {
-        data = typeof data === 'object' ? data : {};
-        let result = new FlowerVariant();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["flowerId"] = this.flowerId;
-        data["flower"] = this.flower ? this.flower.toJSON() : <any>undefined;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IFlowerVariant extends ILookupEntity {
-    flowerId?: number;
-    flower?: Flower | undefined;
-}
-
 export class Responsible extends LookupEntity implements IResponsible {
 
     constructor(data?: IResponsible) {
@@ -2228,70 +2858,6 @@ export class Responsible extends LookupEntity implements IResponsible {
 }
 
 export interface IResponsible extends ILookupEntity {
-}
-
-export class Wrapper extends LookupEntity implements IWrapper {
-
-    constructor(data?: IWrapper) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-    }
-
-    static override fromJS(data: any): Wrapper {
-        data = typeof data === 'object' ? data : {};
-        let result = new Wrapper();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IWrapper extends ILookupEntity {
-}
-
-export class WrapperVariant extends LookupEntity implements IWrapperVariant {
-    wrapperId?: number;
-    wrapper?: Wrapper | undefined;
-
-    constructor(data?: IWrapperVariant) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.wrapperId = _data["wrapperId"];
-            this.wrapper = _data["wrapper"] ? Wrapper.fromJS(_data["wrapper"]) : <any>undefined;
-        }
-    }
-
-    static override fromJS(data: any): WrapperVariant {
-        data = typeof data === 'object' ? data : {};
-        let result = new WrapperVariant();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["wrapperId"] = this.wrapperId;
-        data["wrapper"] = this.wrapper ? this.wrapper.toJSON() : <any>undefined;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IWrapperVariant extends ILookupEntity {
-    wrapperId?: number;
-    wrapper?: Wrapper | undefined;
 }
 
 export interface FileResponse {
