@@ -82,20 +82,14 @@ function CreateEntity({
     setFatherEntityData(data);
   };
 
-  const isDisabled = () => {
-    return Object.entries(properties)
+  const isDisabled = () =>
+    Object.entries(properties)
       .filter(([key]) => key !== "id")
       .some(([, value]) => value == null || value.trim() === "");
-  };
 
   const propertyKeys = Object.keys(properties).filter(
     (property) => property !== "id"
   );
-
-  useEffect(() => {
-    console.log(properties);
-    console.log("disabled", isDisabled());
-  }, [properties]);
 
   return (
     <Card
@@ -129,9 +123,7 @@ function CreateEntity({
           }}
         >
           {Object.keys(properties)
-            .filter(
-              (property) => property !== "id" && property !== fatherEntityName
-            )
+            .filter((property) => property !== "id")
             .map((property) => (
               <Box key={property + entity.id} width="100%">
                 <Box mb={1} mt={5} display="flex">
@@ -156,9 +148,13 @@ function CreateEntity({
                     onChange={(e) =>
                       setProperties({
                         ...properties,
-                        [property]: e.target.value,
+                        [property]: e.target.value.replace(
+                          /[^a-zA-Z0-9\s#,]/g,
+                          ""
+                        ),
                       })
                     }
+                    pattern="[a-zA-Z0-9\s#,]*"
                   />
                 )}
               </Box>
