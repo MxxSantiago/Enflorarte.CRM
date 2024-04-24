@@ -1,37 +1,40 @@
 import {
-  BranchClient,
-  ClientClient,
-  CommunicationTypeClient,
-  DeliveryTypeClient,
-  FlowerClient,
-  FlowerVariantClient,
-  ResponsibleClient,
-  WrapperClient,
-  WrapperVariantClient,
+    ArrangementTypeClient,
+    BranchClient,
+    ClientClient,
+    CommunicationTypeClient,
+    DeliveryTypeClient,
+    FlowerClient,
+    FlowerVariantClient,
+    ResponsibleClient,
+    WrapperClient,
+    WrapperVariantClient,
 } from "../../web-api-client.ts";
 
 function selectClient(entityName: string) {
-  switch (entityName.trim()) {
-    case "branch":
-      return new BranchClient();
-    case "client":
-      return new ClientClient();
-    case "communicationType":
-      return new CommunicationTypeClient();
-    case "deliveryType":
-      return new DeliveryTypeClient();
-    case "flower":
-      return new FlowerClient();
-    case "flowerVariant":
-      return new FlowerVariantClient();
-    case "responsible":
-      return new ResponsibleClient();
-    case "wrapper":
-      return new WrapperClient();
-    case "wrapperVariant":
-      return new WrapperVariantClient();
-    default:
-      throw new Error("Invalid entity name");
+    switch (entityName.trim()) {
+        case "arrangementType":
+            return new ArrangementTypeClient();
+        case "branch":
+            return new BranchClient();
+        case "client":
+            return new ClientClient();
+        case "communicationType":
+            return new CommunicationTypeClient();
+        case "deliveryType":
+            return new DeliveryTypeClient();
+        case "flower":
+            return new FlowerClient();
+        case "flowerVariant":
+            return new FlowerVariantClient();
+        case "responsible":
+            return new ResponsibleClient();
+        case "wrapper":
+            return new WrapperClient();
+        case "wrapperVariant":
+            return new WrapperVariantClient();
+        default:
+            throw new Error("Invalid entity name");
   }
 }
 
@@ -103,6 +106,7 @@ export function deleteEntity(entityName: string, id: number) {
 
 export function updateEntity(entityName: string, args: any) {
   switch (entityName) {
+    case "arrangementType":
     case "branch":
     case "client":
     case "communicationType":
@@ -121,6 +125,7 @@ export function updateEntity(entityName: string, args: any) {
 
 export function createEntity(entityName: string, args: any) {
   switch (entityName) {
+    case "arrangementType":
     case "branch":
     case "client":
     case "communicationType":
