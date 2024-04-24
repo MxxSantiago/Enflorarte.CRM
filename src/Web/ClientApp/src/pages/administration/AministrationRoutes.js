@@ -2,6 +2,7 @@ import React from "react";
 import EntityView from "./components/EntityView.jsx";
 import EntityWithVariantView from "./components/EntityWithVariantView.jsx";
 import {
+  ArrangementType,
   Branch,
   Client,
   CommunicationType,
@@ -112,6 +113,18 @@ const administrationRoutes = [
         variantName="flowerVariant"
         entity={new Flower().toJSON()}
         variant={new FlowerVariant().toJSON()}
+      />
+    ),
+    icon: <IoFlowerOutline />,
+  },
+  {
+    name: "Tipo de arreglos",
+    path: "arrangementtype",
+    element: (
+      <EntityView
+        title="Crear nuevo tipo de arreglo"
+        entityName="arrangementType"
+        entity={new ArrangementType().toJSON()}
       />
     ),
     icon: <IoFlowerOutline />,
