@@ -5,8 +5,13 @@ using Enflorarte.CRM.Domain.Entities;
 namespace Enflorarte.CRM.Application.Services;
 
 
-public class ArrangementService : BaseService<Arrangement>
+public class ArrangementService(IArrangementDAO repository, IValidator<Arrangement> validator)
+    : BaseService<Arrangement>(repository, validator)
 {
-    public ArrangementService(IArrangementDAO repository, IValidator<Arrangement> validator)
-        : base(repository, validator) { }
+    public override async Task AddAsync(Arrangement entity)
+    {
+        await ValidateAsync(entity);
+        await repository.AddAsync(entity);
+        await repository.SaveChangesAsync();
+    }
 }

@@ -1,5 +1,5 @@
-import Layout from "../../../components/layout/Layout";
-import arrangementsRoutes from "./ArrangementsRoutes";
+import Layout from "../../components/layout";
+import arrangementsRoutes from "./arrangementsRoutes";
 
 export const ArrangementsLayout = () => {
   return <Layout routes={arrangementsRoutes} showSidebar={false} />;

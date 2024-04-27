@@ -1,9 +1,10 @@
+import React from "react";
 import {
-  SimpleGrid,
   Box,
   Button,
-  Text,
   Input,
+  SimpleGrid,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import ArrangementTemplate from "./ArrangementTemplate";

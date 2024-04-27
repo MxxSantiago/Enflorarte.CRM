@@ -1,5 +1,5 @@
 import AdministrationLayout from "./pages/administration/AdministrationLayout";
-import ArrangementsLayout from "./pages/administration/arrangements/ArrangementsLayout";
+import ArrangementsLayout from "./pages/arrangements/ArrangementsLayout";
 
 const mainRoutes = [
   {
