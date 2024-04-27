@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Grid,
   GridItem,
@@ -10,13 +10,46 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  useToast,
   Image,
   Text,
 } from "@chakra-ui/react";
 import Arrangment from "../Assest/ArregloPlantilla.jpeg";
 import Form from "./Form";
+import {
+    createEntity,
+    createEntityPayload
+} from "../../../../core/helpers/web-api-client.helper.ts";
+import {LANG} from "../../../../core/helpers/translations.helper.ts";
 
 function CreateArrangmentTemplate({ isOpen, onClose }) {
+    const toast = useToast();
+    const [entity, setEntity] = useState({});
+    const [properties, setProperties] = useState({ ...entity });
+
+
+    const handleCreate = async (event) => {
+        event.preventDefault();
+
+        try {
+            await createEntity("arrangement", createEntityPayload(properties));
+            toast({
+                title: `${LANG("arrangement")} creado correctamente`,
+                status: "success",
+                isClosable: true,
+                position: "bottom-right",
+            });
+            setProperties({ ...entity });
+        } catch (error) {
+            toast({
+                title: error.message,
+                status: "error",
+                isClosable: true,
+                position: "bottom-right",
+            });
+        }
+    };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="4xl" height="600px">
@@ -54,7 +87,7 @@ function CreateArrangmentTemplate({ isOpen, onClose }) {
                     </Text>
                   </GridItem>
                   <GridItem>
-                    <Form />
+                    <Form onSubmit={handleCreate}/>
                   </GridItem>
                 </Grid>
               </GridItem>
@@ -65,7 +98,7 @@ function CreateArrangmentTemplate({ isOpen, onClose }) {
             <Button mr={3} onClick={onClose}>
               Cerrar
             </Button>
-            <Button colorScheme="pink">Editar</Button>
+            <Button colorScheme="pink" onClick={handleCreate}>Guardar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

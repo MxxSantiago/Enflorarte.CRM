@@ -1,4 +1,6 @@
+// @ts-ignore
 import {
+    ArrangementClient,
     ArrangementTypeClient,
     BranchClient,
     ClientClient,
@@ -13,6 +15,8 @@ import {
 
 function selectClient(entityName: string) {
     switch (entityName.trim()) {
+        case "arrangement":
+            return new ArrangementClient();
         case "arrangementType":
             return new ArrangementTypeClient();
         case "branch":
@@ -106,6 +110,7 @@ export function deleteEntity(entityName: string, id: number) {
 
 export function updateEntity(entityName: string, args: any) {
   switch (entityName) {
+    case "arrangement":
     case "arrangementType":
     case "branch":
     case "client":
@@ -125,6 +130,7 @@ export function updateEntity(entityName: string, args: any) {
 
 export function createEntity(entityName: string, args: any) {
   switch (entityName) {
+    case "arrangement":
     case "arrangementType":
     case "branch":
     case "client":
