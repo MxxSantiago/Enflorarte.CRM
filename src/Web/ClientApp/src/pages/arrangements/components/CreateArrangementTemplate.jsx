@@ -18,7 +18,6 @@ import {
   Textarea,
   Checkbox,
 } from "@chakra-ui/react";
-import Arrangment from "../Assest/ArregloPlantilla.jpeg";
 import {
   createEntity,
   createEntityPayload,
@@ -48,8 +47,6 @@ const CreateArrangmentTemplate = ({
     flowerVariants: [],
     arrangementTypes: [],
     isTemplate: true,
-    referenceImage:
-      "https://th.bing.com/th/id/OIP.jhDoQH_cNgvyWYy9yH6eKQHaG8?rs=1&pid=ImgDetMain",
   });
   const toast = useToast();
 
@@ -120,11 +117,12 @@ const CreateArrangmentTemplate = ({
                 alignItems="center"
               >
                 <Image
-                  src={Arrangment}
+                  src={properties.referenceImage}
                   objectFit="cover"
                   borderRadius="10px"
                   boxSize="500px"
                   width={{ base: "100%", md: "500px" }}
+                  fallbackSrc="https://via.placeholder.com/500"
                 />
               </GridItem>
               <GridItem
@@ -141,6 +139,19 @@ const CreateArrangmentTemplate = ({
                       setProperties({
                         ...properties,
                         name: e.target.value,
+                      })
+                    }
+                  />
+                  <Text marginY={2} marginTop={8}>
+                    URL Imagen de Referencia
+                  </Text>
+                  <Input
+                    size={{ base: "md", md: "lg" }}
+                    value={properties.referenceImage ?? ""}
+                    onChange={(e) =>
+                      setProperties({
+                        ...properties,
+                        referenceImage: e.target.value,
                       })
                     }
                   />

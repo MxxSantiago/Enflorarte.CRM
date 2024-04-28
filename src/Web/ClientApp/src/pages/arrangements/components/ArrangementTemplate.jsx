@@ -13,33 +13,43 @@ const ArrangementTemplate = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Card
-      variant="outline"
-      height="400px"
-      width="100%"
-      maxWidth="450px"
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      borderRadius="lg"
-      boxShadow="lg"
-      onClick={onOpen}
-      cursor="pointer"
-    >
-      <Image
-        src={arrangement.referenceImage ?? Arrangment}
-        alt="Arrangement"
-        height="370px"
+    <>
+      <Card
+        variant="outline"
+        height="400px"
+        width="100%"
+        maxWidth="450px"
+        display="flex"
+        flexDirection="column"
+        overflow="hidden"
         borderRadius="lg"
-        objectFit="cover"
+        boxShadow="lg"
+        onClick={onOpen}
+        cursor="pointer"
         _hover={{
-          filter: "brightness(0.8)",
-          transition: "0.3s ease-in-out all",
+          "> img": {
+            filter: "brightness(0.8)",
+            transition: "0.3s ease-in-out all",
+          },
         }}
-      />
-      <Text display="flex" justifyContent="center" as="b" pb="2px">
-        {arrangement.name}
-      </Text>
+      >
+        <Image
+          src={arrangement.referenceImage}
+          height="350px"
+          objectFit="cover"
+          margin={0}
+        />
+        <Text
+          height="50px"
+          textAlign="center"
+          as="b"
+          fontSize="lg"
+          overflowY="auto"
+          paddingY={2.5}
+        >
+          {arrangement.name}
+        </Text>
+      </Card>
 
       <UpdateArrangement
         isOpenUpdate={isOpen}
@@ -52,7 +62,7 @@ const ArrangementTemplate = ({
         wrappingVariantData={wrappingVariantData}
         flowerVariantData={flowerVariantData}
       />
-    </Card>
+    </>
   );
 };
 

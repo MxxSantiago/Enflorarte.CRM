@@ -26,7 +26,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect";
-import Arrangment from "../Assest/ArregloPlantilla.jpeg";
 import {
   deleteEntity,
   updateEntity,
@@ -155,11 +154,12 @@ function UpdateArrangement({
                 alignItems="center"
               >
                 <Image
-                  src={arrangement.referenceImage ?? Arrangment}
+                  src={properties.referenceImage}
                   objectFit="cover"
                   borderRadius="10px"
                   boxSize="500px"
                   width={{ base: "100%", md: "500px" }}
+                  fallbackSrc="https://via.placeholder.com/500"
                 />
               </GridItem>
               <GridItem
@@ -176,6 +176,19 @@ function UpdateArrangement({
                       setProperties({
                         ...properties,
                         name: e.target.value,
+                      })
+                    }
+                  />
+                  <Text marginY={2} marginTop={8}>
+                    URL Imagen de Referencia
+                  </Text>
+                  <Input
+                    size={{ base: "md", md: "lg" }}
+                    value={properties.referenceImage ?? ""}
+                    onChange={(e) =>
+                      setProperties({
+                        ...properties,
+                        referenceImage: e.target.value,
                       })
                     }
                   />
@@ -268,7 +281,9 @@ function UpdateArrangement({
             <AlertDialog
               isOpen={isOpen}
               leastDestructiveRef={cancelRef}
+              motionPreset="slideInBottom"
               onClose={onClose}
+              isCentered
             >
               <AlertDialogOverlay>
                 <AlertDialogContent>
