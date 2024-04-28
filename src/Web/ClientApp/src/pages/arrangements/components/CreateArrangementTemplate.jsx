@@ -30,10 +30,7 @@ import { getAllEntities } from "../../../core/helpers/web-api-client.helper.ts";
 
 const ArrangementEntity = new Arrangement().toJSON();
 
-const CreateArrangmentTemplate = ({ isOpen, onClose }) => {
-  const [arrangementTypeData, setArrangementTypeData] = useState([]);
-  const [wrappingVariantData, setWrappingVariantData] = useState([]);
-  const [flowerVariantData, setFlowerVariantData] = useState([]);
+const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappingVariantData, flowerVariantData }) => {
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: [],
     wrapperVariants: [],
@@ -96,27 +93,6 @@ const CreateArrangmentTemplate = ({ isOpen, onClose }) => {
         [property]: [],
       });
     }
-  };
-
-  useEffect(() => {
-    populateArrangementTypeEntity();
-    populateWrappingTypeEntity();
-    populateFlowerTypeEntity();
-  }, []);
-
-  const populateArrangementTypeEntity = async () => {
-    const data = await getAllEntities("arrangementType");
-    setArrangementTypeData(data);
-  };
-
-  const populateWrappingTypeEntity = async () => {
-    const data = await getAllEntities("wrapperVariant");
-    setWrappingVariantData(data);
-  };
-
-  const populateFlowerTypeEntity = async () => {
-    const data = await getAllEntities("flowerVariant");
-    setFlowerVariantData(data);
   };
 
   return (

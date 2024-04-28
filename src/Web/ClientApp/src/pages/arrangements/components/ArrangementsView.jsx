@@ -17,10 +17,31 @@ const ArrangementsView = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [items, setItems] = useState([]);
+  const [arrangementTypeData, setArrangementTypeData] = useState([]);
+  const [wrappingVariantData, setWrappingVariantData] = useState([]);
+  const [flowerVariantData, setFlowerVariantData] = useState([]);
 
   useEffect(() => {
     fetchArrangements();
+    populateArrangementTypeEntity();
+    populateWrappingTypeEntity();
+    populateFlowerTypeEntity();
   }, []);
+
+    const populateArrangementTypeEntity = async () => {
+        const data = await getAllEntities("arrangementType");
+        setArrangementTypeData(data);
+    };
+
+    const populateWrappingTypeEntity = async () => {
+        const data = await getAllEntities("wrapperVariant");
+        setWrappingVariantData(data);
+    };
+
+    const populateFlowerTypeEntity = async () => {
+        const data = await getAllEntities("flowerVariant");
+        setFlowerVariantData(data);
+    };
 
   const fetchArrangements = async () => {
     try {
@@ -50,6 +71,9 @@ const ArrangementsView = () => {
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
+        arrangementTypeData={arrangementTypeData}
+        wrappingVariantData={wrappingVariantData}
+        flowerVariantData={flowerVariantData}
       />
     </Box>
   );
