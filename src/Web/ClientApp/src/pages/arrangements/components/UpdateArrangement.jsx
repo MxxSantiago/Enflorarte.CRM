@@ -16,7 +16,6 @@ import {
   Text,
   Textarea,
   Checkbox,
-  Badge,
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -26,35 +25,76 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect";
 import Arrangment from "../Assest/ArregloPlantilla.jpeg";
-import { deleteEntity } from "../../../core/helpers/web-api-client.helper.ts";
+import {
+  deleteEntity,
+  updateEntity,
+} from "../../../core/helpers/web-api-client.helper.ts";
 
-function UpdateArrangement({ isOpenUpdate, onCloseUpdate, item }) {
-  const toast = useToast();
-  const [edit, setEdit] = useState(true);
-  const [buttonText, setButtonText] = useState("Editar");
+function UpdateArrangement({
+  isOpenUpdate,
+  onCloseUpdate,
+  arrangement,
+  deleteArrangement,
+  updateArrangement,
+  arrangementTypeData,
+  wrappingVariantData,
+  flowerVariantData,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const [selectedItems, setSelectedItems] = useState({
+    arrangementTypes: arrangement.arrangementTypes.map((item) => ({
+      value: item.id,
+      label: item.name,
+    })),
+    wrapperVariants: arrangement.wrapperVariants.map((item) => ({
+      value: item.id,
+      label: item.name,
+    })),
+    flowerVariants: arrangement.flowerVariants.map((item) => ({
+      value: item.id,
+      label: item.name,
+    })),
+  });
+  const [properties, setProperties] = useState({ ...arrangement });
   const cancelRef = React.useRef();
 
-  const handleEdit = () => {
-    setEdit(false);
-    setButtonText(edit ? "Guardar" : "Editar");
-  };
+  const handleEdit = async () => {
+    try {
+      console.log(properties);
 
-  const handleSave = () => {
-    setEdit(true);
-    setButtonText("Editar");
+      await updateEntity("arrangement", properties);
+      toast({
+        title: "Arreglo Actualizado",
+        status: "success",
+        isClosable: true,
+        position: "bottom-right",
+      });
+      updateArrangement(properties);
+      onCloseUpdate();
+    } catch (error) {
+      toast({
+        title: "El arreglo no se pudo actualizar",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
+    }
   };
 
   const handleDelete = async () => {
     try {
-      await deleteEntity("arrangement", item.id);
+      await deleteEntity("arrangement", arrangement.id);
       toast({
         title: "Arreglo Eliminado",
         status: "success",
         isClosable: true,
         position: "bottom-right",
       });
+      deleteArrangement(arrangement.id);
+      onClose();
     } catch (error) {
       toast({
         title: "El arreglo no se pudo eliminar",
@@ -64,6 +104,32 @@ function UpdateArrangement({ isOpenUpdate, onCloseUpdate, item }) {
       });
     }
   };
+
+  const handleSelectedItemChange = (propertySelectedItems, property) => {
+    if (propertySelectedItems.length) {
+      setSelectedItems({
+        ...selectedItems,
+        [property]: propertySelectedItems,
+      });
+      setProperties({
+        ...properties,
+        [property]: propertySelectedItems.map((item) => ({
+          id: item.value,
+          name: item.label,
+        })),
+      });
+    } else {
+      setSelectedItems({
+        ...selectedItems,
+        [property]: [],
+      });
+      setProperties({
+        ...properties,
+        [property]: [],
+      });
+    }
+  };
+
   return (
     <>
       <Modal
@@ -79,69 +145,112 @@ function UpdateArrangement({ isOpenUpdate, onCloseUpdate, item }) {
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {console.log(item)}
-            <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
+            <Grid
+              height="100%"
+              templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+            >
               <GridItem
                 maxW={{ base: "100%", md: "400px" }}
                 display="flex"
                 alignItems="center"
               >
-                <Image src={Arrangment} objectFit="cover" borderRadius="10px" />
+                <Image
+                  src={arrangement.referenceImage ?? Arrangment}
+                  objectFit="cover"
+                  borderRadius="10px"
+                  boxSize="500px"
+                  width={{ base: "100%", md: "500px" }}
+                />
               </GridItem>
-              <GridItem w={{ base: "100%", md: "400px" }}>
-                <Box p="10px" overflow="auto" h={{ md: "420px" }}>
-                  <Box display="flex">
-                    {item.tags.map((item, index) => (
-                      <Badge
-                        key={index}
-                        variant="outline"
-                        colorScheme="pink"
-                        fontSize="1em"
-                        m={1}
-                      >
-                        {item}
-                      </Badge>
-                    ))}
-                  </Box>
-
-                  <Box mt={5}>
-                    <Text>Nombre</Text>
-                    <Input value={item.name} disabled={edit} />
-                  </Box>
-                  <Box mt={5}>
-                    <Text>Tipo de Arreglo</Text>
-                    {item.arrangementTypes.map((item, index) => (
-                      <Input
-                        key={index}
-                        value={item.name}
-                        disabled={edit}
-                        mb={1}
-                      />
-                    ))}
-                  </Box>
-                  <Box mt={5}>
-                    <Text>Variante de Envoltura</Text>
-                    {item.wrapperVariants.map((item, index) => (
-                      <Input key={index} value={item.name} disabled={edit} />
-                    ))}
-                  </Box>
-                  <Box mt={5}>
-                    <Text>Variante de Flor</Text>
-                    {item.flowerVariants.map((item, index) => (
-                      <Input key={index} value={item.name} disabled={edit} />
-                    ))}
-                  </Box>
-
-                  <Box display="flex" alignItems="center" mt={5}>
+              <GridItem
+                height="500px"
+                w={{ base: "100%", md: "400px" }}
+                overflow="auto"
+              >
+                <Box p="10px">
+                  <Text marginY={2}>Nombre</Text>
+                  <Input
+                    size={{ base: "md", md: "lg" }}
+                    value={properties.name ?? ""}
+                    onChange={(e) =>
+                      setProperties({
+                        ...properties,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                  <Text marginY={2} marginTop={8}>
+                    Tipo de Arreglo
+                  </Text>
+                  <AutocompleteMultiSelect
+                    items={arrangementTypeData.map((item) => ({
+                      value: item.id,
+                      label: item.name,
+                    }))}
+                    selectedItems={selectedItems.arrangementTypes}
+                    onSelectedItemsChange={(changes) =>
+                      handleSelectedItemChange(
+                        changes.selectedItems,
+                        "arrangementTypes"
+                      )
+                    }
+                  />
+                  <Text marginY={2}>Variante de Envoltura</Text>
+                  <AutocompleteMultiSelect
+                    items={wrappingVariantData.map((item) => ({
+                      value: item.id,
+                      label: item.name,
+                    }))}
+                    selectedItems={selectedItems.wrapperVariants}
+                    onSelectedItemsChange={(changes) =>
+                      handleSelectedItemChange(
+                        changes.selectedItems,
+                        "wrapperVariants"
+                      )
+                    }
+                  />
+                  <Text marginY={2} marginTop={8}>
+                    Variante de Flor
+                  </Text>
+                  <AutocompleteMultiSelect
+                    items={flowerVariantData.map((item) => ({
+                      value: item.id,
+                      label: item.name,
+                    }))}
+                    selectedItems={selectedItems.flowerVariants}
+                    onSelectedItemsChange={(changes) =>
+                      handleSelectedItemChange(
+                        changes.selectedItems,
+                        "flowerVariants"
+                      )
+                    }
+                  />
+                  <Box display="flex" alignItems="center" marginTop={8}>
                     <Text margin={0} marginRight={3}>
                       Disponible
                     </Text>
-                    <Checkbox isChecked={item.isAvailable} disabled={edit} />
+                    <Checkbox
+                      isChecked={properties.isAvailable}
+                      onChange={(e) =>
+                        setProperties({
+                          ...properties,
+                          isAvailable: e.target.checked,
+                        })
+                      }
+                    />
                   </Box>
-                  <Text marginTop={5} disabled={edit}>
-                    Extra
+                  <Text marginY={2} marginTop={8}>
+                    Extras
                   </Text>
-                  <Textarea disabled={edit} />
+                  <Textarea
+                    value={properties.extras ?? ""}
+                    onChange={(e) =>
+                      setProperties({
+                        ...properties,
+                        extras: e.target.value,
+                      })
+                    }
+                  />
                 </Box>
               </GridItem>
             </Grid>
@@ -188,15 +297,9 @@ function UpdateArrangement({ isOpenUpdate, onCloseUpdate, item }) {
               <Button mr={3} onClick={onCloseUpdate}>
                 Cerrar
               </Button>
-              {edit ? (
-                <Button colorScheme="pink" onClick={handleEdit}>
-                  {buttonText}
-                </Button>
-              ) : (
-                <Button colorScheme="pink" onClick={handleSave}>
-                  {buttonText}
-                </Button>
-              )}
+              <Button colorScheme="pink" onClick={handleEdit}>
+                Guardar cambios
+              </Button>
             </Box>
           </ModalFooter>
         </ModalContent>

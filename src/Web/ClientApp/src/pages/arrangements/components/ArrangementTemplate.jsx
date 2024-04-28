@@ -1,17 +1,23 @@
 import { Card, Text, Image, useDisclosure } from "@chakra-ui/react";
 import Arrangment from "../Assest/ArregloPlantilla.jpeg";
 import UpdateArrangement from "./UpdateArrangement";
-import { useState } from "react";
 
-const ArrangementTemplate = ({ item, index }) => {
+const ArrangementTemplate = ({
+  arrangement,
+  deleteArrangement,
+  updateArrangement,
+  arrangementTypeData,
+  wrappingVariantData,
+  flowerVariantData,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Card
-      key={index}
       variant="outline"
       height="400px"
       width="100%"
+      maxWidth="450px"
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
@@ -21,22 +27,30 @@ const ArrangementTemplate = ({ item, index }) => {
       cursor="pointer"
     >
       <Image
-        src={Arrangment}
+        src={arrangement.referenceImage ?? Arrangment}
         alt="Arrangement"
         height="370px"
         borderRadius="lg"
         objectFit="cover"
-        _hover={{ filter: "blur(2px)" }}
+        _hover={{
+          filter: "brightness(0.8)",
+          transition: "0.3s ease-in-out all",
+        }}
       />
       <Text display="flex" justifyContent="center" as="b" pb="2px">
-        {item.name}
+        {arrangement.name}
       </Text>
 
       <UpdateArrangement
         isOpenUpdate={isOpen}
         onOpenUpdate={onOpen}
         onCloseUpdate={onClose}
-        item={item}
+        arrangement={arrangement}
+        deleteArrangement={deleteArrangement}
+        updateArrangement={updateArrangement}
+        arrangementTypeData={arrangementTypeData}
+        wrappingVariantData={wrappingVariantData}
+        flowerVariantData={flowerVariantData}
       />
     </Card>
   );

@@ -14,4 +14,11 @@ public class ArrangementService(IArrangementDAO repository, IValidator<Arrangeme
         await repository.AddAsync(entity);
         await repository.SaveChangesAsync();
     }
+    
+    public override async Task UpdateAsync(Arrangement entity)
+    {
+        await ValidateAsync(entity);
+        await repository.UpdateAsync(entity);
+        await repository.SaveChangesAsync();
+    }
 }

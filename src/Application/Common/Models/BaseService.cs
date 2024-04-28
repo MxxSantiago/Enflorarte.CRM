@@ -20,7 +20,7 @@ public abstract class BaseService<TEntity>(IBaseDAO<TEntity> dao, IValidator<TEn
         await dao.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(TEntity entity)
+    public virtual async Task UpdateAsync(TEntity entity)
     {
         await ValidateAsync(entity);
         dao.Update(entity);

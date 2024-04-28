@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   GridItem,
@@ -26,11 +26,17 @@ import {
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { Arrangement } from "../../../web-api-client.ts";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect";
-import { getAllEntities } from "../../../core/helpers/web-api-client.helper.ts";
 
 const ArrangementEntity = new Arrangement().toJSON();
 
-const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappingVariantData, flowerVariantData }) => {
+const CreateArrangmentTemplate = ({
+  isOpen,
+  onClose,
+  arrangementTypeData,
+  wrappingVariantData,
+  flowerVariantData,
+  addArrangement,
+}) => {
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: [],
     wrapperVariants: [],
@@ -41,8 +47,6 @@ const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappi
     wrapperVariants: [],
     flowerVariants: [],
     arrangementTypes: [],
-    extras: ["extra1", "extra2", "extra3"],
-    tags: ["tag1", "tag2", "tag3"],
     isTemplate: true,
     referenceImage:
       "https://th.bing.com/th/id/OIP.jhDoQH_cNgvyWYy9yH6eKQHaG8?rs=1&pid=ImgDetMain",
@@ -60,6 +64,7 @@ const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappi
         isClosable: true,
         position: "bottom-right",
       });
+      addArrangement(properties);
       onClose();
     } catch (error) {
       toast({
@@ -72,8 +77,6 @@ const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappi
   };
 
   const handleSelectedItemChange = (propertySelectedItems, property) => {
-    console.log(propertySelectedItems);
-
     if (propertySelectedItems.length) {
       setSelectedItems({
         ...selectedItems,
@@ -116,10 +119,20 @@ const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappi
                 display="flex"
                 alignItems="center"
               >
-                <Image src={Arrangment} objectFit="cover" borderRadius="10px" />
+                <Image
+                  src={Arrangment}
+                  objectFit="cover"
+                  borderRadius="10px"
+                  boxSize="500px"
+                  width={{ base: "100%", md: "500px" }}
+                />
               </GridItem>
-              <GridItem w={{ base: "100%", md: "400px" }}>
-                <Box p="10px" overflow="auto" h={{ md: "420px" }}>
+              <GridItem
+                height="500px"
+                overflow="auto"
+                w={{ base: "100%", md: "400px" }}
+              >
+                <Box p="10px">
                   <Text marginY={2}>Nombre</Text>
                   <Input
                     size={{ base: "md", md: "lg" }}
@@ -153,7 +166,7 @@ const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappi
                       value: item,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.wrappingVariants}
+                    selectedItems={selectedItems.wrapperVariants}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -191,9 +204,17 @@ const CreateArrangmentTemplate = ({ isOpen, onClose, arrangementTypeData, wrappi
                     />
                   </Box>
                   <Text marginY={2} marginTop={8}>
-                    Extra
+                    Extras
                   </Text>
-                  <Textarea />
+                  <Textarea
+                    value={properties.extras ?? ""}
+                    onChange={(e) =>
+                      setProperties({
+                        ...properties,
+                        extras: e.target.value,
+                      })
+                    }
+                  />
                 </Box>
               </GridItem>
             </Grid>

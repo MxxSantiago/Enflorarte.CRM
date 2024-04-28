@@ -2401,8 +2401,7 @@ export interface IBaseEntity {
 export class Arrangement extends BaseEntity implements IArrangement {
     name?: string;
     isTemplate?: boolean;
-    tags?: string[];
-    extras?: string[];
+    extras?: string;
     referenceImage?: string;
     isAvailable?: boolean;
     wrapperVariants?: WrapperVariant[];
@@ -2418,16 +2417,7 @@ export class Arrangement extends BaseEntity implements IArrangement {
         if (_data) {
             this.name = _data["name"];
             this.isTemplate = _data["isTemplate"];
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(item);
-            }
-            if (Array.isArray(_data["extras"])) {
-                this.extras = [] as any;
-                for (let item of _data["extras"])
-                    this.extras!.push(item);
-            }
+            this.extras = _data["extras"];
             this.referenceImage = _data["referenceImage"];
             this.isAvailable = _data["isAvailable"];
             if (Array.isArray(_data["wrapperVariants"])) {
@@ -2459,16 +2449,7 @@ export class Arrangement extends BaseEntity implements IArrangement {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["isTemplate"] = this.isTemplate;
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item);
-        }
-        if (Array.isArray(this.extras)) {
-            data["extras"] = [];
-            for (let item of this.extras)
-                data["extras"].push(item);
-        }
+        data["extras"] = this.extras;
         data["referenceImage"] = this.referenceImage;
         data["isAvailable"] = this.isAvailable;
         if (Array.isArray(this.wrapperVariants)) {
@@ -2494,8 +2475,7 @@ export class Arrangement extends BaseEntity implements IArrangement {
 export interface IArrangement extends IBaseEntity {
     name?: string;
     isTemplate?: boolean;
-    tags?: string[];
-    extras?: string[];
+    extras?: string;
     referenceImage?: string;
     isAvailable?: boolean;
     wrapperVariants?: WrapperVariant[];

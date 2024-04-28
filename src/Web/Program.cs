@@ -1,5 +1,7 @@
 using Enflorarte.CRM.Application;
 using Enflorarte.CRM.Infrastructure;
+using Enflorarte.CRM.Infrastructure.Data;
+using Enflorarte.CRM.Infrastructure.Data.Seeder;
 using Enflorarte.CRM.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,10 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
+}
+else
+{
+    await app.InitializeDatabaseAsync();
 }
 
 app.UseHealthChecks("/health");

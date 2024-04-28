@@ -1,5 +1,5 @@
 import ArrangementsView from "./components/ArrangementsView";
-// import { GiFlowerPot } from "react-icons/gi";
+import { GiFlowerPot } from "react-icons/gi";
 import { Navigate } from "react-router-dom";
 
 const arrangementsRoutes = [
@@ -8,7 +8,7 @@ const arrangementsRoutes = [
     name: "Arreglos",
     path: "/catalog",
     element: <ArrangementsView />,
-    // icon: <GiFlowerPot />,
+    icon: <GiFlowerPot />,
   },
 ];
 

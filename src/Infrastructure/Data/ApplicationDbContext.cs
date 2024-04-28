@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Enflorarte.CRM.Domain.Entities;
+using Enflorarte.CRM.Infrastructure.Data.Seeder;
 using Enflorarte.CRM.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        DataSeeder.SeedData(builder);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
