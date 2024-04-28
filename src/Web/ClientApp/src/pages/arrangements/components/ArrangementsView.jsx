@@ -9,21 +9,27 @@ import {
 } from "@chakra-ui/react";
 import ArrangementTemplate from "./ArrangementTemplate";
 import CreateArrangmentTemplate from "./CreateArrangementTemplate";
+import { getAllEntities } from "../../../core/helpers/web-api-client.helper.ts";
+
+import { useState, useEffect } from "react";
 
 const ArrangementsView = () => {
-  const arrangement = {
-    IsTemplate: true,
-    TypeId: 1,
-    image: "https://via.placeholder.com/500",
-    Type: "Type 1",
-    Wrappings: [{ name: "Wrapping 1" }, { name: "Wrapping 2" }],
-    Flowers: [{ name: "Flower 1" }, { name: "Flower 2" }],
-    Extras: ["Extra 1", "Extra 2"],
-    Message: "This is a message",
-  };
-
-  const items = Array(50).fill(arrangement);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetchArrangements();
+  }, []);
+
+  const fetchArrangements = async () => {
+    try {
+      const arrangements = await getAllEntities("arrangement", false);
+      setItems(arrangements);
+    } catch (error) {
+      console.error("Error fetching arrangements:", error);
+    }
+  };
 
   return (
     <Box py={5} px={8} width="100%">

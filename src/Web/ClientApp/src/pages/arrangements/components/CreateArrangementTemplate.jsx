@@ -63,6 +63,7 @@ const CreateArrangmentTemplate = ({ isOpen, onClose }) => {
         isClosable: true,
         position: "bottom-right",
       });
+      onClose();
     } catch (error) {
       toast({
         title: error.message,
