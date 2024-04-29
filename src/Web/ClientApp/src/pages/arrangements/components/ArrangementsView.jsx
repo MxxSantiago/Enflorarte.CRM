@@ -12,7 +12,7 @@ import {
 import ArrangementTemplate from "./ArrangementCard.jsx";
 import CreateArrangmentTemplate from "./CreateArrangement.jsx";
 import { getAllEntities } from "../../../core/helpers/web-api-client.helper.ts";
-
+import Filter from "./Filter.jsx";
 import { useState, useEffect } from "react";
 
 const ArrangementsView = () => {
@@ -22,6 +22,12 @@ const ArrangementsView = () => {
   const [wrappingVariantData, setWrappingVariantData] = useState([]);
   const [flowerVariantData, setFlowerVariantData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [valueMenu, setValueMenu] = useState();
+  const [filterValue, setFilterValue] = useState("");
+
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
 
   useEffect(() => {
     populateArrangements();
@@ -34,6 +40,7 @@ const ArrangementsView = () => {
     const arrangements = await getAllEntities("arrangement", false);
     setArrangements(arrangements);
     setLoading(false);
+    console.log(arrangements);
   };
 
   const populateArrangementTypeEntity = async () => {
@@ -67,6 +74,45 @@ const ArrangementsView = () => {
     setArrangements(newArregements);
   };
 
+  const filterArrangements = () => {
+    switch (valueMenu) {
+      case "":
+        return arrangements;
+
+      case "Tipo de Arreglo":
+        return arrangements.filter((arrangement) =>
+          arrangement.arrangementTypes.some(
+            (type) => type.name.toLowerCase() === filterValue.toLowerCase()
+          )
+        );
+      case "Variante de Flor":
+        return arrangements.filter((arrangement) =>
+          arrangement.flowerVariants.some(
+            (variant) =>
+              variant.name.toLowerCase() === filterValue.toLowerCase()
+          )
+        );
+      case "Variante de Envoltura":
+        return arrangements.filter((arrangement) =>
+          arrangement.wrapperVariants.some(
+            (variant) =>
+              variant.name.toLowerCase() === filterValue.toLowerCase()
+          )
+        );
+      case "Disponible":
+        return arrangements.filter(
+          (arrangement) => arrangement.isAvailable === true
+        );
+      case "No disponible":
+        return arrangements.filter(
+          (arrangement) => arrangement.isAvailable === false
+        );
+
+      default:
+        return arrangements;
+    }
+  };
+
   return (
     <>
       <Box height="100%">
@@ -86,6 +132,17 @@ const ArrangementsView = () => {
               </Button>
             </Flex>
             <Divider marginBottom="auto" />
+            <Box px={8} pt={5}>
+              <Filter
+                valueMenu={valueMenu}
+                setValueMenu={setValueMenu}
+                arrangementTypeData={arrangementTypeData}
+                wrappingVariantData={wrappingVariantData}
+                flowerVariantData={flowerVariantData}
+                filterValue={filterValue}
+                handleFilterChange={handleFilterChange}
+              />
+            </Box>
           </Box>
           {arrangements.length === 0 ? (
             <Flex alignItems="center" justifyContent="center">
@@ -106,7 +163,7 @@ const ArrangementsView = () => {
               py={5}
               overflow="auto"
             >
-              {arrangements.map((arrangement) => (
+              {filterArrangements().map((arrangement) => (
                 <ArrangementTemplate
                   key={arrangement.id}
                   arrangement={arrangement}
