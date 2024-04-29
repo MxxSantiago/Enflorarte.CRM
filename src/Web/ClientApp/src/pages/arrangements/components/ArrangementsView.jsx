@@ -1,7 +1,16 @@
 import React from "react";
-import { Box, Button, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
-import ArrangementTemplate from "./ArrangementTemplate";
-import CreateArrangmentTemplate from "./CreateArrangementTemplate";
+import {
+  Box,
+  Button,
+  SimpleGrid,
+  Text,
+  useDisclosure,
+  Flex,
+  Divider,
+  Spinner,
+} from "@chakra-ui/react";
+import ArrangementTemplate from "./ArrangementCard.jsx";
+import CreateArrangmentTemplate from "./CreateArrangement.jsx";
 import { getAllEntities } from "../../../core/helpers/web-api-client.helper.ts";
 
 import { useState, useEffect } from "react";
@@ -12,6 +21,7 @@ const ArrangementsView = () => {
   const [arrangementTypeData, setArrangementTypeData] = useState([]);
   const [wrappingVariantData, setWrappingVariantData] = useState([]);
   const [flowerVariantData, setFlowerVariantData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     populateArrangements();
@@ -23,6 +33,7 @@ const ArrangementsView = () => {
   const populateArrangements = async () => {
     const arrangements = await getAllEntities("arrangement", false);
     setArrangements(arrangements);
+    setLoading(false);
   };
 
   const populateArrangementTypeEntity = async () => {
@@ -57,39 +68,69 @@ const ArrangementsView = () => {
   };
 
   return (
-    <Box py={5} px={8} width="100%" display="flex" justifyContent="center">
-      <Box width="100%" maxWidth="2000px">
-        <Box display="flex">
-          <Button colorScheme="pink" marginLeft="auto" onClick={onOpen}>
-            Nueva Plantilla
-          </Button>
-        </Box>
-        <Text fontSize="3xl">Tus Plantillas</Text>
-        <SimpleGrid minChildWidth="250px" spacing={10} width="100%">
-          {arrangements.map((arrangement) => (
-            <ArrangementTemplate
-              key={arrangement.id}
-              arrangement={arrangement}
-              deleteArrangement={deleteArrangement}
-              updateArrangement={updateArrangement}
-              arrangementTypeData={arrangementTypeData}
-              wrappingVariantData={wrappingVariantData}
-              flowerVariantData={flowerVariantData}
-            />
-          ))}
+    <>
+      <Box height="100%">
+        <SimpleGrid
+          width="100%"
+          height="100%"
+          maxWidth="2000px"
+          gridTemplateRows="auto 1fr"
+        >
+          <Box pt={5}>
+            <Flex px={8}>
+              <Text margin={0} fontSize="3xl">
+                Tus Plantillas
+              </Text>
+              <Button colorScheme="pink" marginLeft="auto" onClick={onOpen}>
+                Nueva Plantilla
+              </Button>
+            </Flex>
+            <Divider marginBottom="auto" />
+          </Box>
+          {arrangements.length === 0 ? (
+            <Flex alignItems="center" justifyContent="center">
+              {loading ? (
+                <Spinner size="xl" />
+              ) : (
+                <Text fontSize="2xl">
+                  No tienes plantillas de arreglos registradas
+                </Text>
+              )}
+            </Flex>
+          ) : (
+            <SimpleGrid
+              width="100%"
+              minChildWidth="250px"
+              spacing={10}
+              px={8}
+              py={5}
+              overflow="auto"
+            >
+              {arrangements.map((arrangement) => (
+                <ArrangementTemplate
+                  key={arrangement.id}
+                  arrangement={arrangement}
+                  deleteArrangement={deleteArrangement}
+                  updateArrangement={updateArrangement}
+                  arrangementTypeData={arrangementTypeData}
+                  wrappingVariantData={wrappingVariantData}
+                  flowerVariantData={flowerVariantData}
+                />
+              ))}
+            </SimpleGrid>
+          )}
         </SimpleGrid>
-
-        <CreateArrangmentTemplate
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          arrangementTypeData={arrangementTypeData}
-          wrappingVariantData={wrappingVariantData}
-          flowerVariantData={flowerVariantData}
-          addArrangement={addArrangement}
-        />
       </Box>
-    </Box>
+      <CreateArrangmentTemplate
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        arrangementTypeData={arrangementTypeData}
+        wrappingVariantData={wrappingVariantData}
+        flowerVariantData={flowerVariantData}
+        addArrangement={addArrangement}
+      />
+    </>
   );
 };
 

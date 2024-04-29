@@ -1,5 +1,4 @@
 import { Card, Text, Image, useDisclosure } from "@chakra-ui/react";
-import Arrangment from "../Assest/ArregloPlantilla.jpeg";
 import UpdateArrangement from "./UpdateArrangement";
 
 const ArrangementTemplate = ({
@@ -50,7 +49,6 @@ const ArrangementTemplate = ({
           {arrangement.name}
         </Text>
       </Card>
-
       <UpdateArrangement
         isOpenUpdate={isOpen}
         onOpenUpdate={onOpen}

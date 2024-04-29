@@ -24,7 +24,7 @@ import {
 } from "../../../core/helpers/web-api-client.helper.ts";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { Arrangement } from "../../../web-api-client.ts";
-import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect";
+import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect.jsx";
 
 const ArrangementEntity = new Arrangement().toJSON();
 
@@ -35,6 +35,7 @@ const CreateArrangmentTemplate = ({
   wrappingVariantData,
   flowerVariantData,
   addArrangement,
+  isTemplate = true,
 }) => {
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: [],
@@ -46,7 +47,7 @@ const CreateArrangmentTemplate = ({
     wrapperVariants: [],
     flowerVariants: [],
     arrangementTypes: [],
-    isTemplate: true,
+    isTemplate: isTemplate,
   });
   const toast = useToast();
 
