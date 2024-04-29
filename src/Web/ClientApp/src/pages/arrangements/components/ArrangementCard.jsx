@@ -1,7 +1,7 @@
 import { Card, Text, Image, useDisclosure } from "@chakra-ui/react";
 import UpdateArrangement from "./UpdateArrangement";
 
-const ArrangementTemplate = ({
+const ArrangementCard = ({
   arrangement,
   deleteArrangement,
   updateArrangement,
@@ -17,7 +17,10 @@ const ArrangementTemplate = ({
         variant="outline"
         height="400px"
         width="100%"
-        maxWidth="450px"
+        maxWidth={{
+          base: "100%",
+          lg: "500px",
+        }}
         display="flex"
         flexDirection="column"
         overflow="hidden"
@@ -34,6 +37,7 @@ const ArrangementTemplate = ({
       >
         <Image
           src={arrangement.referenceImage}
+          fallbackSrc="https://via.placeholder.com/500"
           height="350px"
           objectFit="cover"
           margin={0}
@@ -64,4 +68,4 @@ const ArrangementTemplate = ({
   );
 };
 
-export default ArrangementTemplate;
+export default ArrangementCard;
