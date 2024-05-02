@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Enflorarte.CRM.Application.Common.Interfaces.DAOs;
 using Enflorarte.CRM.Infrastructure.Data.Dommon.Models;
+using Enflorarte.CRM.Infrastructure.Data.Seeder;
 
 namespace Enflorarte.CRM.Infrastructure;
 
@@ -22,6 +23,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ApplicationDbContext>();
+
+        services.AddScoped<DatabaseInitializer>();
 
         services
             .AddDefaultIdentity<ApplicationUser>()

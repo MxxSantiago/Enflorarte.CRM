@@ -15,7 +15,7 @@ import {
   getAllEntities,
 } from "../../../core/helpers/web-api-client.helper.ts";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
-import AutocompleteSelect from "../../../components/shared/AutocompleteSelect.jsx";
+import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelect.jsx";
 
 function CreateEntity({
   title,

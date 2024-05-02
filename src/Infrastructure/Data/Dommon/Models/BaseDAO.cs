@@ -9,7 +9,10 @@ public abstract class BaseDAO<TEntity>(ApplicationDbContext context) : IBaseDAO<
 {
     protected readonly ApplicationDbContext _context = context;
 
-    public virtual void Add(TEntity entity) => _context.Set<TEntity>().Add(entity);
+    public virtual void Add(TEntity entity)
+    {
+        _context.Set<TEntity>().Add(entity);
+    }
 
     public virtual void Update(TEntity entity) => _context.Set<TEntity>().Update(entity);
 

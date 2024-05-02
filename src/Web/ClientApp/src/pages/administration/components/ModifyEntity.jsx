@@ -14,7 +14,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
-import AutocompleteSelect from "../../../components/shared/AutocompleteSelect.jsx";
+import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelect.jsx";
 
 function getRelatedFatherEntity(fatherEntityName, entity) {
   const fatherEntity = entity && entity[fatherEntityName];

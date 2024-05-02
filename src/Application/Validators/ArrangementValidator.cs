@@ -11,12 +11,9 @@ public class ArrangementValidator : AbstractValidator<Arrangement>
             .MaximumLength(100);
 
         RuleFor(arrangement => arrangement.IsTemplate)
-            .NotEmpty();
+            .Must(x => x == false || x == true);
 
         RuleFor(arrangement => arrangement.ArrangementTypes)
-            .NotEmpty();
-
-        RuleFor(arrangement => arrangement.Tags)
             .NotEmpty();
 
         RuleFor(arrangement => arrangement.WrapperVariants)
@@ -30,8 +27,6 @@ public class ArrangementValidator : AbstractValidator<Arrangement>
             .MaximumLength(100);
 
         RuleFor(arrangement => arrangement.IsAvailable)
-            .NotEmpty();
-
-
+            .Must(x => x == false || x == true);
     }
 }

@@ -13,14 +13,14 @@ public abstract class BaseService<TEntity>(IBaseDAO<TEntity> dao, IValidator<TEn
 
     public async Task<TEntity?> GetAsync(int id) => await dao.GetAsync(id);
     
-    public async Task AddAsync(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity)
     {
         await ValidateAsync(entity);
         dao.Add(entity);
         await dao.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(TEntity entity)
+    public virtual async Task UpdateAsync(TEntity entity)
     {
         await ValidateAsync(entity);
         dao.Update(entity);
@@ -33,7 +33,7 @@ public abstract class BaseService<TEntity>(IBaseDAO<TEntity> dao, IValidator<TEn
         await dao.SaveChangesAsync();
     }
     
-    private async Task ValidateAsync(TEntity entity)
+    protected async Task ValidateAsync(TEntity entity)
     {
         var validationResult = await validator.ValidateAsync(entity);
 

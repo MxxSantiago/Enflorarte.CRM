@@ -15,7 +15,6 @@ public class ArrangementConfiguration : IEntityTypeConfiguration<Arrangement>
 
         builder.Property(p => p.Name).HasMaxLength(100).IsRequired();
         builder.Property(p => p.IsTemplate).IsRequired();
-        builder.Property(p => p.Tags).HasMaxLength(255);
         builder.Property(p => p.Extras).HasMaxLength(255);
         builder.Property(p => p.ReferenceImage).HasMaxLength(255);
         builder.Property(p => p.IsAvailable).IsRequired();
