@@ -59,8 +59,10 @@ function DeleteEntity({ entityName, entity, refreshView }) {
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
+        isCentered
       >
-        <AlertDialogOverlay>
+        <AlertDialogOverlay 
+        backdropFilter='blur(10px)'>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Eliminar {LANG(entityName)} <b>{entity.name}</b>

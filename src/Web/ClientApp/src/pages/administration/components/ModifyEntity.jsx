@@ -115,10 +115,12 @@ function ModifyEntity({
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
+        isCentered
       >
-        <AlertDialogOverlay>
+        <AlertDialogOverlay 
+        backdropFilter='blur(10px)'>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            <AlertDialogHeader fontSize="xl" fontWeight="bold">
               Modificar {LANG(entityName)} <b>{entity.name}</b>
             </AlertDialogHeader>
             <AlertDialogBody>
@@ -129,7 +131,7 @@ function ModifyEntity({
                 )
                 .map((property) => (
                   <Box key={property + entity.id} width="100%">
-                    <Box mb={2} mt={7} display="flex">
+                    <Box mb={2} display="flex">
                       <label htmlFor={property}>{LANG(property)}</label>
                     </Box>
                     {property.toString().includes("Id") ? (

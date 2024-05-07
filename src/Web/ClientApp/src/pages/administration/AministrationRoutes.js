@@ -31,7 +31,7 @@ const administrationRoutes = [
     path: "branch",
     element: (
       <EntityView
-        title="Crear Nueva Sucursal"
+        title="Crear Sucursal"
         entityName="branch"
         entity={new Branch().toJSON()}
       />
@@ -67,7 +67,7 @@ const administrationRoutes = [
     path: "responsible",
     element: (
       <EntityView
-        title="Crear Nuevo Responsable"
+        title="Crear Responsable"
         entityName="responsible"
         entity={new Responsible().toJSON()}
       />
@@ -79,7 +79,7 @@ const administrationRoutes = [
     path: "client",
     element: (
       <EntityView
-        title="Crear Nuevo Cliente"
+        title="Crear Cliente"
         entityName="client"
         fatherEntityName="communicationType"
         entity={new Client()}
@@ -92,7 +92,7 @@ const administrationRoutes = [
     path: "wrapper",
     element: (
       <EntityWithVariantView
-        title="Crear Nueva Envoltura"
+        title="Crear Envoltura"
         variantTitle="Crear Nueva Variante"
         entityName="wrapper"
         variantName="wrapperVariant"
@@ -107,7 +107,7 @@ const administrationRoutes = [
     path: "flower",
     element: (
       <EntityWithVariantView
-        title="Crear Nueva Flor"
+        title="Crear Flor"
         variantTitle="Crear Nueva Variante"
         entityName="flower"
         variantName="flowerVariant"
@@ -122,7 +122,7 @@ const administrationRoutes = [
     path: "arrangementtype",
     element: (
       <EntityView
-        title="Crear nuevo tipo de arreglo"
+        title="Crear Tipo de Arreglo"
         entityName="arrangementType"
         entity={new ArrangementType().toJSON()}
       />
