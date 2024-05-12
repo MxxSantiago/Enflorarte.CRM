@@ -31,6 +31,7 @@ const Header = ({ showSidebar }) => (
     w="100%"
     height={{ base: headerMobileHeight, md: headerDesktopHeight }}
     pr={{ base: "1rem", md: "2rem" }}
+    zIndex={999}
   >
     <Flex direction={{ base: "none", md: "row" }} alignItems="center">
       {!showSidebar && (

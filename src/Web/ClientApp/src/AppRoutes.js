@@ -1,11 +1,12 @@
 import AdministrationLayout from "./pages/administration/AdministrationLayout";
 import ArrangementsLayout from "./pages/arrangements/ArrangementsLayout";
+import OrdersLayout from "./pages/orders/OrdersLayout";
 
 const mainRoutes = [
   {
     name: "Pedidos",
     path: "/orders/*",
-    element: <AdministrationLayout />,
+    element: <OrdersLayout />,
   },
   {
     name: "Arreglos",
