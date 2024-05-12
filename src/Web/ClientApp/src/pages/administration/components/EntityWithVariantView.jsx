@@ -17,23 +17,11 @@ const EntityWithVariantView = ({
     lg: "repeat(2, 1fr)",
   });
 
-  const {
-    data: entitiesData,
-    localMutations: {
-      add: addEntity,
-      delete: deleteEntity,
-      update: updateEntity,
-    },
-  } = useGetQuery(entityName);
+  const { data: entitiesData, refetch: refetchEntity } =
+    useGetQuery(entityName);
 
-  const {
-    data: variantsData,
-    localMutations: {
-      add: addVariant,
-      delete: deleteVariant,
-      update: updateVariant,
-    },
-  } = useGetQuery(variantName);
+  const { data: variantsData, refetch: refetchVariant } =
+    useGetQuery(variantName);
 
   return (
     <Box width="100%">
@@ -48,7 +36,7 @@ const EntityWithVariantView = ({
             entityName={entityName}
             title={title}
             entity={entity}
-            _createEntity={addEntity}
+            refetch={refetchEntity}
           />
         </Box>
         <Box order={{ md: 2, lg: 3 }}>
@@ -56,8 +44,7 @@ const EntityWithVariantView = ({
             entity={entity}
             entityName={entityName}
             entitiesData={entitiesData}
-            deleteEntity={deleteEntity}
-            updateEntity={updateEntity}
+            refetch={refetchEntity}
           />
         </Box>
         <Box order={{ md: 3, lg: 2 }}>
@@ -67,7 +54,7 @@ const EntityWithVariantView = ({
             entity={removeReferenceObjectProperties(variant)}
             fatherEntity={entity}
             fatherEntityName={entityName}
-            _createEntity={addVariant}
+            refetch={refetchVariant}
           />
         </Box>
         <Box order={{ md: 4, lg: 4 }}>
@@ -77,8 +64,7 @@ const EntityWithVariantView = ({
             fatherEntityName={entityName}
             fatherEntityData={entitiesData}
             entitiesData={variantsData}
-            deleteEntity={deleteVariant}
-            updateEntity={updateVariant}
+            refetch={refetchVariant}
           />
         </Box>
       </Grid>

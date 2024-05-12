@@ -34,7 +34,7 @@ function ModifyEntity({
   entity,
   fatherEntityData,
   fatherEntityName,
-  _updateEntity,
+  refetch,
 }) {
   const [properties, setProperties] = useState({ ...entity });
   const [selectedItem, setSelectedItem] = useState(
@@ -45,9 +45,7 @@ function ModifyEntity({
   const { isSuccess, putEntity } = usePutQuery(entityName, properties);
 
   useEffect(() => {
-    if (isSuccess) {
-      _updateEntity({ ...properties, id: entity.id });
-    }
+    if (isSuccess) refetch();
   }, [isSuccess]);
 
   useEffect(() => {

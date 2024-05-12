@@ -18,8 +18,7 @@ const EntitiesTable = ({
   fatherEntityName,
   entitiesData,
   fatherEntityData,
-  updateEntity,
-  deleteEntity,
+  refetch,
 }) => {
   const [paginatedEntities, setPaginatedEntities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,10 +50,9 @@ const EntitiesTable = ({
           <EntitiesTableBody
             items={paginatedEntities}
             entityName={entityName}
-            deleteEntity={deleteEntity}
-            updateEntity={updateEntity}
             fatherEntityName={fatherEntityName}
             fatherEntityData={fatherEntityData}
+            refetch={refetch}
           />
           <EntitiesTableFooter
             totalPages={totalPages}

@@ -3,11 +3,10 @@ import UpdateArrangement from "./UpdateArrangement";
 
 const ArrangementCard = ({
   arrangement,
-  deleteArrangement,
-  updateArrangement,
   arrangementTypeData,
   wrappingVariantData,
   flowerVariantData,
+  refetch,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -58,8 +57,7 @@ const ArrangementCard = ({
         onOpenUpdate={onOpen}
         onCloseUpdate={onClose}
         arrangement={arrangement}
-        deleteArrangement={deleteArrangement}
-        updateArrangement={updateArrangement}
+        refetch={refetch}
         arrangementTypeData={arrangementTypeData}
         wrappingVariantData={wrappingVariantData}
         flowerVariantData={flowerVariantData}

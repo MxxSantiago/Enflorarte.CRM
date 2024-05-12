@@ -14,16 +14,14 @@ import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDeleteQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
-function DeleteEntity({ entityName, entity, _deleteEntity }) {
+function DeleteEntity({ entityName, entity, refetch }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
   const { isSuccess, deleteEntity } = useDeleteQuery(entityName, entity.id);
 
   useEffect(() => {
-    if (isSuccess) {
-      _deleteEntity(entity.id);
-    }
+    if (isSuccess) refetch();
   }, [isSuccess]);
 
   const handleDelete = () => {

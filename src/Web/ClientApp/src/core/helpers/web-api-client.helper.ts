@@ -14,6 +14,46 @@ import {
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
 
+class CacheManager {
+  private cache: { [key: string]: any } = {};
+
+  public getCachedResult(cacheKey: string, refresh: boolean) {
+    if (!refresh && this.cache[cacheKey]) {
+      return this.cache[cacheKey];
+    }
+  }
+
+  public updateCache(cacheKey: string, value: any) {
+    this.cache[cacheKey] = value;
+  }
+
+  public removeCache(cacheKey: string) {
+    delete this.cache[cacheKey];
+  }
+
+  public addEntityToCache(cacheKey: string, entity: any) {
+    this.cache[cacheKey] = [...this.cache[cacheKey], entity];
+  }
+
+  public removeEntityFromCache(cacheKey: string, id: number) {
+    this.cache[cacheKey] = [
+      ...this.cache[cacheKey].filter((entity: any) => entity.id !== id),
+    ];
+  }
+
+  public updateEntityInCache(cacheKey: string, entity: any) {
+    this.cache[cacheKey] = [
+      ...this.cache[cacheKey].map((e: any) =>
+        e.id === entity.id ? { ...e, ...entity } : e
+      ),
+    ];
+  }
+
+  public clearCache() {
+    this.cache = {};
+  }
+}
+
 class ApiClient {
   private clients = {
     arrangement: new ArrangementClient(),
@@ -29,13 +69,7 @@ class ApiClient {
     wrapperVariant: new WrapperVariantClient(),
   };
 
-  private clientCache: { [key: string]: any } = {};
-
-  private getCachedResult(cacheKey: string, refresh: boolean) {
-    if (!refresh && this.clientCache[cacheKey]) {
-      return this.clientCache[cacheKey];
-    }
-  }
+  constructor(private cacheManager = new CacheManager()) {}
 
   public async getAllEntities(
     entityName: string,
@@ -43,17 +77,19 @@ class ApiClient {
     refresh: boolean = false
   ) {
     const cacheKey = entityName;
-    const cachedResult = this.getCachedResult(cacheKey, refresh);
+    const cachedResult = this.cacheManager.getCachedResult(cacheKey, refresh);
 
     if (cachedResult) {
       return cachedResult;
     }
 
     const result = await this.executeHttpMethod(entityName, "GetAll");
-    this.clientCache[cacheKey] = result;
+    this.cacheManager.updateCache(cacheKey, result);
+
     if (removeReferences) {
       result.forEach((entity: any) => removeReferenceIdProperties(entity));
     }
+
     return result;
   }
 
@@ -63,29 +99,37 @@ class ApiClient {
     refresh: boolean = false
   ) {
     const cacheKey = `${entityName}_${id}`;
-    const cachedResult = this.getCachedResult(cacheKey, refresh);
+    const cachedResult = this.cacheManager.getCachedResult(cacheKey, refresh);
 
     if (cachedResult) {
       return cachedResult;
     }
 
     const result = await this.executeHttpMethod(entityName, "Get", id);
-    this.clientCache[cacheKey] = result;
+    this.cacheManager.updateCache(cacheKey, result);
 
     return result;
   }
 
-  public deleteEntity = (entityName: string, id: number) =>
+  public deleteEntity = (entityName: string, id: number) => {
     this.executeHttpMethod(entityName, "Delete", id);
+    this.cacheManager.removeCache(`${entityName}_${id}`);
+    this.cacheManager.removeEntityFromCache(entityName, id);
+  };
 
-  public updateEntity = (entityName: string, args: any) =>
+  public updateEntity = (entityName: string, args: any) => {
     this.executeHttpMethod(entityName, "Put", args);
+    this.cacheManager.updateCache(`${entityName}_${args.id}`, args);
+    this.cacheManager.updateEntityInCache(entityName, args);
+  };
 
   public createEntity = async (
     entityName: string,
     args: any
   ): Promise<number> => {
     const id = await this.executeHttpMethod(entityName, "Post", args);
+    this.cacheManager.updateCache(`${entityName}_${id}`, { ...args, id });
+    this.cacheManager.addEntityToCache(entityName, { ...args, id });
     return id;
   };
 

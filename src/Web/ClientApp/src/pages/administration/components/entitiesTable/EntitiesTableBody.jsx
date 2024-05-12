@@ -6,8 +6,7 @@ const EntitiesTableBody = ({
   entityName,
   fatherEntityName,
   fatherEntityData,
-  deleteEntity,
-  updateEntity,
+  refetch,
 }) => (
   <Tbody>
     {items.map((item) => (
@@ -17,8 +16,7 @@ const EntitiesTableBody = ({
         entityName={entityName}
         fatherEntityName={fatherEntityName}
         fatherEntityData={fatherEntityData}
-        deleteEntity={deleteEntity}
-        updateEntity={updateEntity}
+        refetch={refetch}
       />
     ))}
   </Tbody>

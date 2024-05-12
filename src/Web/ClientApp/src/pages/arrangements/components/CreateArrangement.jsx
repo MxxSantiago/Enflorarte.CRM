@@ -30,8 +30,8 @@ const CreateArrangmentTemplate = ({
   arrangementTypeData,
   wrappingVariantData,
   flowerVariantData,
-  addArrangement,
   isTemplate = true,
+  refetch,
 }) => {
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: [],
@@ -46,18 +46,13 @@ const CreateArrangmentTemplate = ({
     isTemplate: isTemplate,
   });
 
-  const { id, isSuccess, postEntity } = usePostQuery(
+  const { isSuccess, postEntity } = usePostQuery(
     "arrangement",
     createLookupEntityPayload(properties)
   );
 
   useEffect(() => {
-    if (isSuccess) {
-      addArrangement({
-        ...properties,
-        id,
-      });
-    }
+    if (isSuccess) refetch();
     onClose();
   }, [isSuccess]);
 

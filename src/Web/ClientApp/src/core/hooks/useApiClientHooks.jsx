@@ -16,59 +16,64 @@ import { LANG } from "../helpers/translations.helper.ts";
  * - isError: A boolean indicating whether an error occurred during the fetch operation.
  * - isUninitialized: A boolean indicating whether the fetch operation has not yet been initiated.
  * - refetch: A function to manually trigger a refetch of the data.
- * - localMutations: An object containing the following functions for local mutations:
- *  - add: A function to add a new entity to the data.
- *  - delete: A function to delete an entity from the data.
- *  - update: A function to update an existing entity in the data.
  */
-export const useGetQuery = (entityName, id, refetchOnMount = false) => {
+export const useGetQuery = (entityName, id) => {
   const toast = useToast();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [refetchCount, setRefetchCount] = useState(0);
+  const [clearCache, setClearCache] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isUninitialized, setIsUninitialized] = useState(true);
+  const [refetchCount, setRefetchCount] = useState(0);
 
   useEffect(() => {
     /**
      * Fetches the data from the API based on the entity name and ID.
      */
     const fetchData = async () => {
+      if (!entityName) return;
+
       try {
-        setIsLoading(true);
-        setIsSuccess(false);
-        setIsError(false);
-        setIsUninitialized(true);
+        if (data.length === 0 || clearCache) {
+          setIsLoading(true);
+          setIsSuccess(false);
+          setIsError(false);
+        }
 
         let result;
         if (id) {
-          result = await apiClient.getEntity(entityName, id);
+          if (clearCache) {
+            result = await apiClient.getEntity(entityName, id, true);
+          } else {
+            result = await apiClient.getEntity(entityName, id);
+          }
         } else {
-          result = await apiClient.getAllEntities(entityName);
+          if (clearCache) {
+            result = await apiClient.getAllEntities(entityName, false, true);
+          } else {
+            result = await apiClient.getAllEntities(entityName);
+          }
         }
 
         setData(result);
-
-        if (result) {
-          setIsSuccess(true);
-          setIsError(false);
-          setIsUninitialized(false);
-        } else {
-          setIsSuccess(false);
-          setIsError(true);
-          setIsUninitialized(false);
-        }
+        setIsUninitialized(false);
       } catch (err) {
+        console.error(err, entityName);
+        setIsSuccess(false);
+        setIsError(true);
         setError(err);
       } finally {
-        setIsLoading(false);
+        if (data.length === 0 || clearCache) {
+          setIsLoading(false);
+          setClearCache(false);
+        }
       }
     };
 
     fetchData();
-  }, [entityName, id, refetchOnMount, refetchCount]);
+  }, [entityName, id, refetchCount]);
 
   useEffect(() => {
     if (isError) {
@@ -83,35 +88,11 @@ export const useGetQuery = (entityName, id, refetchOnMount = false) => {
 
   /**
    * Function to manually trigger a refetch of the data.
+   * @param {boolean} clearCache - Determines whether the cache should be cleared before refetching the data.
    */
-  const refetch = () => {
+  const refetch = (clearCache = false) => {
+    setClearCache(clearCache);
     setRefetchCount(refetchCount + 1);
-  };
-
-  /**
-   * Function to add a new entity to the data.
-   * @param {object} entity - The entity object to add.
-   */
-  const _add = (entity) => {
-    setData([...data, entity]);
-  };
-
-  /**
-   * Function to delete an entity from the data based on its ID.
-   * @param {string} id - The ID of the entity to delete.
-   */
-  const _delete = (id) => {
-    setData(data.filter((item) => item.id !== id));
-  };
-
-  /**
-   * Function to update an existing entity in the data.
-   * @param {object} updatedEntity - The updated entity object.
-   */
-  const _update = (updatedEntity) => {
-    setData(
-      data.map((item) => (item.id === updatedEntity.id ? updatedEntity : item))
-    );
   };
 
   return {
@@ -122,11 +103,6 @@ export const useGetQuery = (entityName, id, refetchOnMount = false) => {
     isError: isError,
     isUninitialized: isUninitialized,
     refetch,
-    localMutations: {
-      add: _add,
-      delete: _delete,
-      update: _update,
-    },
   };
 };
 
