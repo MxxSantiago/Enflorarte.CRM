@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import { Table, TableContainer, Card } from "@chakra-ui/react";
-import { getAllEntities } from "../../../../core/helpers/web-api-client.helper.ts";
 import EntitiesTableBody from "./EntitiesTableBody.jsx";
 import EntitiesTableHeader from "./EntitiesTableHeader.jsx";
 import EntitiesTableFooter from "./EntitiesTableFooter.jsx";
@@ -11,38 +10,25 @@ const paginate = (items, currentPage, itemsPerPage) => {
   return items.slice(start, end);
 };
 
+const itemsPerPage = 5;
+
 const EntitiesTable = ({
-  entityName,
-  refreshView,
-  lastUpdated,
   entity,
+  entityName,
   fatherEntityName,
+  entitiesData,
+  fatherEntityData,
+  updateEntity,
+  deleteEntity,
 }) => {
-  const [allItems, setAllItems] = useState([]);
-  const [items, setItems] = useState([]);
+  const [paginatedEntities, setPaginatedEntities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
-  const [fatherEntityData, setFatherEntityData] = useState([]);
 
   useEffect(() => {
-    populateAllItems();
-    if (fatherEntityName) {
-      populateFatherItems();
-    }
-  }, [lastUpdated]);
+    setPaginatedEntities(paginate(entitiesData, currentPage, itemsPerPage));
+  }, [currentPage, entitiesData]);
 
-  useEffect(() => {
-    setItems(paginate(allItems, currentPage, itemsPerPage));
-  }, [currentPage, allItems]);
-
-  const populateAllItems = async () => {
-    setAllItems(await getAllEntities(entityName));
-  };
-
-  const populateFatherItems = async () =>
-    setFatherEntityData(await getAllEntities(fatherEntityName));
-
-  const totalPages = Math.ceil(allItems.length / itemsPerPage);
+  const totalPages = Math.ceil(entitiesData.length / itemsPerPage);
 
   const changePage = useCallback(
     (newPage) => {
@@ -63,16 +49,16 @@ const EntitiesTable = ({
         <Table variant="striped" colorScheme="pink">
           <EntitiesTableHeader entity={entity} />
           <EntitiesTableBody
-            items={items}
+            items={paginatedEntities}
             entityName={entityName}
-            refreshView={refreshView}
-            lastUpdated={lastUpdated}
+            deleteEntity={deleteEntity}
+            updateEntity={updateEntity}
             fatherEntityName={fatherEntityName}
             fatherEntityData={fatherEntityData}
           />
           <EntitiesTableFooter
             totalPages={totalPages}
-            totalItems={allItems.length}
+            totalItems={entitiesData.length}
             currentPage={currentPage}
             changePage={changePage}
             entityName={entityName}

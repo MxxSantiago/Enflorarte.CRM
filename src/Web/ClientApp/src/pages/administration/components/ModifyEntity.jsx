@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { Input, Button, Box } from "@chakra-ui/react";
-import { updateEntity } from "../../../core/helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -8,13 +7,13 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  useToast,
   IconButton,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
 import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelect.jsx";
+import { usePutQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
 function getRelatedFatherEntity(fatherEntityName, entity) {
   const fatherEntity = entity && entity[fatherEntityName];
@@ -33,43 +32,35 @@ function getRelatedFatherEntity(fatherEntityName, entity) {
 function ModifyEntity({
   entityName,
   entity,
-  refreshView,
-  lastUpdated,
   fatherEntityData,
   fatherEntityName,
+  _updateEntity,
 }) {
-  const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
   const [selectedItem, setSelectedItem] = useState(
     getRelatedFatherEntity(fatherEntityName, entity)
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
+  const { isSuccess, putEntity } = usePutQuery(entityName, properties);
+
+  useEffect(() => {
+    if (isSuccess) {
+      _updateEntity({ ...properties, id: entity.id });
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    cleanProperties();
+  }, [entity, isOpen]);
+
+  useEffect(() => {
+    setSelectedItem(getRelatedFatherEntity(fatherEntityName, entity));
+  }, [entity, fatherEntityData, fatherEntityName]);
 
   const handleUpdate = async () => {
-    try {
-      await updateEntity(entityName, {
-        ...properties,
-        id: entity.id,
-      });
-
-      toast({
-        title: `${LANG(entityName)} modificada correctamente`,
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
-
-      onClose();
-      refreshView();
-    } catch (error) {
-      toast({
-        title: error.message,
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
-    }
+    await putEntity();
+    onClose();
   };
 
   const cleanProperties = () => setProperties({ ...entity });
@@ -89,14 +80,6 @@ function ModifyEntity({
       });
     }
   };
-
-  useEffect(() => {
-    cleanProperties();
-  }, [entity, lastUpdated, isOpen]);
-
-  useEffect(() => {
-    setSelectedItem(getRelatedFatherEntity(fatherEntityName, entity));
-  }, [entity, fatherEntityData, fatherEntityName]);
 
   const isDisabled = () =>
     Object.entries(properties)

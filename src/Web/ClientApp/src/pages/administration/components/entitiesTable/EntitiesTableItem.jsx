@@ -9,6 +9,8 @@ const EntitiesTableItem = ({
   lastUpdated,
   fatherEntityName,
   fatherEntityData,
+  deleteEntity,
+  updateEntity,
 }) => (
   <Tr key={item.id}>
     {Object.keys(item)
@@ -29,11 +31,13 @@ const EntitiesTableItem = ({
           refreshView={refreshView}
           fatherEntityName={fatherEntityName}
           fatherEntityData={fatherEntityData}
+          _updateEntity={updateEntity}
         />
         <DeleteEntity
           entityName={entityName}
           entity={item}
           refreshView={refreshView}
+          _deleteEntity={deleteEntity}
         />
       </Flex>
     </Td>

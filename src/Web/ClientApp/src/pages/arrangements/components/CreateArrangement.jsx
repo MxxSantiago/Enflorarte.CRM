@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   GridItem,
@@ -10,7 +10,6 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  useToast,
   Image,
   Box,
   Input,
@@ -18,13 +17,10 @@ import {
   Textarea,
   Checkbox,
 } from "@chakra-ui/react";
-import {
-  createEntity,
-  createEntityPayload,
-} from "../../../core/helpers/web-api-client.helper.ts";
-import { LANG } from "../../../core/helpers/translations.helper.ts";
+import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.helper.ts";
 import { Arrangement } from "../../../web-api-client.ts";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect.jsx";
+import { usePostQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
 const ArrangementEntity = new Arrangement().toJSON();
 
@@ -49,29 +45,22 @@ const CreateArrangmentTemplate = ({
     arrangementTypes: [],
     isTemplate: isTemplate,
   });
-  const toast = useToast();
 
-  const handleCreate = async (event) => {
-    event.preventDefault();
+  const { isSuccess, postEntity } = usePostQuery(
+    "arrangement",
+    createLookupEntityPayload(properties)
+  );
 
-    try {
-      await createEntity("arrangement", createEntityPayload(properties));
-      toast({
-        title: `${LANG("arrangement")} creado correctamente`,
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
+  useEffect(() => {
+    if (isSuccess) {
       addArrangement(properties);
-      onClose();
-    } catch (error) {
-      toast({
-        title: error.message,
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
     }
+    onClose();
+  }, [isSuccess]);
+
+  const handleCreate = (event) => {
+    event.preventDefault();
+    postEntity();
   };
 
   const handleSelectedItemChange = (propertySelectedItems, property) => {

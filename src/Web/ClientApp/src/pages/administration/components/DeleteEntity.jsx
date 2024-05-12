@@ -1,4 +1,3 @@
-import { deleteEntity } from "../../../core/helpers/web-api-client.helper.ts";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -6,43 +5,29 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  useToast,
   IconButton,
   useDisclosure,
   Button,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { MdDeleteOutline } from "react-icons/md";
+import { useDeleteQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
-function DeleteEntity({ entityName, entity, refreshView }) {
-  const toast = useToast();
+function DeleteEntity({ entityName, entity, _deleteEntity }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
-  const handleDelete = async () => {
-    try {
-      await deleteEntity(entityName, entity.id);
-      toast({
-        title: `${LANG(entityName)} '${entity.name}' eliminado correctamente`,
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
-    } catch (error) {
-      toast({
-        title: `
-          La ${LANG(entityName)}
-          '${
-            entity.name
-          }' no se pudo eliminar ya que hay recurso(s) asociado(s).
-        `,
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
+  const { isSuccess, deleteEntity } = useDeleteQuery(entityName, entity.id);
+
+  useEffect(() => {
+    if (isSuccess) {
+      _deleteEntity(entity.id);
     }
-    refreshView();
+  }, [isSuccess]);
+
+  const handleDelete = () => {
+    deleteEntity(entityName, entity.id);
   };
 
   return (
@@ -63,7 +48,7 @@ function DeleteEntity({ entityName, entity, refreshView }) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Eliminar {LANG(entityName)} <b>{entity.name}</b>
+              Eliminar {LANG(entityName)} <b>{entity?.name}</b>
             </AlertDialogHeader>
             <AlertDialogBody>
               ¿Estás seguro de que quieres eliminar esta entidad? Esta acción no

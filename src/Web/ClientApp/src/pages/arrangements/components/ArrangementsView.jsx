@@ -13,71 +13,40 @@ import {
 } from "@chakra-ui/react";
 import ArrangementCard from "./ArrangementCard.jsx";
 import CreateArrangmentTemplate from "./CreateArrangement.jsx";
-import { getAllEntities } from "../../../core/helpers/web-api-client.helper.ts";
 import ArrangementsFilter from "./ArrangementsFilter.jsx";
 import { useState, useEffect } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
 const ArrangementsView = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [arrangementsData, setArrangementsData] = useState([]);
-  const [arrangementTypesData, setArrangementTypeData] = useState([]);
-  const [wrapperVariantsData, setWrappingVariantData] = useState([]);
-  const [flowerVariantsData, setFlowerVariantData] = useState([]);
-  const [filteredArrangements, setFilteredArrangements] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const {
+    isOpen: isCreateOpen,
+    onOpen: onOpenCreate,
+    onClose: onCloseCreate,
+  } = useDisclosure();
   const { isOpen: isHeaderOpen, onToggle: onToggleHeader } = useDisclosure({
     defaultIsOpen: true,
   });
 
-  useEffect(() => {
-    populateArrangements();
-    populateArrangementTypeEntity();
-    populateWrappingTypeEntity();
-    populateFlowerTypeEntity();
-  }, []);
+  const {
+    data: arrangementsData,
+    isLoading,
+    localMutations: {
+      add: addArrangement,
+      delete: deleteArrangement,
+      update: updateArrangement,
+    },
+  } = useGetQuery("arrangement", null, false);
+
+  const { data: arrangementTypesData } = useGetQuery("arrangementType");
+  const { data: wrapperVariantsData } = useGetQuery("wrapperVariant");
+  const { data: flowerVariantsData } = useGetQuery("flowerVariant");
+
+  const [filteredArrangements, setFilteredArrangements] = useState([]);
 
   useEffect(() => {
     setFilteredArrangements(arrangementsData);
   }, [arrangementsData]);
-
-  const populateArrangements = async () => {
-    const arrangements = await getAllEntities("arrangement", false);
-    setArrangementsData(arrangements);
-    setLoading(false);
-  };
-
-  const populateArrangementTypeEntity = async () => {
-    const data = await getAllEntities("arrangementType");
-    setArrangementTypeData(data);
-  };
-
-  const populateWrappingTypeEntity = async () => {
-    const data = await getAllEntities("wrapperVariant");
-    setWrappingVariantData(data);
-  };
-
-  const populateFlowerTypeEntity = async () => {
-    const data = await getAllEntities("flowerVariant");
-    setFlowerVariantData(data);
-  };
-
-  const addArrangement = (arrangement) => {
-    setArrangementsData([...arrangementsData, arrangement]);
-  };
-
-  const deleteArrangement = (id) => {
-    const newArregements = arrangementsData.filter((a) => a.id !== id);
-    setArrangementsData(newArregements);
-  };
-
-  const updateArrangement = (arrangement) => {
-    const newArregements = arrangementsData.map((a) =>
-      a.id === arrangement.id ? arrangement : a
-    );
-    setArrangementsData(newArregements);
-  };
 
   return (
     <>
@@ -94,13 +63,17 @@ const ArrangementsView = () => {
                 <Text margin={0} fontSize="3xl">
                   Tus Plantillas
                 </Text>
-                <Button colorScheme="pink" marginLeft="auto" onClick={onOpen}>
+                <Button
+                  colorScheme="pink"
+                  marginLeft="auto"
+                  onClick={onOpenCreate}
+                >
                   Nueva Plantilla
                 </Button>
               </Flex>
-              {arrangementsData.length > 0 && (
+              {!isLoading && arrangementsData.length > 0 && (
                 <Box position="relative" width="100%">
-                  <Divider marginBottom={0} />
+                  <Divider marginBottom={3} />
                   <AbsoluteCenter zIndex={1}>
                     <IconButton
                       borderRadius="full"
@@ -116,7 +89,7 @@ const ArrangementsView = () => {
                 </Box>
               )}
             </Box>
-            {arrangementsData.length > 0 && (
+            {!isLoading && arrangementsData.length > 0 && (
               <Collapse in={isHeaderOpen}>
                 <Box>
                   <Flex px={8} pt={8} direction="column">
@@ -135,17 +108,20 @@ const ArrangementsView = () => {
               </Collapse>
             )}
           </Box>
-          {arrangementsData.length === 0 ? (
+          {isLoading ? (
             <Flex alignItems="center" justifyContent="center">
-              {loading ? (
-                <Spinner size="xl" />
-              ) : (
+              <Spinner size="xl" />
+            </Flex>
+          ) : (
+            arrangementsData.length === 0 && (
+              <Flex alignItems="center" justifyContent="center">
                 <Text fontSize="2xl">
                   No tienes plantillas de arreglos registradas
                 </Text>
-              )}
-            </Flex>
-          ) : (
+              </Flex>
+            )
+          )}
+          {filteredArrangements.length > 0 && !isLoading && (
             <SimpleGrid
               height="100%"
               minChildWidth="300px"
@@ -173,9 +149,9 @@ const ArrangementsView = () => {
         </SimpleGrid>
       </Flex>
       <CreateArrangmentTemplate
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
+        isOpen={isCreateOpen}
+        onOpen={onOpenCreate}
+        onClose={onCloseCreate}
         arrangementTypeData={arrangementTypesData}
         wrappingVariantData={wrapperVariantsData}
         flowerVariantData={flowerVariantsData}

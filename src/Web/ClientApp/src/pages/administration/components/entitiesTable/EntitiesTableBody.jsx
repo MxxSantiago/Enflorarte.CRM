@@ -4,21 +4,21 @@ import EntitiesTableItem from "./EntitiesTableItem";
 const EntitiesTableBody = ({
   items,
   entityName,
-  refreshView,
-  lastUpdated,
   fatherEntityName,
   fatherEntityData,
+  deleteEntity,
+  updateEntity,
 }) => (
   <Tbody>
     {items.map((item) => (
       <EntitiesTableItem
-        lastUpdated={lastUpdated}
         key={item.id}
         item={item}
         entityName={entityName}
         fatherEntityName={fatherEntityName}
-        refreshView={refreshView}
         fatherEntityData={fatherEntityData}
+        deleteEntity={deleteEntity}
+        updateEntity={updateEntity}
       />
     ))}
   </Tbody>

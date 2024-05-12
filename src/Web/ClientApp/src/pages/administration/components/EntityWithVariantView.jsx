@@ -1,8 +1,8 @@
 import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
-import { useEffect, useState } from "react";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 import { removeReferenceObjectProperties } from "../../../core/helpers/web-api-client.helper.ts";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
 const EntityWithVariantView = ({
   title,
@@ -12,15 +12,28 @@ const EntityWithVariantView = ({
   variantName,
   variant,
 }) => {
-  const [lastUpdated, setLastUpdated] = useState();
   const gridTemplateColumns = useBreakpointValue({
     md: "repeat(1, 1fr)",
     lg: "repeat(2, 1fr)",
   });
 
-  const refreshView = () => setLastUpdated(new Date());
+  const {
+    data: entitiesData,
+    localMutations: {
+      add: addEntity,
+      delete: deleteEntity,
+      update: updateEntity,
+    },
+  } = useGetQuery(entityName);
 
-  useEffect(() => refreshView(), [title]);
+  const {
+    data: variantsData,
+    localMutations: {
+      add: addVariant,
+      delete: deleteVariant,
+      update: updateVariant,
+    },
+  } = useGetQuery(variantName);
 
   return (
     <Box width="100%">
@@ -35,15 +48,16 @@ const EntityWithVariantView = ({
             entityName={entityName}
             title={title}
             entity={entity}
-            refreshView={refreshView}
+            _createEntity={addEntity}
           />
         </Box>
         <Box order={{ md: 2, lg: 3 }}>
           <EntitiesTable
             entity={entity}
             entityName={entityName}
-            refreshView={refreshView}
-            lastUpdated={lastUpdated}
+            entitiesData={entitiesData}
+            deleteEntity={deleteEntity}
+            updateEntity={updateEntity}
           />
         </Box>
         <Box order={{ md: 3, lg: 2 }}>
@@ -51,10 +65,9 @@ const EntityWithVariantView = ({
             entityName={variantName}
             title={variantTitle}
             entity={removeReferenceObjectProperties(variant)}
-            refreshView={refreshView}
             fatherEntity={entity}
             fatherEntityName={entityName}
-            lastUpdated={lastUpdated}
+            _createEntity={addVariant}
           />
         </Box>
         <Box order={{ md: 4, lg: 4 }}>
@@ -62,8 +75,10 @@ const EntityWithVariantView = ({
             entity={variant}
             entityName={variantName}
             fatherEntityName={entityName}
-            refreshView={refreshView}
-            lastUpdated={lastUpdated}
+            fatherEntityData={entitiesData}
+            entitiesData={variantsData}
+            deleteEntity={deleteVariant}
+            updateEntity={updateVariant}
           />
         </Box>
       </Grid>
