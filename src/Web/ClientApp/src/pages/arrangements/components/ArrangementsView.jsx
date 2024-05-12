@@ -31,12 +31,8 @@ const ArrangementsView = () => {
   const {
     data: arrangementsData,
     isLoading,
-    localMutations: {
-      add: addArrangement,
-      delete: deleteArrangement,
-      update: updateArrangement,
-    },
-  } = useGetQuery("arrangement", null, false);
+    refetch,
+  } = useGetQuery("arrangement");
 
   const { data: arrangementTypesData } = useGetQuery("arrangementType");
   const { data: wrapperVariantsData } = useGetQuery("wrapperVariant");
@@ -137,8 +133,7 @@ const ArrangementsView = () => {
                 <ArrangementCard
                   key={arrangement.id}
                   arrangement={arrangement}
-                  deleteArrangement={deleteArrangement}
-                  updateArrangement={updateArrangement}
+                  refetch={refetch}
                   arrangementTypeData={arrangementTypesData}
                   wrappingVariantData={wrapperVariantsData}
                   flowerVariantData={flowerVariantsData}
@@ -155,7 +150,7 @@ const ArrangementsView = () => {
         arrangementTypeData={arrangementTypesData}
         wrappingVariantData={wrapperVariantsData}
         flowerVariantData={flowerVariantsData}
-        addArrangement={addArrangement}
+        refetch={refetch}
       />
     </>
   );

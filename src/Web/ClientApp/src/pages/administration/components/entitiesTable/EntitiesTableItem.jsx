@@ -5,12 +5,10 @@ import DeleteEntity from "../DeleteEntity";
 const EntitiesTableItem = ({
   item,
   entityName,
-  refreshView,
   lastUpdated,
   fatherEntityName,
   fatherEntityData,
-  deleteEntity,
-  updateEntity,
+  refetch,
 }) => (
   <Tr key={item.id}>
     {Object.keys(item)
@@ -28,17 +26,11 @@ const EntitiesTableItem = ({
           lastUpdated={lastUpdated}
           entityName={entityName}
           entity={item}
-          refreshView={refreshView}
           fatherEntityName={fatherEntityName}
           fatherEntityData={fatherEntityData}
-          _updateEntity={updateEntity}
+          refetch={refetch}
         />
-        <DeleteEntity
-          entityName={entityName}
-          entity={item}
-          refreshView={refreshView}
-          _deleteEntity={deleteEntity}
-        />
+        <DeleteEntity entityName={entityName} entity={item} refetch={refetch} />
       </Flex>
     </Td>
   </Tr>

@@ -21,13 +21,13 @@ function CreateEntity({
   entityName,
   entity,
   fatherEntityName,
-  _createEntity,
+  refetch,
 }) {
   const [properties, setProperties] = useState({ ...entity });
   const [selectedItem, setSelectedItem] = useState([]);
   const { data: fatherEntityData } = useGetQuery(fatherEntityName);
 
-  const { id, isSuccess, postEntity } = usePostQuery(entityName, properties);
+  const { isSuccess, postEntity } = usePostQuery(entityName, properties);
 
   const handleSelectedItemChange = (selectedItem, property) => {
     if (selectedItem.length) {
@@ -48,13 +48,7 @@ function CreateEntity({
   useEffect(() => setProperties({ ...entity }), [entity]);
 
   useEffect(() => {
-    if (isSuccess) {
-      _createEntity({
-        ...properties,
-        id,
-      });
-      setProperties({ ...entity });
-    }
+    if (isSuccess) refetch();
   }, [isSuccess]);
 
   const handleCreate = async (event) => {

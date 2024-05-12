@@ -6,15 +6,7 @@ import { removeReferenceIdProperties } from "../../../core/helpers/web-api-clien
 import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
 
 const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
-  const {
-    data: entitiesData,
-    localMutations: {
-      add: createEntity,
-      delete: deleteEntity,
-      update: updateEntity,
-    },
-  } = useGetQuery(entityName);
-
+  const { data: entitiesData, refetch } = useGetQuery(entityName);
   const { data: fatherEntityData } = useGetQuery(fatherEntityName);
 
   return (
@@ -25,7 +17,7 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
         entity={removeReferenceIdProperties(entity)}
         fatherEntity={new CommunicationType().toJSON()}
         fatherEntityName="communicationType"
-        _createEntity={createEntity}
+        refetch={refetch}
       />
       <EntitiesTable
         entity={entity}
@@ -33,8 +25,7 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
         fatherEntityName={fatherEntityName}
         entitiesData={entitiesData}
         fatherEntityData={fatherEntityData}
-        deleteEntity={deleteEntity}
-        updateEntity={updateEntity}
+        refetch={refetch}
       />
     </Flex>
   );

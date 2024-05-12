@@ -34,11 +34,10 @@ function UpdateArrangement({
   isOpenUpdate,
   onCloseUpdate,
   arrangement,
-  deleteArrangement,
-  updateArrangement,
   arrangementTypeData,
   wrappingVariantData,
   flowerVariantData,
+  refetch,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
@@ -67,14 +66,14 @@ function UpdateArrangement({
 
   useEffect(() => {
     if (isSuccess) {
-      updateArrangement(properties);
+      refetch();
     }
     onCloseUpdate();
   }, [isSuccess]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
-      deleteArrangement(arrangement.id);
+      refetch();
     }
     onClose();
   }, [isDeleteSuccess]);
