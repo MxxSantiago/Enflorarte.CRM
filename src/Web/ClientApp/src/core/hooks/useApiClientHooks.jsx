@@ -136,7 +136,7 @@ export const useGetQuery = (entityName, id, refetchOnMount = false) => {
  * @param {string} entityName - The name of the entity.
  * @param {object} entity - The entity object to be created.
  * @returns {object} - An object containing the following properties:
- * - data: The result of the create operation.
+ * - id: The identificator of the created entity.
  * - error: The error object, if any.
  * - isLoading: A boolean indicating whether the create operation is in progress.
  * - isSuccess: A boolean indicating whether the create operation was successful.
@@ -145,7 +145,7 @@ export const useGetQuery = (entityName, id, refetchOnMount = false) => {
  */
 const usePostQuery = (entityName, entity) => {
   const toast = useToast();
-  const [data, setData] = useState(null);
+  const [id, setId] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -158,7 +158,7 @@ const usePostQuery = (entityName, entity) => {
       setIsError(false);
 
       const result = await apiClient.createEntity(entityName, entity);
-      setData(result);
+      setId(result);
       setIsSuccess(true);
     } catch (err) {
       setError(err);
@@ -187,7 +187,7 @@ const usePostQuery = (entityName, entity) => {
   }, [isSuccess, isError]);
 
   return {
-    data,
+    id,
     error,
     isLoading,
     isSuccess,

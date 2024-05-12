@@ -81,8 +81,13 @@ class ApiClient {
   public updateEntity = (entityName: string, args: any) =>
     this.executeHttpMethod(entityName, "Put", args);
 
-  public createEntity = (entityName: string, args: any) =>
-    this.executeHttpMethod(entityName, "Post", args);
+  public createEntity = async (
+    entityName: string,
+    args: any
+  ): Promise<number> => {
+    const id = await this.executeHttpMethod(entityName, "Post", args);
+    return id;
+  };
 
   private async executeHttpMethod(
     entityName: string,

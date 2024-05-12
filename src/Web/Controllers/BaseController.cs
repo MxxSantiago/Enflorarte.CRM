@@ -78,9 +78,9 @@ public abstract class BaseController<TEntity, TService> : ControllerBase
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> PostAsync(TEntity entity)
+    public virtual async Task<ActionResult<int>> PostAsync(TEntity entity)
     {
-        await _service.AddAsync(entity);
-        return NoContent();
+        int entityId = await _service.AddAsync(entity);
+        return Ok(entityId);
     }
 }
