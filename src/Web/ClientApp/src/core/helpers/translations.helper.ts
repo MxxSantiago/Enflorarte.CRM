@@ -1,52 +1,31 @@
-﻿export function LANG(word: string) {
-  switch (word.toLocaleLowerCase()) {
-    case "name":
-      return "Nombre";
-    case "flowerid":
-      return "Flor";
-    case "flower":
-      return "Flor";
-    case "flowervariant":
-    case "flowervariants":
-      return "Variante de flor";
-    case "address":
-      return "Dirección";
-    case "phonenumber":
-      return "Teléfono";
-    case "communicationtype":
-    case "communicationtypeid":
-      return "Tipo de comunicación";
-    case "link":
-      return "Enlace";
-    case "wrapperid":
-      return "Envoltura";
-    case "wrapper":
-      return "Envoltura";
-    case "wrappervariant":
-    case "wrappervariants":
-      return "Variante de envoltura";
-    case "client":
-      return "Cliente";
-    case "clientid":
-      return "Cliente";
-    case "branch":
-      return "Sucursal";
-    case "branchid":
-      return "Sucursal";
-    case "responsible":
-      return "Responsable";
-    case "arrangement":
-      return "Arreglo";
-    case "arrangementtype":
-    case "arrangementtypes":
-      return "Tipo de arreglo";
-    case "isavailable":
-      return "Disponibilidad";
-    case "true":
-      return "Disponible";
-    case "false":
-      return "No disponible";
-    default:
-      return word;
-  }
+﻿const translations = {
+  name: "Nombre",
+  flowerid: "Flor",
+  flower: "Flor",
+  flowervariant: "Variante de flor",
+  flowervariants: "Variante de flor",
+  address: "Dirección",
+  phonenumber: "Teléfono",
+  communicationtype: "Tipo de comunicación",
+  communicationtypeid: "Tipo de comunicación",
+  link: "Enlace",
+  wrapperid: "Envoltura",
+  wrapper: "Envoltura",
+  wrappervariant: "Variante de envoltura",
+  wrappervariants: "Variante de envoltura",
+  client: "Cliente",
+  clientid: "Cliente",
+  branch: "Sucursal",
+  branchid: "Sucursal",
+  responsible: "Responsable",
+  arrangement: "Arreglo",
+  arrangementtype: "Tipo de arreglo",
+  arrangementtypes: "Tipo de arreglo",
+  isavailable: "Disponibilidad",
+  true: "Disponible",
+  false: "No disponible",
+};
+
+export function LANG(word) {
+  return translations[word.toLowerCase()] || word;
 }
