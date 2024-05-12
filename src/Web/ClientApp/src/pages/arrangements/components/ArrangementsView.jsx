@@ -24,7 +24,8 @@ const ArrangementsView = () => {
   const [arrangementTypesData, setArrangementTypeData] = useState([]);
   const [wrapperVariantsData, setWrappingVariantData] = useState([]);
   const [flowerVariantsData, setFlowerVariantData] = useState([]);
-  const [filteredArrangements, setFilteredArrangements] = useState([]);
+  const [filteredArrangements, setFilteredArrangements] = useState(arrangementsData);
+
   const [loading, setLoading] = useState(true);
 
   const { isOpen: isHeaderOpen, onToggle: onToggleHeader } = useDisclosure({
@@ -39,7 +40,7 @@ const ArrangementsView = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredArrangements(arrangementsData);
+    setFilteredArrangements(filteredArrangements);
   }, [arrangementsData]);
 
   const populateArrangements = async () => {
@@ -78,6 +79,7 @@ const ArrangementsView = () => {
     );
     setArrangementsData(newArregements);
   };
+
 
   return (
     <>
