@@ -8,11 +8,12 @@ namespace Enflorarte.CRM.Application.Services;
 public class ArrangementService(IArrangementDAO repository, IValidator<Arrangement> validator)
     : BaseService<Arrangement>(repository, validator)
 {
-    public override async Task AddAsync(Arrangement entity)
+    public override async Task<int> AddAsync(Arrangement entity)
     {
         await ValidateAsync(entity);
         await repository.AddAsync(entity);
         await repository.SaveChangesAsync();
+        return entity.Id;
     }
     
     public override async Task UpdateAsync(Arrangement entity)

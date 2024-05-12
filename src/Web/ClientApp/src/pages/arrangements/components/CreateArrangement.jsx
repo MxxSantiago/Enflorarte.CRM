@@ -46,14 +46,17 @@ const CreateArrangmentTemplate = ({
     isTemplate: isTemplate,
   });
 
-  const { isSuccess, postEntity } = usePostQuery(
+  const { id, isSuccess, postEntity } = usePostQuery(
     "arrangement",
     createLookupEntityPayload(properties)
   );
 
   useEffect(() => {
     if (isSuccess) {
-      addArrangement(properties);
+      addArrangement({
+        ...properties,
+        id,
+      });
     }
     onClose();
   }, [isSuccess]);
