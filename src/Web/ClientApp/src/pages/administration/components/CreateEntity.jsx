@@ -5,38 +5,29 @@ import {
   Card,
   Heading,
   Input,
-  useToast,
   Grid,
   VStack,
 } from "@chakra-ui/react";
-import {
-  createEntity,
-  createEntityPayload,
-  getAllEntities,
-} from "../../../core/helpers/web-api-client.helper.ts";
+import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.helper.ts";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelect.jsx";
+import {
+  useGetQuery,
+  usePostQuery,
+} from "../../../core/hooks/useApiClientHooks.jsx";
 
 function CreateEntity({
   title,
   entityName,
   entity,
-  refreshView,
   fatherEntityName,
-  lastUpdated,
+  _createEntity,
 }) {
-  const toast = useToast();
   const [properties, setProperties] = useState({ ...entity });
-  const [fatherEntityData, setFatherEntityData] = useState([]);
   const [selectedItem, setSelectedItem] = useState([]);
+  const { data: fatherEntityData } = useGetQuery(fatherEntityName);
 
-  useEffect(() => setProperties({ ...entity }), [entity]);
-
-  useEffect(() => {
-    if (fatherEntityName) {
-      populateFatherItems();
-    }
-  }, [lastUpdated]);
+  const { isSuccess, postEntity } = usePostQuery(entityName, properties);
 
   const handleSelectedItemChange = (selectedItem, property) => {
     if (selectedItem.length) {
@@ -54,32 +45,18 @@ function CreateEntity({
     }
   };
 
+  useEffect(() => setProperties({ ...entity }), [entity]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      _createEntity(properties);
+      setProperties({ ...entity });
+    }
+  }, [isSuccess]);
+
   const handleCreate = async (event) => {
     event.preventDefault();
-
-    try {
-      await createEntity(entityName, createEntityPayload(properties));
-      toast({
-        title: `${LANG(entityName)} creado correctamente`,
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
-      setProperties({ ...entity });
-      refreshView();
-    } catch (error) {
-      toast({
-        title: error.message,
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
-    }
-  };
-
-  const populateFatherItems = async () => {
-    const data = await getAllEntities(fatherEntityName);
-    setFatherEntityData(data);
+    postEntity(createLookupEntityPayload(properties));
   };
 
   const isDisabled = () => {

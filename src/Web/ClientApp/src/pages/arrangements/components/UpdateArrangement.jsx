@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   GridItem,
@@ -23,13 +23,12 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect";
 import {
-  deleteEntity,
-  updateEntity,
-} from "../../../core/helpers/web-api-client.helper.ts";
+  useDeleteQuery,
+  usePutQuery,
+} from "../../../core/hooks/useApiClientHooks.jsx";
 
 function UpdateArrangement({
   isOpenUpdate,
@@ -42,7 +41,8 @@ function UpdateArrangement({
   flowerVariantData,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+  const cancelRef = React.useRef();
+
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: arrangement.arrangementTypes.map((item) => ({
       value: item.id,
@@ -58,51 +58,26 @@ function UpdateArrangement({
     })),
   });
   const [properties, setProperties] = useState({ ...arrangement });
-  const cancelRef = React.useRef();
 
-  const handleEdit = async () => {
-    try {
-      console.log(properties);
+  const { isSuccess, putEntity } = usePutQuery("arrangement", properties);
+  const { isSuccess: isDeleteSuccess, deleteEntity } = useDeleteQuery(
+    "arrangement",
+    arrangement.id
+  );
 
-      await updateEntity("arrangement", properties);
-      toast({
-        title: "Arreglo Actualizado",
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
+  useEffect(() => {
+    if (isSuccess) {
       updateArrangement(properties);
-      onCloseUpdate();
-    } catch (error) {
-      toast({
-        title: "El arreglo no se pudo actualizar",
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
     }
-  };
+    onCloseUpdate();
+  }, [isSuccess]);
 
-  const handleDelete = async () => {
-    try {
-      await deleteEntity("arrangement", arrangement.id);
-      toast({
-        title: "Arreglo Eliminado",
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
+  useEffect(() => {
+    if (isDeleteSuccess) {
       deleteArrangement(arrangement.id);
-      onClose();
-    } catch (error) {
-      toast({
-        title: "El arreglo no se pudo eliminar",
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
     }
-  };
+    onClose();
+  }, [isDeleteSuccess]);
 
   const handleSelectedItemChange = (propertySelectedItems, property) => {
     if (propertySelectedItems.length) {
@@ -300,7 +275,7 @@ function UpdateArrangement({
                     <Button ref={cancelRef} onClick={onClose}>
                       Cancelar
                     </Button>
-                    <Button colorScheme="red" onClick={handleDelete} ml={3}>
+                    <Button colorScheme="red" onClick={deleteEntity} ml={3}>
                       Eliminar
                     </Button>
                   </AlertDialogFooter>
@@ -312,7 +287,7 @@ function UpdateArrangement({
               <Button mr={3} onClick={onCloseUpdate}>
                 Cerrar
               </Button>
-              <Button colorScheme="pink" onClick={handleEdit}>
+              <Button colorScheme="pink" onClick={putEntity}>
                 Guardar cambios
               </Button>
             </Box>

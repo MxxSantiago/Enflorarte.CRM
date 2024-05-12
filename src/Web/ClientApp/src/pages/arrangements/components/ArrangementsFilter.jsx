@@ -100,7 +100,10 @@ function ArrangementsFilter({
         </MenuButton>
         <MenuList>
           {filters.map((filter) => (
-            <MenuItem onClick={() => setSelectedFilter(filter)}>
+            <MenuItem
+              key={filter.name}
+              onClick={() => setSelectedFilter(filter)}
+            >
               {filter.name}
             </MenuItem>
           ))}
