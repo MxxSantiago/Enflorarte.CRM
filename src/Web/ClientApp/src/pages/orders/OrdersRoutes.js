@@ -1,4 +1,4 @@
-import OrdersView from "./components/OrdersView";
+import OrdersView from "./components/Weekly/OrdersView";
 import { Navigate } from "react-router-dom";
 
 const ordersRoutes = [

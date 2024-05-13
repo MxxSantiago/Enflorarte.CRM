@@ -17,6 +17,7 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
         <Flex marginTop="auto" padding={5} paddingBottom={2} direction="column">
           <Divider />
           <Flex
+            justifyContent="center"
             gap={3}
             overflowX="auto"
             css={{
