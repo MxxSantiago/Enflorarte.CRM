@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Card, Flex, Button, Image, Stack } from "@chakra-ui/react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
+  primaryColorScheme,
   sidebarDesktopWidth,
   sidebarMobileWidth,
 } from "../../core/constants.ts";
@@ -9,6 +10,7 @@ const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
 const Sidebar = ({ routes }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <Card
@@ -19,13 +21,22 @@ const Sidebar = ({ routes }) => {
       width={{ base: sidebarMobileWidth, md: sidebarDesktopWidth }}
       overflowY={{ base: "auto" }}
     >
-      <Flex align="center" mb={6} justify="center">
+      <Flex
+        align="center"
+        mb={6}
+        justify="center"
+        height={{
+          base: "6.5%",
+          md: "18%",
+        }}
+      >
         <Image
           src={logo}
           height={{
             base: "70%",
             md: "80%",
           }}
+          fallbackSrc="https://via.placeholder.com/150"
         />
       </Flex>
       <Stack spacing={0}>
@@ -35,18 +46,17 @@ const Sidebar = ({ routes }) => {
             <Button
               key={name}
               width="100%"
-              colorScheme="pink"
+              colorScheme={primaryColorScheme}
               variant={
                 location.pathname.indexOf(path) !== -1 ? "solid" : "ghost"
               }
-              as={NavLink}
-              _hover={{ color: "currentColor" }}
+              isActive={location.pathname.indexOf(path) !== -1}
               height={16}
-              to={path}
               borderRadius={0}
               leftIcon={icon}
               display="flex"
               justifyContent={{ base: "center", md: "flex-start" }}
+              onClick={() => navigate(path)}
             >
               <Box display={{ base: "none", md: "block" }}>{name}</Box>
             </Button>

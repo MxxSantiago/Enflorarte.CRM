@@ -9,6 +9,7 @@ const ToggleTheme = (props) => {
     <IconButton
       onClick={toggleColorMode}
       icon={colorMode === "light" ? <FaRegMoon /> : <FaRegSun />}
+      colorScheme={colorMode === "light" ? "purple" : "yellow"}
       {...props}
     >
       Toggle {colorMode === "light" ? "Dark" : "Light"}

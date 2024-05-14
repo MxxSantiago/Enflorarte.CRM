@@ -307,6 +307,8 @@ const AutocompleteMultiSelect = (props) => {
     disableCreateItem = false,
     createItemRenderer = defaultCreateItemRenderer,
     renderCustomInput,
+    _selectedItems,
+    onSelectedItemsChange,
     ...downshiftProps
   } = props;
 
@@ -325,7 +327,11 @@ const AutocompleteMultiSelect = (props) => {
     addSelectedItem,
     removeSelectedItem,
     selectedItems,
-  } = useMultipleSelection(downshiftProps);
+  } = useMultipleSelection({
+    ...downshiftProps,
+    onSelectedItemsChange,
+    selectedItems: _selectedItems,
+  });
   const selectedItemValues = selectedItems.map((item) => item.value);
 
   const {

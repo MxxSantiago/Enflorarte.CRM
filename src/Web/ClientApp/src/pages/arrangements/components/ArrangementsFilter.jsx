@@ -12,6 +12,7 @@ import {
   TagCloseButton,
 } from "@chakra-ui/react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
+import { primaryColorScheme } from "../../../core/constants.ts";
 
 const filters = [
   { name: "Tipo de Arreglo", field: "arrangementTypes" },
@@ -95,7 +96,11 @@ function ArrangementsFilter({
   return (
     <Box display="flex" flexDirection="row" flexWrap="wrap" gap={4}>
       <Menu>
-        <MenuButton as={Button} colorScheme="pink" minWidth="175px">
+        <MenuButton
+          as={Button}
+          colorScheme={primaryColorScheme}
+          minWidth="175px"
+        >
           Seleccionar filtro
         </MenuButton>
         <MenuList>

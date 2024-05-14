@@ -1,24 +1,50 @@
-import { Flex } from "@chakra-ui/react";
+import { Grid, Box, Text } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
 import { CommunicationType } from "../../../web-api-client.ts";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 import { removeReferenceIdProperties } from "../../../core/helpers/web-api-client.helper.ts";
 import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { LANG } from "../../../core/helpers/translations.helper.ts";
 
 const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
-  const { data: entitiesData, refetch } = useGetQuery(entityName);
-  const { data: fatherEntityData } = useGetQuery(fatherEntityName);
+  const {
+    data: entitiesData,
+    refetch,
+    isLoading: isEntitiesLoading,
+  } = useGetQuery(entityName);
+  const { data: fatherEntityData, isLoading: isFatherEntitiesLoading } =
+    useGetQuery(fatherEntityName);
+
+  const isLoading = isEntitiesLoading || isFatherEntitiesLoading;
 
   return (
-    <Flex direction="column" gap={5} px={{ base: 4, md: 6 }} py={6}>
-      <CreateEntity
-        entityName={entityName}
-        title={title}
-        entity={removeReferenceIdProperties(entity)}
-        fatherEntity={new CommunicationType().toJSON()}
-        fatherEntityName="communicationType"
-        refetch={refetch}
-      />
+    <Grid
+      height="100%"
+      width="100%"
+      gridTemplateRows="60px calc(100% - 60px)"
+      px={{ base: 4, md: 6 }}
+      py={4}
+    >
+      <Box display="flex" width="100%" alignItems="center" height="100%">
+        <Text
+          fontSize={{
+            base: "lg",
+            md: "2xl",
+          }}
+          fontWeight="bold"
+          marginBottom={2}
+        >
+          {LANG(entityName)}
+        </Text>
+        <CreateEntity
+          entityName={entityName}
+          title={title}
+          entity={removeReferenceIdProperties(entity)}
+          fatherEntityName="communicationType"
+          refetch={refetch}
+          marginLeft="auto"
+        />
+      </Box>
       <EntitiesTable
         entity={entity}
         entityName={entityName}
@@ -26,8 +52,9 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
         entitiesData={entitiesData}
         fatherEntityData={fatherEntityData}
         refetch={refetch}
+        isLoading={isLoading}
       />
-    </Flex>
+    </Grid>
   );
 };
 

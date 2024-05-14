@@ -21,6 +21,11 @@ import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.
 import { Arrangement } from "../../../web-api-client.ts";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect.jsx";
 import { usePostQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import {
+  cancelChangesText,
+  saveChangesText,
+  saveColorScheme,
+} from "../../../core/constants.ts";
 
 const ArrangementEntity = new Arrangement().toJSON();
 
@@ -95,7 +100,7 @@ const CreateArrangmentTemplate = ({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader></ModalHeader>
+          <ModalHeader>Crear Plantilla de arreglo</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
@@ -151,7 +156,7 @@ const CreateArrangmentTemplate = ({
                       value: item,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.arrangementTypes}
+                    _selectedItems={selectedItems.arrangementTypes}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -165,7 +170,7 @@ const CreateArrangmentTemplate = ({
                       value: item,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.wrapperVariants}
+                    _selectedItems={selectedItems.wrapperVariants}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -181,7 +186,7 @@ const CreateArrangmentTemplate = ({
                       value: item,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.flowerVariants}
+                    _selectedItems={selectedItems.flowerVariants}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -220,10 +225,10 @@ const CreateArrangmentTemplate = ({
           </ModalBody>
           <ModalFooter>
             <Button mr={3} onClick={onClose}>
-              Cerrar
+              {cancelChangesText}
             </Button>
-            <Button colorScheme="pink" onClick={handleCreate}>
-              Guardar
+            <Button colorScheme={saveColorScheme} onClick={handleCreate}>
+              {saveChangesText}
             </Button>
           </ModalFooter>
         </ModalContent>
