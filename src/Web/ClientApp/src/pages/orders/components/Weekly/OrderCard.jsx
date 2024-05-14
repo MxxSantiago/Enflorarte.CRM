@@ -40,7 +40,7 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
                 size="sm"
                 minW="fit-content"
                 width="auto"
-                variant="outline"
+                //variant="outline"
                 borderRadius="2xl"
                 colorScheme={tag.color}
                 padding=".5rem 0.85rem"

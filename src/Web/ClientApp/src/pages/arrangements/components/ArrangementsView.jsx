@@ -42,10 +42,10 @@ const ArrangementsView = () => {
   const { data: wrapperVariantsData } = useGetQuery("wrapperVariant");
   const { data: flowerVariantsData } = useGetQuery("flowerVariant");
 
-  const [filteredArrangements, setFilteredArrangements] = useState([]);
+  const [filteredArrangements, setFilteredArrangements] = useState(arrangementsData);
 
   useEffect(() => {
-    setFilteredArrangements(arrangementsData);
+    setFilteredArrangements(filteredArrangements);
   }, [arrangementsData]);
 
   return (

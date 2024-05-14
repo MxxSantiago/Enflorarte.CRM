@@ -20,11 +20,20 @@ import {
   Card,
   Select,
   Flex,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Imagen from "./Assets/spiderman.jpg";
 import { AutocompleteMultiSelect } from "../../../../components/shared/AutocompleteSelect";
+import TagForm from "./Tags/TagForm";
 
 const CreateOrder = ({ isOpen, onClose }) => {
+  const disclosure = useDisclosure();
+  const {
+    isOpen: isOpenTag,
+    onOpen: onOpenTag,
+    onClose: onCloseTag,
+  } = disclosure;
+
   return (
     <>
       <Modal
@@ -85,25 +94,25 @@ const CreateOrder = ({ isOpen, onClose }) => {
                     <Input type="Date" />
                   </Card>
 
-                  <Card p={4} mt={3}>
+                  <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
                         Cliente
                       </Heading>
                     </CardHeader>
                     <Text>Responsable</Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Dirección
                     </Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Forma de Comunicación
                     </Text>
                     <Select></Select>
                   </Card>
 
-                  <Card p={4} mt={3}>
+                  <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
                         Pedido
@@ -113,7 +122,7 @@ const CreateOrder = ({ isOpen, onClose }) => {
                     <Select></Select>
                     <Box mt={3}>
                       <Flex>
-                        <Button marginLeft="auto" colorScheme="pink" size="sm">
+                        <Button marginLeft="auto" colorScheme="gray" size="sm">
                           Crear Arreglo
                         </Button>
                       </Flex>
@@ -129,7 +138,7 @@ const CreateOrder = ({ isOpen, onClose }) => {
                     <Text marginY={2} marginTop={8}>
                       Imagen de Resultado
                     </Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Tipo de Entrega
                     </Text>
@@ -144,50 +153,75 @@ const CreateOrder = ({ isOpen, onClose }) => {
                     <Checkbox />
                   </Card>
 
-                  <Card p={4} mt={3}>
+                  <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
                         Precios y Pagos
                       </Heading>
                     </CardHeader>
                     <Text>Precio del Pedido</Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Precio de Realización
                     </Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Precio de Envio
                     </Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Dinero Abonado
                     </Text>
-                    <Input />
+                    <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Pagado
                     </Text>
                     <Checkbox />
                   </Card>
 
-                  <Card p={4} mt={3}>
+                  <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
-                        Etiquetas de Pedido
+                        Etiquetas del Pedido
                       </Heading>
                     </CardHeader>
                     <Text>Etiquetas</Text>
                     <Select></Select>
                     <Box mt={3}>
                       <Flex>
-                        <Button marginLeft="auto" colorScheme="pink" size="sm">
+                        <Button
+                          marginLeft="auto"
+                          colorScheme="gray"
+                          size="sm"
+                          onClick={onOpenTag}
+                        >
                           Crear Etiqueta
                         </Button>
                       </Flex>
                     </Box>
                   </Card>
 
-                  <Card p={4} mt={3}>
+                  <Modal isOpen={isOpenTag} onClose={onCloseTag} isCentered size={{base: "sm", md: "md"}}>
+                    <ModalOverlay />
+                    <ModalContent>
+                      <ModalHeader>Crear Etiqueta</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
+                        <TagForm/>
+                      </ModalBody>
+
+                      <ModalFooter>
+                      <Button colorScheme="gray" mr={3} onClick={onCloseTag}>
+                          Cerrar
+                        </Button>
+                        <Button colorScheme="pink" mr={3}>
+                          Guardar
+                        </Button>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Modal>
+
+                  <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
                         Sucursal
@@ -203,7 +237,9 @@ const CreateOrder = ({ isOpen, onClose }) => {
 
           <ModalFooter>
             <Box display="flex">
-              <Button mr={3} onClick={onClose}>Cerrar</Button>
+              <Button mr={3} onClick={onClose}>
+                Cerrar
+              </Button>
               <Button colorScheme="pink">Guardar</Button>
             </Box>
           </ModalFooter>
