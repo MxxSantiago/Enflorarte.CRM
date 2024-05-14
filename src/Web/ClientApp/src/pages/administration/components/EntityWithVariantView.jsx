@@ -1,8 +1,9 @@
-import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
+import { Divider, Box, Text, Grid, useBreakpointValue } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 import { removeReferenceObjectProperties } from "../../../core/helpers/web-api-client.helper.ts";
 import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { LANG } from "../../../core/helpers/translations.helper.ts";
 
 const EntityWithVariantView = ({
   title,
@@ -13,8 +14,13 @@ const EntityWithVariantView = ({
   variant,
 }) => {
   const gridTemplateColumns = useBreakpointValue({
-    md: "repeat(1, 1fr)",
-    lg: "repeat(2, 1fr)",
+    base: "1fr",
+    xl: "repeat(2, 1fr)",
+  });
+
+  const gridTemplateRows = useBreakpointValue({
+    base: "auto auto auto auto",
+    xl: "auto 1fr",
   });
 
   const { data: entitiesData, refetch: refetchEntity } =
@@ -24,51 +30,105 @@ const EntityWithVariantView = ({
     useGetQuery(variantName);
 
   return (
-    <Box width="100%">
-      <Grid
-        templateColumns={gridTemplateColumns}
-        gap={5}
-        px={{ base: 4, md: 6 }}
-        py={6}
+    <Grid
+      height={{
+        base: "auto",
+        xl: "100%",
+      }}
+      width="100%"
+      templateColumns={gridTemplateColumns}
+      templateRows={gridTemplateRows}
+      gap="0 2rem"
+      px={{ base: 4, md: 6 }}
+      py={6}
+      overflowY={{
+        base: "auto",
+        xl: "hidden",
+      }}
+    >
+      <Box
+        display="flex"
+        width="100%"
+        alignItems="center"
+        height="100%"
+        order={{ xl: 1 }}
+        paddingBottom={4}
       >
-        <Box order={{ md: 1, lg: 1 }}>
-          <CreateEntity
-            entityName={entityName}
-            title={title}
-            entity={entity}
-            refetch={refetchEntity}
-          />
-        </Box>
-        <Box order={{ md: 2, lg: 3 }}>
-          <EntitiesTable
-            entity={entity}
-            entityName={entityName}
-            entitiesData={entitiesData}
-            refetch={refetchEntity}
-          />
-        </Box>
-        <Box order={{ md: 3, lg: 2 }}>
-          <CreateEntity
-            entityName={variantName}
-            title={variantTitle}
-            entity={removeReferenceObjectProperties(variant)}
-            fatherEntity={entity}
-            fatherEntityName={entityName}
-            refetch={refetchVariant}
-          />
-        </Box>
-        <Box order={{ md: 4, lg: 4 }}>
-          <EntitiesTable
-            entity={variant}
-            entityName={variantName}
-            fatherEntityName={entityName}
-            fatherEntityData={entitiesData}
-            entitiesData={variantsData}
-            refetch={refetchVariant}
-          />
-        </Box>
-      </Grid>
-    </Box>
+        <Text
+          fontSize={{
+            base: "lg",
+            md: "2xl",
+          }}
+          fontWeight="bold"
+          marginBottom={2}
+        >
+          {LANG(entityName)}
+        </Text>
+        <CreateEntity
+          entityName={entityName}
+          title={title}
+          entity={entity}
+          refetch={refetchEntity}
+          marginLeft="auto"
+        />
+      </Box>
+      <EntitiesTable
+        entity={entity}
+        entityName={entityName}
+        entitiesData={entitiesData}
+        refetch={refetchEntity}
+        order={{ xl: 3 }}
+        height={{
+          base: "calc(100vh - 200px)",
+        }}
+      />
+      <Divider
+        display={{
+          base: "block",
+          xl: "none",
+        }}
+        my={10}
+      />
+      <Box
+        display="flex"
+        width="100%"
+        alignItems="center"
+        height="100%"
+        order={{ xl: 2 }}
+        paddingBottom={4}
+      >
+        <Text
+          fontSize={{
+            base: "lg",
+            md: "2xl",
+          }}
+          fontWeight="bold"
+          marginBottom={2}
+        >
+          {LANG(variantName)}
+        </Text>
+        <CreateEntity
+          entityName={variantName}
+          title={variantTitle}
+          entity={removeReferenceObjectProperties(variant)}
+          fatherEntityName={entityName}
+          refetch={refetchVariant}
+          marginLeft="auto"
+        />
+      </Box>
+      <EntitiesTable
+        entity={variant}
+        entityName={variantName}
+        fatherEntityName={entityName}
+        fatherEntityData={entitiesData}
+        entitiesData={variantsData}
+        refetch={refetchVariant}
+        order={{ xl: 4 }}
+        height={{
+          base: "calc(100vh - 200px)",
+        }}
+      />
+    </Grid>
   );
 };
 

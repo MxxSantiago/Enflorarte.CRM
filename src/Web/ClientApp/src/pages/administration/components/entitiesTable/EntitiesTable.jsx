@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import { Table, TableContainer, Card } from "@chakra-ui/react";
+import { Table, TableContainer, Card, Skeleton, Box } from "@chakra-ui/react";
 import EntitiesTableBody from "./EntitiesTableBody.jsx";
 import EntitiesTableHeader from "./EntitiesTableHeader.jsx";
 import EntitiesTableFooter from "./EntitiesTableFooter.jsx";
+import { primaryColorScheme } from "../../../../core/constants.ts";
 
 const paginate = (items, currentPage, itemsPerPage) => {
   const start = (currentPage - 1) * itemsPerPage;
@@ -10,7 +11,7 @@ const paginate = (items, currentPage, itemsPerPage) => {
   return items.slice(start, end);
 };
 
-const itemsPerPage = 5;
+const itemsPerPage = 30;
 
 const EntitiesTable = ({
   entity,
@@ -19,6 +20,8 @@ const EntitiesTable = ({
   entitiesData,
   fatherEntityData,
   refetch,
+  isLoading,
+  ...props
 }) => {
   const [paginatedEntities, setPaginatedEntities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,29 +43,36 @@ const EntitiesTable = ({
 
   return (
     <Card
-      overflowX="auto"
-      maxW={{ base: "100%", md: "700px" }}
       variant="outline"
+      display="grid"
+      gridTemplateRows="calc(100% - 60px) 60px"
+      overflow="hidden"
+      width="100%"
+      {...props}
     >
-      <TableContainer>
-        <Table variant="striped" colorScheme="pink">
-          <EntitiesTableHeader entity={entity} />
-          <EntitiesTableBody
-            items={paginatedEntities}
-            entityName={entityName}
-            fatherEntityName={fatherEntityName}
-            fatherEntityData={fatherEntityData}
-            refetch={refetch}
-          />
-          <EntitiesTableFooter
-            totalPages={totalPages}
-            totalItems={entitiesData.length}
-            currentPage={currentPage}
-            changePage={changePage}
-            entityName={entityName}
-          />
-        </Table>
-      </TableContainer>
+      <Box overflowY="auto">
+        <Skeleton isLoaded={!isLoading} height="100%">
+          <TableContainer overflowX="unset" overflowY="unset">
+            <Table variant="striped" colorScheme={primaryColorScheme}>
+              <EntitiesTableHeader entity={entity} />
+              <EntitiesTableBody
+                items={paginatedEntities}
+                entityName={entityName}
+                fatherEntityName={fatherEntityName}
+                fatherEntityData={fatherEntityData}
+                refetch={refetch}
+              />
+            </Table>
+          </TableContainer>
+        </Skeleton>
+      </Box>
+      <EntitiesTableFooter
+        totalPages={totalPages}
+        totalItems={entitiesData.length}
+        currentPage={currentPage}
+        changePage={changePage}
+        entityName={entityName}
+      />
     </Card>
   );
 };

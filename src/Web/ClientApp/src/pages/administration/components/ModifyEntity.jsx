@@ -14,6 +14,12 @@ import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
 import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelect.jsx";
 import { usePutQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import {
+  cancelChangesText,
+  modifierColorScheme,
+  saveChangesText,
+  saveColorScheme,
+} from "../../../core/constants.ts";
 
 function getRelatedFatherEntity(fatherEntityName, entity) {
   const fatherEntity = entity && entity[fatherEntityName];
@@ -42,10 +48,16 @@ function ModifyEntity({
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
-  const { isSuccess, putEntity } = usePutQuery(entityName, properties);
+  const { isSuccess, putEntity, isLoading } = usePutQuery(
+    entityName,
+    properties
+  );
 
   useEffect(() => {
-    if (isSuccess) refetch();
+    if (isSuccess) {
+      refetch();
+      onClose();
+    }
   }, [isSuccess]);
 
   useEffect(() => {
@@ -55,11 +67,6 @@ function ModifyEntity({
   useEffect(() => {
     setSelectedItem(getRelatedFatherEntity(fatherEntityName, entity));
   }, [entity, fatherEntityData, fatherEntityName]);
-
-  const handleUpdate = async () => {
-    await putEntity();
-    onClose();
-  };
 
   const cleanProperties = () => setProperties({ ...entity });
 
@@ -88,7 +95,7 @@ function ModifyEntity({
     <>
       <IconButton
         icon={<FaRegEdit />}
-        colorScheme="pink"
+        colorScheme={modifierColorScheme}
         onClick={onOpen}
         size="sm"
       />
@@ -99,8 +106,10 @@ function ModifyEntity({
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Modificar {LANG(entityName)} <b>{entity.name}</b>
+            <AlertDialogHeader fontSize="xl" fontWeight="bold">
+              <b>
+                Modificar {LANG(entityName)} '{entity.name}'
+              </b>
             </AlertDialogHeader>
             <AlertDialogBody>
               {Object.keys(properties)
@@ -140,16 +149,17 @@ function ModifyEntity({
                 ))}
             </AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancelar
+              <Button ref={cancelRef} onClick={onClose} isDisabled={isLoading}>
+                {cancelChangesText}
               </Button>
               <Button
+                isLoading={isLoading}
                 ml={3}
-                colorScheme="pink"
-                onClick={handleUpdate}
+                colorScheme={saveColorScheme}
+                onClick={putEntity}
                 isDisabled={isDisabled()}
               >
-                Aceptar
+                {saveChangesText}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

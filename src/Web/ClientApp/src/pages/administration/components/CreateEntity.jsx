@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Card,
-  Heading,
   Input,
-  Grid,
-  VStack,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.helper.ts";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
@@ -15,6 +19,12 @@ import {
   useGetQuery,
   usePostQuery,
 } from "../../../core/hooks/useApiClientHooks.jsx";
+import { IoMdAdd } from "react-icons/io";
+import {
+  cancelChangesText,
+  createColorScheme,
+  saveColorScheme,
+} from "../../../core/constants.ts";
 
 function CreateEntity({
   title,
@@ -22,12 +32,39 @@ function CreateEntity({
   entity,
   fatherEntityName,
   refetch,
+  ...props
 }) {
   const [properties, setProperties] = useState({ ...entity });
   const [selectedItem, setSelectedItem] = useState([]);
   const { data: fatherEntityData } = useGetQuery(fatherEntityName);
 
-  const { isSuccess, postEntity } = usePostQuery(entityName, properties);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
+
+  const { isSuccess, postEntity, isLoading } = usePostQuery(
+    entityName,
+    properties
+  );
+
+  useEffect(() => setProperties({ ...entity }), [entity]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+      onClose();
+    }
+  }, [isSuccess]);
+
+  const handleCreate = async (event) => {
+    event.preventDefault();
+    postEntity(createLookupEntityPayload(properties));
+  };
+
+  const isDisabled = () => {
+    return Object.entries(properties)
+      .filter(([key]) => key !== "id")
+      .some(([, value]) => value == null || value.trim() === "");
+  };
 
   const handleSelectedItemChange = (selectedItem, property) => {
     if (selectedItem.length) {
@@ -45,107 +82,92 @@ function CreateEntity({
     }
   };
 
-  useEffect(() => setProperties({ ...entity }), [entity]);
-
-  useEffect(() => {
-    if (isSuccess) refetch();
-  }, [isSuccess]);
-
-  const handleCreate = async (event) => {
-    event.preventDefault();
-    postEntity(createLookupEntityPayload(properties));
-  };
-
-  const isDisabled = () => {
-    return Object.entries(properties)
-      .filter(([key]) => key !== "id")
-      .some(([, value]) => value == null || value.trim() === "");
-  };
-
-  const propertyKeys = Object.keys(properties).filter(
-    (property) => property !== "id"
-  );
-
-  useEffect(() => {}, [properties]);
-
   return (
-    <Card
-      as="form"
-      p={4}
-      pt={8}
-      variant="outline"
-      height="100%"
-      display="flex"
-      maxW={{ base: "100%", md: "700px" }}
-    >
-      <Heading
-        mt={0}
-        mb={2}
-        fontSize={{ base: "lg", md: "xl" }}
-        fontWeight="bold"
-        textAlign="center"
+    <>
+      <Button
+        colorScheme={createColorScheme}
+        onClick={onOpen}
+        display={{ base: "none", md: "flex" }}
+        {...props}
       >
         {title}
-      </Heading>
-      <VStack spacing={10}>
-        <Grid
-          gap={6}
-          templateColumns={{
-            base: "1fr",
-            md: propertyKeys.length > 1 ? "1fr 1fr" : "1fr",
-          }}
-          justifyItems={{
-            base: "start",
-            md: propertyKeys.length > 1 ? "start" : "center",
-          }}
-        >
-          {Object.keys(properties)
-            .filter(
-              (property) => property !== "id" && property !== fatherEntityName
-            )
-            .map((property) => (
-              <Box key={property + entity.id} width="100%">
-                <Box mb={1} mt={5} display="flex">
-                  <label htmlFor={property}>{LANG(property)}:</label>
-                </Box>
-                {property.toString().includes("Id") ? (
-                  <>
-                    <AutocompleteSelect
-                      _items={fatherEntityData.map((item) => ({
-                        value: item.id,
-                        label: item.name,
-                      }))}
-                      onChange={(e) => handleSelectedItemChange(e, property)}
-                      selectedItem={selectedItem}
-                    />
-                  </>
-                ) : (
-                  <Input
-                    id={property}
-                    size={{ base: "md", md: "lg" }}
-                    value={properties[property] ?? ""}
-                    onChange={(e) =>
-                      setProperties({
-                        ...properties,
-                        [property]: e.target.value,
-                      })
-                    }
-                  />
-                )}
-              </Box>
-            ))}
-        </Grid>
-        <Button
-          size={{ base: "sm", md: "md" }}
-          colorScheme="pink"
-          onClick={handleCreate}
-          type="submit"
-          isDisabled={isDisabled()}
-        >
-          Agregar
-        </Button>
-      </VStack>
-    </Card>
+      </Button>
+      <IconButton
+        colorScheme={createColorScheme}
+        onClick={onOpen}
+        icon={<IoMdAdd />}
+        size="md"
+        display={{ base: "flex", md: "none" }}
+        {...props}
+      />
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="xl" fontWeight="bold">
+              <b>{title}</b>
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              {Object.keys(properties)
+                .filter(
+                  (property) =>
+                    property !== "id" && property !== fatherEntityName
+                )
+                .map((property, index) => (
+                  <Box key={property + entity.id} width="100%">
+                    <Box mb={1} mt={index !== 0 ? 5 : 0} display="flex">
+                      <label htmlFor={property}>{LANG(property)}:</label>
+                    </Box>
+                    {property.toString().includes("Id") ? (
+                      <>
+                        <AutocompleteSelect
+                          _items={fatherEntityData.map((item) => ({
+                            value: item.id,
+                            label: item.name,
+                          }))}
+                          onChange={(e) =>
+                            handleSelectedItemChange(e, property)
+                          }
+                          selectedItem={selectedItem}
+                        />
+                      </>
+                    ) : (
+                      <Input
+                        id={property}
+                        size={{ base: "md", md: "lg" }}
+                        value={properties[property] ?? ""}
+                        onChange={(e) =>
+                          setProperties({
+                            ...properties,
+                            [property]: e.target.value,
+                          })
+                        }
+                      />
+                    )}
+                  </Box>
+                ))}
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose} isDisabled={isLoading}>
+                {cancelChangesText}
+              </Button>
+              <Button
+                isLoading={isLoading}
+                ml={3}
+                colorScheme={saveColorScheme}
+                onClick={handleCreate}
+                isDisabled={isDisabled()}
+              >
+                Guardar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
   );
 }
 

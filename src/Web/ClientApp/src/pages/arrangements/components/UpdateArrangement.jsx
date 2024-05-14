@@ -29,6 +29,12 @@ import {
   useDeleteQuery,
   usePutQuery,
 } from "../../../core/hooks/useApiClientHooks.jsx";
+import {
+  cancelChangesText,
+  deleteText,
+  saveChangesText,
+  saveColorScheme,
+} from "../../../core/constants.ts";
 
 function UpdateArrangement({
   isOpenUpdate,
@@ -115,7 +121,7 @@ function UpdateArrangement({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader></ModalHeader>
+          <ModalHeader>Modificar plantilla de arreglo</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Grid
@@ -174,7 +180,7 @@ function UpdateArrangement({
                       value: item.id,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.arrangementTypes}
+                    _selectedItems={selectedItems.arrangementTypes}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -188,7 +194,7 @@ function UpdateArrangement({
                       value: item.id,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.wrapperVariants}
+                    _selectedItems={selectedItems.wrapperVariants}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -204,7 +210,7 @@ function UpdateArrangement({
                       value: item.id,
                       label: item.name,
                     }))}
-                    selectedItems={selectedItems.flowerVariants}
+                    _selectedItems={selectedItems.flowerVariants}
                     onSelectedItemsChange={(changes) =>
                       handleSelectedItemChange(
                         changes.selectedItems,
@@ -249,9 +255,8 @@ function UpdateArrangement({
               display="flex"
               marginRight="auto"
             >
-              Eliminar
+              {deleteText}
             </Button>
-
             <AlertDialog
               isOpen={isOpen}
               leastDestructiveRef={cancelRef}
@@ -262,7 +267,7 @@ function UpdateArrangement({
               <AlertDialogOverlay>
                 <AlertDialogContent>
                   <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                    Eliminar
+                    Eliminar Arreglo <b>{properties.name}</b>
                   </AlertDialogHeader>
 
                   <AlertDialogBody>
@@ -272,22 +277,21 @@ function UpdateArrangement({
 
                   <AlertDialogFooter>
                     <Button ref={cancelRef} onClick={onClose}>
-                      Cancelar
+                      {cancelChangesText}
                     </Button>
                     <Button colorScheme="red" onClick={deleteEntity} ml={3}>
-                      Eliminar
+                      {deleteText}
                     </Button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialogOverlay>
             </AlertDialog>
-
             <Box display="flex">
               <Button mr={3} onClick={onCloseUpdate}>
-                Cerrar
+                {cancelChangesText}
               </Button>
-              <Button colorScheme="pink" onClick={putEntity}>
-                Guardar cambios
+              <Button colorScheme={saveColorScheme} onClick={putEntity}>
+                {saveChangesText}
               </Button>
             </Box>
           </ModalFooter>

@@ -17,6 +17,10 @@ import ArrangementsFilter from "./ArrangementsFilter.jsx";
 import { useState, useEffect } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import {
+  createColorScheme,
+  primaryColorScheme,
+} from "../../../core/constants.ts";
 
 const ArrangementsView = () => {
   const {
@@ -30,15 +34,24 @@ const ArrangementsView = () => {
 
   const {
     data: arrangementsData,
-    isLoading,
+    isLoading: isArrangementsLoading,
     refetch,
   } = useGetQuery("arrangement");
 
-  const { data: arrangementTypesData } = useGetQuery("arrangementType");
-  const { data: wrapperVariantsData } = useGetQuery("wrapperVariant");
-  const { data: flowerVariantsData } = useGetQuery("flowerVariant");
+  const { data: arrangementTypesData, isArrangementTypesLoading } =
+    useGetQuery("arrangementType");
+  const { data: wrapperVariantsData, isWrapperVariantsLoading } =
+    useGetQuery("wrapperVariant");
+  const { data: flowerVariantsData, isFlowerVariantsLoading } =
+    useGetQuery("flowerVariant");
 
   const [filteredArrangements, setFilteredArrangements] = useState(arrangementsData);
+
+  const isLoading =
+    isArrangementsLoading ||
+    isArrangementTypesLoading ||
+    isWrapperVariantsLoading ||
+    isFlowerVariantsLoading;
 
   useEffect(() => {
     setFilteredArrangements(filteredArrangements);
@@ -60,7 +73,7 @@ const ArrangementsView = () => {
                   Tus Plantillas
                 </Text>
                 <Button
-                  colorScheme="pink"
+                  colorScheme={createColorScheme}
                   marginLeft="auto"
                   onClick={onOpenCreate}
                 >
@@ -78,7 +91,7 @@ const ArrangementsView = () => {
                       icon={
                         isHeaderOpen ? <ChevronUpIcon /> : <ChevronDownIcon />
                       }
-                      colorScheme="pink"
+                      colorScheme="cyan"
                       onClick={onToggleHeader}
                     />
                   </AbsoluteCenter>

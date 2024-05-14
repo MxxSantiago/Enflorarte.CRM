@@ -29,15 +29,23 @@ export const useGetQuery = (entityName, id) => {
   const [refetchCount, setRefetchCount] = useState(0);
 
   useEffect(() => {
+    setIsLoading(true);
+  }, [entityName, id]);
+
+  useEffect(() => {
     /**
      * Fetches the data from the API based on the entity name and ID.
      */
     const fetchData = async () => {
-      if (!entityName) return;
+      if (!entityName) {
+        setIsSuccess(false);
+        setIsError(false);
+        setIsLoading(false);
+        return;
+      }
 
       try {
         if (data.length === 0 || clearCache) {
-          setIsLoading(true);
           setIsSuccess(false);
           setIsError(false);
         }
@@ -66,9 +74,10 @@ export const useGetQuery = (entityName, id) => {
         setError(err);
       } finally {
         if (data.length === 0 || clearCache) {
-          setIsLoading(false);
           setClearCache(false);
         }
+
+        setIsLoading(false);
       }
     };
 

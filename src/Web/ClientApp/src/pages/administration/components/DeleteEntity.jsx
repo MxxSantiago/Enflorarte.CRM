@@ -13,20 +13,20 @@ import { useEffect, useRef } from "react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDeleteQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { cancelChangesText, deleteText } from "../../../core/constants.ts";
 
 function DeleteEntity({ entityName, entity, refetch }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
-  const { isSuccess, deleteEntity } = useDeleteQuery(entityName, entity.id);
+  const { isSuccess, deleteEntity, isLoading } = useDeleteQuery(
+    entityName,
+    entity.id
+  );
 
   useEffect(() => {
     if (isSuccess) refetch();
   }, [isSuccess]);
-
-  const handleDelete = () => {
-    deleteEntity(entityName, entity.id);
-  };
 
   return (
     <>
@@ -36,7 +36,7 @@ function DeleteEntity({ entityName, entity, refetch }) {
         onClick={onOpen}
         size={{ base: "sm" }}
       >
-        Eliminar
+        {deleteText}
       </IconButton>
       <AlertDialog
         isOpen={isOpen}
@@ -46,18 +46,25 @@ function DeleteEntity({ entityName, entity, refetch }) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Eliminar {LANG(entityName)} <b>{entity?.name}</b>
+              <b>
+                Eliminar {LANG(entityName)} '{entity?.name}'
+              </b>
             </AlertDialogHeader>
             <AlertDialogBody>
               ¿Estás seguro de que quieres eliminar esta entidad? Esta acción no
               se puede deshacer.
             </AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancelar
+              <Button ref={cancelRef} onClick={onClose} isDisabled={isLoading}>
+                {cancelChangesText}
               </Button>
-              <Button ml={3} colorScheme="red" onClick={handleDelete}>
-                Aceptar
+              <Button
+                ml={3}
+                isLoading={isLoading}
+                colorScheme="red"
+                onClick={deleteEntity}
+              >
+                {deleteText}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

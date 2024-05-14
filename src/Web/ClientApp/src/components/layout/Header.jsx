@@ -16,6 +16,7 @@ import { FaRegUser } from "react-icons/fa6";
 import {
   headerDesktopHeight,
   headerMobileHeight,
+  primaryColorScheme,
 } from "../../core/constants.ts";
 import { Link } from "react-router-dom";
 import ToggleTheme from "./ToggleTheme.jsx";
@@ -54,20 +55,23 @@ const Header = ({ showSidebar }) => (
           <ChakraLink
             key={name}
             marginBottom="0"
+            fontWeight="bold"
             fontSize="lg"
             marginLeft="3rem"
             to={path}
+            _hover={{ color: primaryColorScheme }}
+            _focus={{ color: primaryColorScheme }}
           >
             {name}
           </ChakraLink>
         ))}
       </Stack>
       <ButtonGroup display={{ base: "none", md: "flex" }} marginLeft="auto">
-        <ToggleTheme colorScheme="pink" />
+        <ToggleTheme />
         <IconButton
-          colorScheme="pink"
           onClick={() => (window.location.href = "/Identity/Account/Manage")}
           icon={<FaRegUser />}
+          colorScheme="cyan"
         />
       </ButtonGroup>
       <Menu>
@@ -80,9 +84,8 @@ const Header = ({ showSidebar }) => (
             base: "ghost",
             md: "outline",
           }}
-          colorScheme="pink"
         ></MenuButton>
-        <MenuList>
+        <MenuList zIndex={2}>
           {mainRoutes.map(({ name, path }) => (
             <MenuItem
               key={name}
@@ -98,7 +101,12 @@ const Header = ({ showSidebar }) => (
           >
             Cuenta
           </MenuItem>
-          <ToggleTheme width="100%" background="none" borderRadius={0} />
+          <ToggleTheme
+            width="100%"
+            background="none"
+            borderRadius={0}
+            colorScheme="gray"
+          />
         </MenuList>
       </Menu>
     </Flex>

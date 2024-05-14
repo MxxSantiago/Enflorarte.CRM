@@ -8,6 +8,7 @@
   phonenumber: "Teléfono",
   communicationtype: "Tipo de comunicación",
   communicationtypeid: "Tipo de comunicación",
+  deliverytype: "Tipo de entrega",
   link: "Enlace",
   wrapperid: "Envoltura",
   wrapper: "Envoltura",
