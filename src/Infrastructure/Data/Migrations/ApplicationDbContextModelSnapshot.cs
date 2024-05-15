@@ -55,6 +55,21 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.ToTable("ArrangementFlowerVariant");
                 });
 
+            modelBuilder.Entity("ArrangementOrder", b =>
+                {
+                    b.Property<int>("ArrangementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArrangementId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ArrangementOrder");
+                });
+
             modelBuilder.Entity("ArrangementWrapperVariant", b =>
                 {
                     b.Property<int>("ArrangementId")
@@ -253,6 +268,99 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasIndex("FlowerId");
 
                     b.ToTable("FlowerVariant");
+                });
+
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("CommandGenerated")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("CommunicationTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DeliveryAddress")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeliveryFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeliveryTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DeliveryUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MoneyPaid")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("OrderPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RealizationPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("RecipientCellphoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecipientName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ResponsibleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResultImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ShippingPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("WasDelivered")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CommunicationTypeId");
+
+                    b.HasIndex("DeliveryTypeId");
+
+                    b.HasIndex("ResponsibleId");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Responsible", b =>
@@ -546,6 +654,21 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ArrangementOrder", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
+                        .WithMany()
+                        .HasForeignKey("ArrangementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ArrangementWrapperVariant", b =>
                 {
                     b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
@@ -581,6 +704,39 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Flower");
+                });
+
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", "CommunicationType")
+                        .WithMany()
+                        .HasForeignKey("CommunicationTypeId");
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.DeliveryType", "DeliveryType")
+                        .WithMany()
+                        .HasForeignKey("DeliveryTypeId");
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Responsible", "Responsible")
+                        .WithMany()
+                        .HasForeignKey("ResponsibleId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CommunicationType");
+
+                    b.Navigation("DeliveryType");
+
+                    b.Navigation("Responsible");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.WrapperVariant", b =>
