@@ -71,15 +71,15 @@ const OrdersViewBody = ({ colorMode, mode }) => {
         // },
     
         {
-          name: "Tag 1",
+          name: "SanValentin",
           color: "blue",
         },
         {
-          name: "Tag 2",
+          name: "Cumpleanos",
           color: "red",
         },
         {
-          name: "Tag 3",
+          name: "Domicilio",
           color: "green",
         },
       ], // FK (0-N), Max 3 tags per order

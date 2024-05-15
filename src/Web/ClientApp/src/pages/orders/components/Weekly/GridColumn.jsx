@@ -2,10 +2,13 @@ import OrderCard from "./OrderCard";
 import { Box, GridItem, Text, Tag, IconButton, useDisclosure } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder";
+import UpdateOrder from "./UpdateOrder";
+
 const GridColumn = ({ date, orders, isDragging, colorMode }) => {
     const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
     const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure()
 
   
     return (
@@ -61,11 +64,13 @@ const GridColumn = ({ date, orders, isDragging, colorMode }) => {
               index={index}
               colorMode={colorMode}
               cursor={isDragging ? "grabbing" : "pointer"}
+              onClick={onOpenUpdate}
             />
           ))}
         </Box>
       </GridItem>
           <CreateOrder isOpen={isOpen} onClose={onClose}/>
+          <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate}/>
       </>
     );
   };

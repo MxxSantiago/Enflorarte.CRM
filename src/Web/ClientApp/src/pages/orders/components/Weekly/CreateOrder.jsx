@@ -63,7 +63,7 @@ const CreateOrder = ({ isOpen, onClose }) => {
                   boxSize="500px"
                   width={{ base: "100%", md: "500px" }}
                   fallbackSrc="https://via.placeholder.com/500"
-                  alt="a"
+                  alt="ImagenPedido"
                 />
               </GridItem>
               <GridItem
@@ -100,7 +100,7 @@ const CreateOrder = ({ isOpen, onClose }) => {
                         Cliente
                       </Heading>
                     </CardHeader>
-                    <Text>Responsable</Text>
+                    <Text>Nombre del Responsable</Text>
                     <Input variant="outline" />
                     <Text marginY={2} marginTop={8}>
                       Dirección
@@ -110,6 +110,20 @@ const CreateOrder = ({ isOpen, onClose }) => {
                       Forma de Comunicación
                     </Text>
                     <Select></Select>
+                  </Card>
+
+                  <Card p={4} mt={4}>
+                    <CardHeader>
+                      <Heading size="md" display="flex" justifyContent="center">
+                        Receptor
+                      </Heading>
+                    </CardHeader>
+                    <Text>Nombre del Receptor</Text>
+                    <Input variant="outline" />
+                    <Text marginY={2} marginTop={8}>
+                      Número Telefónico
+                    </Text>
+                    <Input variant="outline" />
                   </Card>
 
                   <Card p={4} mt={4}>
