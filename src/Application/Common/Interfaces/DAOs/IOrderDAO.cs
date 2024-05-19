@@ -2,4 +2,8 @@
 
 namespace Enflorarte.CRM.Application.Common.Interfaces.DAOs;
 
-public interface IOrderDAO : IBaseDAO<Order>;
+public interface IOrderDAO : IBaseDAO<Order>
+{
+    Task AddAsync(Order entity);
+    Task UpdateAsync(Order entity);
+}

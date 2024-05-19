@@ -4,6 +4,7 @@ using Enflorarte.CRM.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240517012137_Order")]
+    partial class Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,21 +116,6 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("CommunicationTypeOrder");
-                });
-
-            modelBuilder.Entity("DeliveryTypeOrder", b =>
-                {
-                    b.Property<int>("DeliveryTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DeliveryTypeId", "OrderId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("DeliveryTypeOrder");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Arrangement", b =>
@@ -336,6 +324,10 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.Property<DateTime>("DeliveryFrom")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DeliveryType")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<DateTime>("DeliveryUntil")
                         .HasColumnType("datetime2");
 
@@ -348,27 +340,24 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 
                     b.Property<decimal?>("MoneyPaid")
                         .IsRequired()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(12, 10)
+                        .HasColumnType("decimal(12,10)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("OrderPrice")
                         .IsRequired()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("OrderStatus")
-                        .HasColumnType("int");
+                        .HasPrecision(12, 10)
+                        .HasColumnType("decimal(12,10)");
 
                     b.Property<int?>("PaymentStatus")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("RealizationPrice")
                         .IsRequired()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(12, 10)
+                        .HasColumnType("decimal(12,10)");
 
                     b.Property<string>("RecipientCellphoneNumber")
                         .HasMaxLength(255)
@@ -388,8 +377,8 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
 
                     b.Property<decimal?>("ShippingPrice")
                         .IsRequired()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(12, 10)
+                        .HasColumnType("decimal(12,10)");
 
                     b.Property<bool>("WasDelivered")
                         .HasColumnType("bit");
@@ -755,21 +744,6 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", null)
                         .WithMany()
                         .HasForeignKey("CommunicationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DeliveryTypeOrder", b =>
-                {
-                    b.HasOne("Enflorarte.CRM.Domain.Entities.DeliveryType", null)
-                        .WithMany()
-                        .HasForeignKey("DeliveryTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

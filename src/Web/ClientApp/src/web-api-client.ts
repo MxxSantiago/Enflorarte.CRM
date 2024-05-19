@@ -1698,6 +1698,217 @@ export class FlowerVariantClient {
     }
 }
 
+export class OrderClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    order_GetAll(): Promise<Order[]> {
+        let url_ = this.baseUrl + "/api/Order";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processOrder_GetAll(_response);
+        });
+    }
+
+    protected processOrder_GetAll(response: Response): Promise<Order[]> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Order.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Order[]>(null as any);
+    }
+
+    order_Post(entity: Order): Promise<number> {
+        let url_ = this.baseUrl + "/api/Order";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processOrder_Post(_response);
+        });
+    }
+
+    protected processOrder_Post(response: Response): Promise<number> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(null as any);
+    }
+
+    order_Get(id: number): Promise<Order> {
+        let url_ = this.baseUrl + "/api/Order/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processOrder_Get(_response);
+        });
+    }
+
+    protected processOrder_Get(response: Response): Promise<Order> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Order.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Order>(null as any);
+    }
+
+    order_Put(id: number, entity: Order): Promise<Order> {
+        let url_ = this.baseUrl + "/api/Order/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(entity);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processOrder_Put(_response);
+        });
+    }
+
+    protected processOrder_Put(response: Response): Promise<Order> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Order.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Order>(null as any);
+    }
+
+    order_Delete(id: number): Promise<Order> {
+        let url_ = this.baseUrl + "/api/Order/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processOrder_Delete(_response);
+        });
+    }
+
+    protected processOrder_Delete(response: Response): Promise<Order> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Order.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Order>(null as any);
+    }
+}
+
 export class ResponsibleClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -2780,6 +2991,171 @@ export class DeliveryType extends LookupEntity implements IDeliveryType {
 export interface IDeliveryType extends ILookupEntity {
 }
 
+export class Order extends BaseEntity implements IOrder {
+    deliveryDate?: Date;
+    deliveryFrom?: Date;
+    deliveryUntil?: Date;
+    responsible?: Responsible[];
+    orderDate?: Date;
+    deliveryType?: DeliveryType[];
+    paymentStatus?: PaymentStatus | undefined;
+    orderStatus?: OrderStatus | undefined;
+    address?: string | undefined;
+    commandGenerated?: boolean;
+    description?: string | undefined;
+    referenceImage?: string | undefined;
+    resultImage?: string | undefined;
+    arrangement?: Arrangement[];
+    communicationType?: CommunicationType[];
+    orderPrice?: number | undefined;
+    realizationPrice?: number | undefined;
+    shippingPrice?: number | undefined;
+    moneyPaid?: number | undefined;
+    isPaid?: boolean;
+    wasDelivered?: boolean;
+    branch?: Branch[];
+    recipientName?: string | undefined;
+    recipientCellphoneNumber?: string | undefined;
+
+    constructor(data?: IOrder) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.deliveryDate = _data["deliveryDate"] ? new Date(_data["deliveryDate"].toString()) : <any>undefined;
+            this.deliveryFrom = _data["deliveryFrom"] ? new Date(_data["deliveryFrom"].toString()) : <any>undefined;
+            this.deliveryUntil = _data["deliveryUntil"] ? new Date(_data["deliveryUntil"].toString()) : <any>undefined;
+            if (Array.isArray(_data["responsible"])) {
+                this.responsible = [] as any;
+                for (let item of _data["responsible"])
+                    this.responsible!.push(Responsible.fromJS(item));
+            }
+            this.orderDate = _data["orderDate"] ? new Date(_data["orderDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["deliveryType"])) {
+                this.deliveryType = [] as any;
+                for (let item of _data["deliveryType"])
+                    this.deliveryType!.push(DeliveryType.fromJS(item));
+            }
+            this.paymentStatus = _data["paymentStatus"];
+            this.orderStatus = _data["orderStatus"];
+            this.address = _data["address"];
+            this.commandGenerated = _data["commandGenerated"];
+            this.description = _data["description"];
+            this.referenceImage = _data["referenceImage"];
+            this.resultImage = _data["resultImage"];
+            if (Array.isArray(_data["arrangement"])) {
+                this.arrangement = [] as any;
+                for (let item of _data["arrangement"])
+                    this.arrangement!.push(Arrangement.fromJS(item));
+            }
+            if (Array.isArray(_data["communicationType"])) {
+                this.communicationType = [] as any;
+                for (let item of _data["communicationType"])
+                    this.communicationType!.push(CommunicationType.fromJS(item));
+            }
+            this.orderPrice = _data["orderPrice"];
+            this.realizationPrice = _data["realizationPrice"];
+            this.shippingPrice = _data["shippingPrice"];
+            this.moneyPaid = _data["moneyPaid"];
+            this.isPaid = _data["isPaid"];
+            this.wasDelivered = _data["wasDelivered"];
+            if (Array.isArray(_data["branch"])) {
+                this.branch = [] as any;
+                for (let item of _data["branch"])
+                    this.branch!.push(Branch.fromJS(item));
+            }
+            this.recipientName = _data["recipientName"];
+            this.recipientCellphoneNumber = _data["recipientCellphoneNumber"];
+        }
+    }
+
+    static override fromJS(data: any): Order {
+        data = typeof data === 'object' ? data : {};
+        let result = new Order();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["deliveryDate"] = this.deliveryDate ? this.deliveryDate.toISOString() : <any>undefined;
+        data["deliveryFrom"] = this.deliveryFrom ? this.deliveryFrom.toISOString() : <any>undefined;
+        data["deliveryUntil"] = this.deliveryUntil ? this.deliveryUntil.toISOString() : <any>undefined;
+        if (Array.isArray(this.responsible)) {
+            data["responsible"] = [];
+            for (let item of this.responsible)
+                data["responsible"].push(item.toJSON());
+        }
+        data["orderDate"] = this.orderDate ? this.orderDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.deliveryType)) {
+            data["deliveryType"] = [];
+            for (let item of this.deliveryType)
+                data["deliveryType"].push(item.toJSON());
+        }
+        data["paymentStatus"] = this.paymentStatus;
+        data["orderStatus"] = this.orderStatus;
+        data["address"] = this.address;
+        data["commandGenerated"] = this.commandGenerated;
+        data["description"] = this.description;
+        data["referenceImage"] = this.referenceImage;
+        data["resultImage"] = this.resultImage;
+        if (Array.isArray(this.arrangement)) {
+            data["arrangement"] = [];
+            for (let item of this.arrangement)
+                data["arrangement"].push(item.toJSON());
+        }
+        if (Array.isArray(this.communicationType)) {
+            data["communicationType"] = [];
+            for (let item of this.communicationType)
+                data["communicationType"].push(item.toJSON());
+        }
+        data["orderPrice"] = this.orderPrice;
+        data["realizationPrice"] = this.realizationPrice;
+        data["shippingPrice"] = this.shippingPrice;
+        data["moneyPaid"] = this.moneyPaid;
+        data["isPaid"] = this.isPaid;
+        data["wasDelivered"] = this.wasDelivered;
+        if (Array.isArray(this.branch)) {
+            data["branch"] = [];
+            for (let item of this.branch)
+                data["branch"].push(item.toJSON());
+        }
+        data["recipientName"] = this.recipientName;
+        data["recipientCellphoneNumber"] = this.recipientCellphoneNumber;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IOrder extends IBaseEntity {
+    deliveryDate?: Date;
+    deliveryFrom?: Date;
+    deliveryUntil?: Date;
+    responsible?: Responsible[];
+    orderDate?: Date;
+    deliveryType?: DeliveryType[];
+    paymentStatus?: PaymentStatus | undefined;
+    orderStatus?: OrderStatus | undefined;
+    address?: string | undefined;
+    commandGenerated?: boolean;
+    description?: string | undefined;
+    referenceImage?: string | undefined;
+    resultImage?: string | undefined;
+    arrangement?: Arrangement[];
+    communicationType?: CommunicationType[];
+    orderPrice?: number | undefined;
+    realizationPrice?: number | undefined;
+    shippingPrice?: number | undefined;
+    moneyPaid?: number | undefined;
+    isPaid?: boolean;
+    wasDelivered?: boolean;
+    branch?: Branch[];
+    recipientName?: string | undefined;
+    recipientCellphoneNumber?: string | undefined;
+}
+
 export class Responsible extends LookupEntity implements IResponsible {
 
     constructor(data?: IResponsible) {
@@ -2805,6 +3181,19 @@ export class Responsible extends LookupEntity implements IResponsible {
 }
 
 export interface IResponsible extends ILookupEntity {
+}
+
+export enum PaymentStatus {
+    Paid = 0,
+    Pending = 1,
+}
+
+export enum OrderStatus {
+    Pending = 0,
+    InProgress = 1,
+    Ready = 2,
+    Delivered = 3,
+    Cancelled = 4,
 }
 
 export class SwaggerException extends Error {

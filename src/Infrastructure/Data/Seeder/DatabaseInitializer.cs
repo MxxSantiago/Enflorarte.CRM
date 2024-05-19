@@ -1,5 +1,6 @@
 ﻿using Enflorarte.CRM.Domain.Constants;
 using Enflorarte.CRM.Domain.Entities;
+using Enflorarte.CRM.Domain.Enums;
 using Enflorarte.CRM.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -245,6 +246,91 @@ public class DatabaseInitializer
                     new ArrangementType { Name = "Arrangement Type 4" }
                 };
                 _context.ArrangementType.AddRange(arrangementTypes);
+            }
+
+            if (!await _context.Order.AnyAsync())
+            {
+                List<Order> orders = new()
+                {
+                    new Order
+                    {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "123 Main St",
+                        CommandGenerated = false,
+                        Description = "Test order",
+                        OrderPrice = 100.0m,
+                        RealizationPrice = 80.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "John Doe",
+                        RecipientCellphoneNumber = "1234567890"
+                    },
+                    new Order {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "456 Elm St",
+                        CommandGenerated = false,
+                        Description = "Test order 2",
+                        OrderPrice = 200.0m,
+                        RealizationPrice = 180.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "Jane Doe",
+                        RecipientCellphoneNumber = "0987654321"
+                    },
+                    new Order {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "789 Oak St",
+                        CommandGenerated = false,
+                        Description = "Test order 3",
+                        OrderPrice = 300.0m,
+                        RealizationPrice = 280.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "Alice Smith",
+                        RecipientCellphoneNumber = "1357924680"
+                    },
+                    new Order {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "012 Pine St",
+                        CommandGenerated = false,
+                        Description = "Test order 4",
+                        OrderPrice = 400.0m,
+                        RealizationPrice = 380.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "Bob Smith",
+                        RecipientCellphoneNumber = "2468135790"
+                    }
+                };
+                _context.Order.AddRange(orders);
             }
 
             await _context.SaveChangesAsync();

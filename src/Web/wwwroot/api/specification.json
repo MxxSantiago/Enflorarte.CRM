@@ -1270,6 +1270,164 @@
         }
       }
     },
+    "/api/Order": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_Post",
+        "requestBody": {
+          "x-name": "entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Order/{id}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "entity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Responsible": {
       "get": {
         "tags": [
@@ -1980,6 +2138,134 @@
           }
         ]
       },
+      "Order": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "deliveryDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "deliveryFrom": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "deliveryUntil": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "responsible": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Responsible"
+                }
+              },
+              "orderDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "deliveryType": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DeliveryType"
+                }
+              },
+              "paymentStatus": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaymentStatus"
+                  }
+                ]
+              },
+              "orderStatus": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OrderStatus"
+                  }
+                ]
+              },
+              "address": {
+                "type": "string",
+                "nullable": true
+              },
+              "commandGenerated": {
+                "type": "boolean"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "referenceImage": {
+                "type": "string",
+                "nullable": true
+              },
+              "resultImage": {
+                "type": "string",
+                "nullable": true
+              },
+              "arrangement": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Arrangement"
+                }
+              },
+              "communicationType": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommunicationType"
+                }
+              },
+              "orderPrice": {
+                "type": "number",
+                "format": "decimal",
+                "nullable": true
+              },
+              "realizationPrice": {
+                "type": "number",
+                "format": "decimal",
+                "nullable": true
+              },
+              "shippingPrice": {
+                "type": "number",
+                "format": "decimal",
+                "nullable": true
+              },
+              "moneyPaid": {
+                "type": "number",
+                "format": "decimal",
+                "nullable": true
+              },
+              "isPaid": {
+                "type": "boolean"
+              },
+              "wasDelivered": {
+                "type": "boolean"
+              },
+              "branch": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "recipientName": {
+                "type": "string",
+                "nullable": true
+              },
+              "recipientCellphoneNumber": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
       "Responsible": {
         "allOf": [
           {
@@ -1989,6 +2275,36 @@
             "type": "object",
             "additionalProperties": false
           }
+        ]
+      },
+      "PaymentStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Paid",
+          "Pending"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "OrderStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Pending",
+          "InProgress",
+          "Ready",
+          "Delivered",
+          "Cancelled"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
         ]
       }
     }

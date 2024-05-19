@@ -1,15 +1,16 @@
 import {
-  ArrangementClient,
-  ArrangementTypeClient,
-  BranchClient,
-  ClientClient,
-  CommunicationTypeClient,
-  DeliveryTypeClient,
-  FlowerClient,
-  FlowerVariantClient,
-  ResponsibleClient,
-  WrapperClient,
-  WrapperVariantClient,
+    ArrangementClient,
+    ArrangementTypeClient,
+    BranchClient,
+    ClientClient,
+    CommunicationTypeClient,
+    DeliveryTypeClient,
+    FlowerClient,
+    FlowerVariantClient,
+    OrderClient,
+    ResponsibleClient,
+    WrapperClient,
+    WrapperVariantClient,
 } from "../../web-api-client.ts";
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
@@ -67,6 +68,7 @@ class ApiClient {
     responsible: new ResponsibleClient(),
     wrapper: new WrapperClient(),
     wrapperVariant: new WrapperVariantClient(),
+    order: new OrderClient(),
   };
 
   constructor(private cacheManager = new CacheManager()) {}
@@ -194,7 +196,7 @@ export function createLookupEntityPayload(properties: any) {
     ...Object.entries(properties).reduce(
       (acc, [key, value]) => ({
         ...acc,
-        [key]: key.toLowerCase().indexOf("id") !== -1 ? Number(value) : value,
+        [key]: key.toLowerCase().indexOf("id") !== -1 && key !== "id" && key[key.toLowerCase().indexOf("id") - 1] === key[key.toLowerCase().indexOf("id") - 1].toUpperCase() ? Number(value) : value,
       }),
       {}
     ),

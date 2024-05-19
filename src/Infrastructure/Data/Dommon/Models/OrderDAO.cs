@@ -1,9 +1,121 @@
 ﻿using Enflorarte.CRM.Application.Common.Interfaces.DAOs;
 using Enflorarte.CRM.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Enflorarte.CRM.Infrastructure.Data.Dommon.Models;
 
 public class OrderDAO : BaseDAO<Order>, IOrderDAO
 {
     public OrderDAO(ApplicationDbContext context) : base(context) { }
+
+    public async Task AddAsync(Order entity)
+    {
+        var arrangements = await _context.Arrangement.Where(w => entity.Arrangement.Select(e => e.Id).Contains(w.Id)).ToListAsync();
+        var responsibles = await _context.Responsible.Where(f => entity.Responsible.Select(e => e.Id).Contains(f.Id)).ToListAsync();
+        var communicationTypes = await _context.CommunicationType.Where(a => entity.CommunicationType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+        var branches = await _context.Branch.Where(a => entity.Branch.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+        var deliveryTypes = await _context.DeliveryType.Where(a => entity.DeliveryType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+
+        entity.Arrangement.Clear();
+        entity.Responsible.Clear();
+        entity.CommunicationType.Clear();
+        entity.Branch.Clear();
+        entity.DeliveryType.Clear();
+
+        foreach (var arrangement in arrangements)
+        {
+            entity.Arrangement.Add(arrangement);
+        }
+
+        foreach (var responsible in responsibles)
+        {
+            entity.Responsible.Add(responsible);
+        }
+
+        foreach (var communicationType in communicationTypes)
+        {
+            entity.CommunicationType.Add(communicationType);
+        }
+
+        foreach (var branch in branches)
+        {
+            entity.Branch.Add(branch);
+        }
+
+        foreach (var deliveryType in deliveryTypes)
+        {
+            entity.DeliveryType.Add(deliveryType);
+        }
+
+        await _context.Set<Order>().AddAsync(entity);
+    }
+
+    public async Task UpdateAsync(Order entity)
+    {
+        var existingEntity = await _context.Order
+            .Include(a => a.Arrangement)
+            .Include(a => a.Responsible)
+            .Include(a => a.CommunicationType)
+            .Include(a => a.Branch)
+            .Include(a => a.DeliveryType)
+            .SingleAsync(a => a.Id == entity.Id);
+
+        existingEntity.DeliveryDate = entity.DeliveryDate;
+        existingEntity.DeliveryFrom = entity.DeliveryFrom;
+        existingEntity.DeliveryUntil = entity.DeliveryUntil;
+        existingEntity.OrderDate = entity.OrderDate;
+        existingEntity.PaymentStatus = entity.PaymentStatus;
+        existingEntity.Address = entity.Address;
+        existingEntity.CommandGenerated = entity.CommandGenerated;
+        existingEntity.Description = entity.Description;
+        existingEntity.ReferenceImage = entity.ReferenceImage;
+        existingEntity.ResultImage = entity.ResultImage;
+        existingEntity.OrderPrice = entity.OrderPrice;
+        existingEntity.RealizationPrice = entity.RealizationPrice;
+        existingEntity.ShippingPrice = entity.ShippingPrice;
+        existingEntity.MoneyPaid = entity.MoneyPaid;
+        existingEntity.IsPaid = entity.IsPaid;
+        existingEntity.WasDelivered = entity.WasDelivered;
+        existingEntity.RecipientName = entity.RecipientName;
+        existingEntity.RecipientCellphoneNumber = entity.RecipientCellphoneNumber;
+
+        existingEntity.Arrangement.Clear();
+        existingEntity.Responsible.Clear();
+        existingEntity.CommunicationType.Clear();
+        existingEntity.Branch.Clear();
+        existingEntity.DeliveryType.Clear();
+
+        var arrangements = await _context.Arrangement.Where(w => entity.Arrangement.Select(e => e.Id).Contains(w.Id)).ToListAsync();
+        var responsibles = await _context.Responsible.Where(f => entity.Responsible.Select(e => e.Id).Contains(f.Id)).ToListAsync();
+        var communicationTypes = await _context.CommunicationType.Where(a => entity.CommunicationType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+        var branches = await _context.Branch.Where(a => entity.Branch.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+        var deliveryTypes = await _context.DeliveryType.Where(a => entity.DeliveryType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+
+        foreach (var arrangement in arrangements)
+        {
+            existingEntity.Arrangement.Add(arrangement);
+        }
+
+        foreach (var responsible in responsibles)
+        {
+            existingEntity.Responsible.Add(responsible);
+        }
+
+        foreach (var communicationType in communicationTypes)
+        {
+            existingEntity.CommunicationType.Add(communicationType);
+        }
+
+        foreach (var branch in branches)
+        {
+            existingEntity.Branch.Add(branch);
+        }
+
+        foreach (var deliveryType in deliveryTypes)
+        {
+            existingEntity.DeliveryType.Add(deliveryType);
+        }
+
+        await _context.SaveChangesAsync();
+    }
 }

@@ -3,12 +3,38 @@ import { Box, GridItem, Text, Tag, IconButton, useDisclosure } from "@chakra-ui/
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder";
 import UpdateOrder from "./UpdateOrder";
+import {useGetQuery} from "../../../../core/hooks/useApiClientHooks";
 
 const GridColumn = ({ date, orders, isDragging, colorMode }) => {
     const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
     const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure()
+
+    const {
+        data: orderData,
+        isLoading: isOrderLoading,
+        refetch,
+    } = useGetQuery("order");
+
+    const { data: arrangementData, isArrangementLoading } =
+        useGetQuery("arrangement");
+    const { data: responsibleData, responsibleLoading } =
+        useGetQuery("responsible");
+    const { data: communicationTypeData, communicationTypeLoading } =
+        useGetQuery("communicationType");
+    const { data: brancData, branchLoading } =
+        useGetQuery("branch");
+    const { data: deliveryTypeData, deliveryTypeDataLoading } =
+        useGetQuery("deliveryType");
+
+    const isLoading =
+        isOrderLoading ||
+        isArrangementLoading ||
+        responsibleLoading ||
+        communicationTypeLoading ||
+        branchLoading ||
+        deliveryTypeDataLoading;
 
   
     return (
@@ -57,19 +83,26 @@ const GridColumn = ({ date, orders, isDragging, colorMode }) => {
         </Box>
   
         <Box padding={5} paddingTop={0}>
-          {orders.map((order, index) => (
+          {orders.map((order, id) => (
             <OrderCard
-              key={index}
+              key={id}
               order={order}
-              index={index}
               colorMode={colorMode}
-              cursor={isDragging ? "grabbing" : "pointer"}
-              onClick={onOpenUpdate}
+              onOpenUpdate={onOpenUpdate}
             />
           ))}
         </Box>
       </GridItem>
-          <CreateOrder isOpen={isOpen} onClose={onClose}/>
+          <CreateOrder
+              isOpen={isOpen}
+              onClose={onClose}
+              arrangementData={arrangementData}
+              responsibleData={responsibleData}
+              communicationTypeData={communicationTypeData}
+              branchData={brancData}
+              deliveryTypeData={deliveryTypeData}
+              refetch={refetch}
+          />
           <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate}/>
       </>
     );

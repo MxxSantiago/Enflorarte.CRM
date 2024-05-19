@@ -1,13 +1,8 @@
-﻿namespace Enflorarte.CRM.Domain.Entities
+﻿using Enflorarte.CRM.Domain.Enums;
+
+namespace Enflorarte.CRM.Domain.Entities
 
 {
-    public enum PaymentStatus
-    {
-        Paid,
-        Pending,
-        Cancelled
-    }
-
     public class Order : BaseEntity
     {
         public DateTime DeliveryDate { get; set; }
@@ -15,8 +10,9 @@
         public DateTime DeliveryUntil { get; set; }
         public virtual ICollection<Responsible> Responsible { get; set; } = new List<Responsible>();
         public DateTime OrderDate { get; set; }
-        public string? DeliveryType { get; set; }
+        public virtual ICollection<DeliveryType> DeliveryType { get; set; } = new List<DeliveryType>();
         public PaymentStatus? PaymentStatus { get; set; }
+        public OrderStatus? OrderStatus { get; set; }
         public string? Address { get; set; }
         public bool CommandGenerated { get; set; }
         public string? Description { get; set; }

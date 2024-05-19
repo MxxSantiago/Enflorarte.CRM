@@ -15,7 +15,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(p => p.ReferenceImage).HasMaxLength(255);
         builder.Property(p => p.ResultImage).HasMaxLength(255);
-        builder.Property(p => p.DeliveryType).HasMaxLength(255);
         builder.Property(p => p.Address).HasMaxLength(255);
         builder.Property(p => p.Description).HasMaxLength(255);
         builder.Property(p => p.DeliveryDate).IsRequired();
@@ -32,9 +31,15 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(p => p.RecipientName).HasMaxLength(255);
         builder.Property(p => p.RecipientCellphoneNumber).HasMaxLength(255);
 
+        builder.Property(p => p.OrderPrice).HasPrecision(18, 2);
+        builder.Property(p => p.RealizationPrice).HasPrecision(18, 2);
+        builder.Property(p => p.ShippingPrice).HasPrecision(18, 2);
+        builder.Property(p => p.MoneyPaid).HasPrecision(18, 2);
+
         builder.HasMany(p => p.Responsible).WithMany();
         builder.HasMany(p => p.Arrangement).WithMany();
         builder.HasMany(p => p.CommunicationType).WithMany();
         builder.HasMany(p => p.Branch).WithMany();
+        builder.HasMany(p => p.DeliveryType).WithMany();
     }
 }
