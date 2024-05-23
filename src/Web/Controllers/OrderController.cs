@@ -21,5 +21,12 @@ public class OrderController : BaseController<Order, OrderService>
             var orders = await service.GetWeekOrderAsync(week);
             return Ok(orders);
         }
+
+        [HttpGet("GetMonthOrders")]
+        async Task<IActionResult> GetMonthOrders(DateTime month)
+        {
+            var orders = await service.GetMonthOrderAsync(month);
+            return Ok(orders);
+        }
     }
 }

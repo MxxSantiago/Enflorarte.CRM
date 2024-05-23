@@ -8,4 +8,5 @@ public interface IOrderDAO : IBaseDAO<Order>
     Task UpdateAsync(Order entity);
     Task<List<Order>> GetDayOrderAsync(DateTime day);
     Task<List<Order>> GetWeekOrderAsync(DateTime week);
+    Task<List<Order>> GetMonthOrderAsync(DateTime month);
 }

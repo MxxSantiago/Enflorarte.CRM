@@ -18,7 +18,7 @@ public class OrderService(IOrderDAO repository, IValidator<Order> validator)
         return await repository.GetWeekOrderAsync(week);
     }
 
-    public async Task<Order> GetMonthOrderAsync(int month)
+    public async Task<List<Order>> GetMonthOrderAsync(DateTime month)
     {
         return await repository.GetMonthOrderAsync(month);
     }

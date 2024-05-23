@@ -22,6 +22,13 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
             .ToListAsync();
     }
 
+    public async Task<List<Order>> GetMonthOrderAsync(DateTime month)
+    {
+        return await _context.Order
+            .Where(a => a.OrderDate.Date >= month.Date && a.OrderDate.Date <= month.Date.AddMonths(1))
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Order entity)
     {
         var arrangements = await _context.Arrangement.Where(w => entity.Arrangement.Select(e => e.Id).Contains(w.Id)).ToListAsync();
