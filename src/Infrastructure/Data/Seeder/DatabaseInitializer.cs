@@ -194,6 +194,16 @@ public class DatabaseInitializer
                 );
             }
             
+            if (!await _context.Tag.AnyAsync())
+            {
+                _context.Tag.AddRange(
+                    new Tag {  Name = "Tag 1", Color = "#dd2020" },
+                    new Tag {  Name = "Tag 2", Color = "#3020dd" },
+                    new Tag {  Name = "Tag 3", Color = "#179124" },
+                    new Tag {  Name = "Tag 4", Color = "#681791" }
+                );
+            }
+            
             if (!await _context.Arrangement.AnyAsync())
             {
                 _context.Arrangement.AddRange(
@@ -377,6 +387,74 @@ public class DatabaseInitializer
                 foreach (var wrapper in wrapperVariants)
                 {
                     arrangement.WrapperVariants.Add(wrapper);
+                }
+            }
+        }
+        
+        // Seed orders with all the many to many relationships
+        var orders = await _context.Order
+            .Include(order => order.Arrangement)
+            .Include(order => order.Responsible)
+            .Include(order => order.CommunicationType)
+            .Include(order => order.Branch)
+            .Include(order => order.DeliveryType)
+            .Include(order => order.Tags)
+            .ToListAsync();
+        
+        var responsibles = await _context.Responsible.ToListAsync();
+        var communicationTypes = await _context.CommunicationType.ToListAsync();
+        var branches = await _context.Branch.ToListAsync();
+        var deliveryTypes = await _context.DeliveryType.ToListAsync();
+        var tags = await _context.Tag.ToListAsync();
+        
+        if (orders.Count == 0) return;
+        foreach (var order in orders)
+        {
+            if (order.Arrangement.Count == 0 && arrangements.Count > 0)
+            {
+                foreach (var arrangement in arrangements)
+                {
+                    order.Arrangement.Add(arrangement);
+                }
+            }
+            
+            if (order.Responsible.Count == 0 && responsibles.Count > 0)
+            {
+                foreach (var responsible in responsibles)
+                {
+                    order.Responsible.Add(responsible);
+                }
+            }
+            
+            if (order.CommunicationType.Count == 0 && communicationTypes.Count > 0)
+            {
+                foreach (var communicationType in communicationTypes)
+                {
+                    order.CommunicationType.Add(communicationType);
+                }
+            }
+            
+            if (order.Branch.Count == 0 && branches.Count > 0)
+            {
+                foreach (var branch in branches)
+                {
+                    order.Branch.Add(branch);
+                }
+            }
+            
+            if (order.DeliveryType.Count == 0 && deliveryTypes.Count > 0)
+            {
+                foreach (var deliveryType in deliveryTypes)
+                {
+                    order.DeliveryType.Add(deliveryType);
+                }
+            }
+            
+            if (order.Tags.Count == 0 && tags.Count > 0)
+            {
+                foreach (var tag in tags)
+                {
+                    order.Tags.Add(tag);
                 }
             }
         }

@@ -2419,6 +2419,12 @@
               "recipientCellphoneNumber": {
                 "type": "string",
                 "nullable": true
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
               }
             }
           }

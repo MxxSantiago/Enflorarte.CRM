@@ -41,5 +41,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasMany(p => p.CommunicationType).WithMany();
         builder.HasMany(p => p.Branch).WithMany();
         builder.HasMany(p => p.DeliveryType).WithMany();
+        builder.HasMany(p => p.Tags).WithMany();
     }
 }

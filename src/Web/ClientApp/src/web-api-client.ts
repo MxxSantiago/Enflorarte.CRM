@@ -3227,6 +3227,7 @@ export class Order extends BaseEntity implements IOrder {
     branch?: Branch[];
     recipientName?: string | undefined;
     recipientCellphoneNumber?: string | undefined;
+    tags?: Tag[];
 
     constructor(data?: IOrder) {
         super(data);
@@ -3279,6 +3280,11 @@ export class Order extends BaseEntity implements IOrder {
             }
             this.recipientName = _data["recipientName"];
             this.recipientCellphoneNumber = _data["recipientCellphoneNumber"];
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(Tag.fromJS(item));
+            }
         }
     }
 
@@ -3335,6 +3341,11 @@ export class Order extends BaseEntity implements IOrder {
         }
         data["recipientName"] = this.recipientName;
         data["recipientCellphoneNumber"] = this.recipientCellphoneNumber;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item.toJSON());
+        }
         super.toJSON(data);
         return data;
     }
@@ -3365,6 +3376,7 @@ export interface IOrder extends IBaseEntity {
     branch?: Branch[];
     recipientName?: string | undefined;
     recipientCellphoneNumber?: string | undefined;
+    tags?: Tag[];
 }
 
 export class Responsible extends LookupEntity implements IResponsible {

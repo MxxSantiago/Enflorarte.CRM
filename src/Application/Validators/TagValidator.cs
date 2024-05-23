@@ -14,6 +14,5 @@ public class TagValidator : AbstractValidator<Tag>
             .NotEmpty()
             .Matches(new Regex("^#[0-9A-Fa-f]{6}$"))
             .WithMessage("Color must be a 7-character hexadecimal value");
-
     }
 }

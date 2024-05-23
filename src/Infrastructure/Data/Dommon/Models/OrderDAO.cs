@@ -15,12 +15,14 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
         var communicationTypes = await _context.CommunicationType.Where(a => entity.CommunicationType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
         var branches = await _context.Branch.Where(a => entity.Branch.Select(e => e.Id).Contains(a.Id)).ToListAsync();
         var deliveryTypes = await _context.DeliveryType.Where(a => entity.DeliveryType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+        var tags = await _context.Tag.Where(a => entity.Tags.Select(e => e.Id).Contains(a.Id)).ToListAsync();
 
         entity.Arrangement.Clear();
         entity.Responsible.Clear();
         entity.CommunicationType.Clear();
         entity.Branch.Clear();
         entity.DeliveryType.Clear();
+        entity.Tags.Clear();
 
         foreach (var arrangement in arrangements)
         {
@@ -46,6 +48,11 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
         {
             entity.DeliveryType.Add(deliveryType);
         }
+        
+        foreach (var tag in tags)
+        {
+            entity.Tags.Add(tag);
+        }
 
         await _context.Set<Order>().AddAsync(entity);
     }
@@ -58,6 +65,7 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
             .Include(a => a.CommunicationType)
             .Include(a => a.Branch)
             .Include(a => a.DeliveryType)
+            .Include(a => a.Tags)
             .SingleAsync(a => a.Id == entity.Id);
 
         existingEntity.DeliveryDate = entity.DeliveryDate;
@@ -84,12 +92,14 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
         existingEntity.CommunicationType.Clear();
         existingEntity.Branch.Clear();
         existingEntity.DeliveryType.Clear();
+        existingEntity.Tags.Clear();
 
         var arrangements = await _context.Arrangement.Where(w => entity.Arrangement.Select(e => e.Id).Contains(w.Id)).ToListAsync();
         var responsibles = await _context.Responsible.Where(f => entity.Responsible.Select(e => e.Id).Contains(f.Id)).ToListAsync();
         var communicationTypes = await _context.CommunicationType.Where(a => entity.CommunicationType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
         var branches = await _context.Branch.Where(a => entity.Branch.Select(e => e.Id).Contains(a.Id)).ToListAsync();
         var deliveryTypes = await _context.DeliveryType.Where(a => entity.DeliveryType.Select(e => e.Id).Contains(a.Id)).ToListAsync();
+        var tags = await _context.Tag.Where(a => entity.Tags.Select(e => e.Id).Contains(a.Id)).ToListAsync();
 
         foreach (var arrangement in arrangements)
         {
@@ -114,6 +124,11 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
         foreach (var deliveryType in deliveryTypes)
         {
             existingEntity.DeliveryType.Add(deliveryType);
+        }
+        
+        foreach (var tag in tags)
+        {
+            existingEntity.Tags.Add(tag);
         }
 
         await _context.SaveChangesAsync();

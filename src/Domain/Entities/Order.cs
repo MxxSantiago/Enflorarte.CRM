@@ -29,5 +29,6 @@ namespace Enflorarte.CRM.Domain.Entities
         public virtual ICollection<Branch> Branch { get; set; } = new List<Branch>();
         public string? RecipientName { get; set; }
         public string? RecipientCellphoneNumber { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }
