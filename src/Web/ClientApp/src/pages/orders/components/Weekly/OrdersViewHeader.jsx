@@ -6,32 +6,12 @@ import {
   Tooltip,
   IconButton,
   Box,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  Button,
 } from "@chakra-ui/react";
 import { MdCalendarViewWeek, MdCalendarViewMonth } from "react-icons/md";
-import { IoPricetags } from "react-icons/io5";
-import TagTemplate from "./Tags/TagTemplate";
-import TagForm from "./Tags/TagForm";
-import { useState, useEffect } from "react";
+import TagPopover from "./Tags/TagPopover";
 
 const OrdersViewHeader = ({ colorMode, mode }) => {
   const navigate = useNavigate();
-  const [tagName, setTagName] = useState("");
-  const [tagColor, setTagColor] = useState("#000000");
-  const [tags, setTags] = useState([]);
-
-  useEffect(() => {
-    setTagName("");
-    setTagColor("#000000");
-  }, [tags]);
 
   return (
     <>
@@ -76,60 +56,7 @@ const OrdersViewHeader = ({ colorMode, mode }) => {
           </Text>
         </Flex>
         <Box display="flex" marginLeft="auto">
-          <Popover>
-            <PopoverTrigger>
-              <IconButton
-                mr={5}
-                icon={<IoPricetags />}
-                variant={mode === "week" ? "solid" : "outline"}
-                color={
-                  mode === "week"
-                    ? colorMode === "dark"
-                      ? "gray.200"
-                      : "gray.500"
-                    : colorMode === "dark"
-                    ? "gray.300"
-                    : "gray.600"
-                }
-              />
-            </PopoverTrigger>
-
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverHeader>Gestor de Etiquetas</PopoverHeader>
-              <PopoverBody>
-                <Box h="100%">
-                  <Box h="200px" overflow="auto">
-                    {tags.map((item, index) => (
-                      <TagTemplate
-                        key={index}
-                        tagName={item.nombre}
-                        tagColor={item.color}
-                      />
-                    ))}
-                  </Box>
-                </Box>
-              </PopoverBody>
-              <PopoverFooter>
-                <TagForm tagName={tagName} tagColor={tagColor} setTagName={setTagName} setTagColor={setTagColor}/>
-                <Box w="100%">
-                  <Button
-                    colorScheme="pink"
-                    size="sm"
-                    mt={3}
-                    w="100%"
-                    onClick={() => {
-                      setTags([...tags, { nombre: tagName, color: tagColor }]);
-                    }}
-                  >
-                    Guardar
-                  </Button>
-                </Box>
-              </PopoverFooter>
-            </PopoverContent>
-          </Popover>
-
+          <TagPopover colorMode={colorMode} mode={mode} />
           <ButtonGroup isAttached variant="outline" marginLeft="auto">
             <Tooltip
               label="Pedidos por semana"

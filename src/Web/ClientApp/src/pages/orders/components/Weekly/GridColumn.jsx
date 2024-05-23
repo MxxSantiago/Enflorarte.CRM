@@ -1,44 +1,46 @@
 import OrderCard from "./OrderCard";
-import { Box, GridItem, Text, Tag, IconButton, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  GridItem,
+  Text,
+  Tag,
+  IconButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder";
 import UpdateOrder from "./UpdateOrder";
-import {useGetQuery} from "../../../../core/hooks/useApiClientHooks";
+import { useGetQuery } from "../../../../core/hooks/useApiClientHooks";
 
 const GridColumn = ({ date, orders, isDragging, colorMode }) => {
-    const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
-    const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure()
+  const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
+  const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenUpdate,
+    onOpen: onOpenUpdate,
+    onClose: onCloseUpdate,
+  } = useDisclosure();
 
-    const {
-        data: orderData,
-        isLoading: isOrderLoading,
-        refetch,
-    } = useGetQuery("order");
+  const { data: arrangementData, isArrangementLoading } =
+    useGetQuery("arrangement");
+  const { data: responsibleData, responsibleLoading } =
+    useGetQuery("responsible");
+  const { data: communicationTypeData, communicationTypeLoading } =
+    useGetQuery("communicationType");
+  const { data: brancData, branchLoading } = useGetQuery("branch");
+  const { data: deliveryTypeData, deliveryTypeDataLoading } =
+    useGetQuery("deliveryType");
 
-    const { data: arrangementData, isArrangementLoading } =
-        useGetQuery("arrangement");
-    const { data: responsibleData, responsibleLoading } =
-        useGetQuery("responsible");
-    const { data: communicationTypeData, communicationTypeLoading } =
-        useGetQuery("communicationType");
-    const { data: brancData, branchLoading } =
-        useGetQuery("branch");
-    const { data: deliveryTypeData, deliveryTypeDataLoading } =
-        useGetQuery("deliveryType");
+  const isLoading =
+    isArrangementLoading ||
+    responsibleLoading ||
+    communicationTypeLoading ||
+    branchLoading ||
+    deliveryTypeDataLoading;
 
-    const isLoading =
-        isOrderLoading ||
-        isArrangementLoading ||
-        responsibleLoading ||
-        communicationTypeLoading ||
-        branchLoading ||
-        deliveryTypeDataLoading;
-
-  
-    return (
-      <>
+  return (
+    <>
       <GridItem
         colSpan={1}
         border="1px solid white"
@@ -68,7 +70,9 @@ const GridColumn = ({ date, orders, isDragging, colorMode }) => {
           backgroundColor={backColor}
         >
           <Text fontSize="xl" margin={0}>
-            {date.toLocaleDateString("es-ES", { weekday: "long" }).toUpperCase()}
+            {date
+              .toLocaleDateString("es-ES", { weekday: "long" })
+              .toUpperCase()}
           </Text>
           <Tag
             size="lg"
@@ -79,33 +83,27 @@ const GridColumn = ({ date, orders, isDragging, colorMode }) => {
           >
             &nbsp;{orders.length}&nbsp;
           </Tag>
-          <IconButton marginLeft="auto" icon={<AddIcon />} onClick={onOpen}/>
+          <IconButton marginLeft="auto" icon={<AddIcon />} onClick={onOpen} />
         </Box>
-  
+
         <Box padding={5} paddingTop={0}>
-          {orders.map((order, id) => (
-            <OrderCard
-              key={id}
-              order={order}
-              colorMode={colorMode}
-              onOpenUpdate={onOpenUpdate}
-            />
+          {orders.map((order) => (
+            <OrderCard key={order.id} order={order} colorMode={colorMode} />
           ))}
         </Box>
       </GridItem>
-          <CreateOrder
-              isOpen={isOpen}
-              onClose={onClose}
-              arrangementData={arrangementData}
-              responsibleData={responsibleData}
-              communicationTypeData={communicationTypeData}
-              branchData={brancData}
-              deliveryTypeData={deliveryTypeData}
-              refetch={refetch}
-          />
-          <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate}/>
-      </>
-    );
-  };
+      <CreateOrder
+        isOpen={isOpen}
+        onClose={onClose}
+        arrangementData={arrangementData}
+        responsibleData={responsibleData}
+        communicationTypeData={communicationTypeData}
+        branchData={brancData}
+        deliveryTypeData={deliveryTypeData}
+      />
+      <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate} />
+    </>
+  );
+};
 
-  export default GridColumn;
+export default GridColumn;

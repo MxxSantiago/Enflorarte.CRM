@@ -1,16 +1,17 @@
 import {
-    ArrangementClient,
-    ArrangementTypeClient,
-    BranchClient,
-    ClientClient,
-    CommunicationTypeClient,
-    DeliveryTypeClient,
-    FlowerClient,
-    FlowerVariantClient,
-    OrderClient,
-    ResponsibleClient,
-    WrapperClient,
-    WrapperVariantClient,
+  ArrangementClient,
+  ArrangementTypeClient,
+  BranchClient,
+  ClientClient,
+  CommunicationTypeClient,
+  DeliveryTypeClient,
+  FlowerClient,
+  FlowerVariantClient,
+  OrderClient,
+  ResponsibleClient,
+  WrapperClient,
+  WrapperVariantClient,
+  TagClient,
 } from "../../web-api-client.ts";
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
@@ -69,6 +70,7 @@ class ApiClient {
     wrapper: new WrapperClient(),
     wrapperVariant: new WrapperVariantClient(),
     order: new OrderClient(),
+    tag: new TagClient(),
   };
 
   constructor(private cacheManager = new CacheManager()) {}

@@ -6,7 +6,7 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
     <Card
       borderRadius="xl"
       height="260px"
-      marginTop={index > 0 ? "1.5rem" : "0"}
+      marginTop={index > 0 ? 0 : "1.5rem"}
       cursor={"pointer"}
       backgroundColor={colorMode === "dark" ? "gray.600" : "#fff"}
       transition="all 0.30s ease-in .15s"
@@ -26,10 +26,10 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
           />
         </Box>
         <HStack spacing={2} h="20%" overflowX="auto" pl={1.5}>
-          {order.tags.map((tag, index) => (
+          {order.tags.map((tag) => (
             <Box>
               <Tag
-                key={index}
+                key={tag.id}
                 size="sm"
                 borderRadius="full"
                 variant="solid"
