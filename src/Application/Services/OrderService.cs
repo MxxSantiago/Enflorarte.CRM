@@ -8,6 +8,20 @@ namespace Enflorarte.CRM.Application.Services;
 public class OrderService(IOrderDAO repository, IValidator<Order> validator)
     : BaseService<Order>(repository, validator)
 {
+    public async Task<List<Order>> GetDayOrderAsync(DateTime day)
+    {
+        return await repository.GetDayOrderAsync(day);
+    }
+
+    public async Task<Order> GetWeekOrderAsync(int week)
+    {
+        return await repository.GetWeekOrderAsync(week);
+    }
+
+    public async Task<Order> GetMonthOrderAsync(int month)
+    {
+        return await repository.GetMonthOrderAsync(month);
+    }
     public override async Task<int> AddAsync(Order entity)
     {
         await ValidateAsync(entity);

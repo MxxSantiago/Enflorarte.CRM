@@ -8,6 +8,13 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
 {
     public OrderDAO(ApplicationDbContext context) : base(context) { }
 
+    public async Task<List<Order>> GetDayOrderAsync(DateTime day)
+    {
+        return await _context.Order
+            .Where(a => a.OrderDate.Date == day.Date)
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Order entity)
     {
         var arrangements = await _context.Arrangement.Where(w => entity.Arrangement.Select(e => e.Id).Contains(w.Id)).ToListAsync();
