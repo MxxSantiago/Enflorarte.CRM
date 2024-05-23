@@ -48,5 +48,6 @@ public static class DependencyInjection
         services.AddScoped<IArrangementTypeDAO, ArrangementTypeDAO>();
         services.AddScoped<IArrangementDAO, ArrangementDAO>();
         services.AddScoped<IOrderDAO, OrderDAO>();
+        services.AddScoped<ITagDAO, TagDAO>();
     }
 }

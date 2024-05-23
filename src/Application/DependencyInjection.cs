@@ -27,5 +27,6 @@ public static class DependencyInjection
         services.AddScoped<ArrangementService>();
         services.AddScoped<ArrangementTypeService>();
         services.AddScoped<OrderService>();
+        services.AddScoped<TagService>();
     }
 }
