@@ -13,7 +13,7 @@ public class OrderService(IOrderDAO repository, IValidator<Order> validator)
         return await repository.GetDayOrderAsync(day);
     }
 
-    public async Task<Order> GetWeekOrderAsync(int week)
+    public async Task<List<Order>> GetWeekOrderAsync(DateTime week)
     {
         return await repository.GetWeekOrderAsync(week);
     }

@@ -8,10 +8,17 @@ public class OrderController : BaseController<Order, OrderService>
 {
     public OrderController(OrderService service) : base(service)
     {
-        [HttpGet("GetOrdersByDay")]
-        async Task<IActionResult> GetOrdersByDeliveryDate(DateTime day)
+        [HttpGet("GetDayOrders")]
+        async Task<IActionResult> GetDayOrders(DateTime day)
         {
             var orders = await service.GetDayOrderAsync(day);
+            return Ok(orders);
+        }
+
+        [HttpGet("GetWeekOrders")]
+        async Task<IActionResult> GetWeekOrders(DateTime week)
+        {
+            var orders = await service.GetWeekOrderAsync(week);
             return Ok(orders);
         }
     }

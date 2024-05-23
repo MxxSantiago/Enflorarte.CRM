@@ -15,6 +15,13 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
             .ToListAsync();
     }
 
+    public async Task<List<Order>> GetWeekOrderAsync(DateTime week)
+    {
+        return await _context.Order
+            .Where(a => a.OrderDate.Date >= week.Date && a.OrderDate.Date <= week.Date.AddDays(7))
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Order entity)
     {
         var arrangements = await _context.Arrangement.Where(w => entity.Arrangement.Select(e => e.Id).Contains(w.Id)).ToListAsync();
