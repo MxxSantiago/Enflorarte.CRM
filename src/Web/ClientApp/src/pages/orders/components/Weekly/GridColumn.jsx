@@ -12,7 +12,7 @@ import CreateOrder from "./CreateOrder";
 import UpdateOrder from "./UpdateOrder";
 import { useGetQuery } from "../../../../core/hooks/useApiClientHooks";
 
-const GridColumn = ({ date, orders, isDragging, colorMode }) => {
+const GridColumn = ({ date, orders, colorMode }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
   const { isOpen, onOpen, onClose } = useDisclosure();

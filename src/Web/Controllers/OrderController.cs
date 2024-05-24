@@ -6,27 +6,31 @@ namespace Enflorarte.CRM.Web.Controllers;
 
 public class OrderController : BaseController<Order, OrderService>
 {
-    public OrderController(OrderService service) : base(service)
+    private readonly OrderService _orderService;
+    
+    public OrderController(OrderService service, OrderService orderService) : base(service)
     {
-        [HttpGet("GetDayOrders")]
-        async Task<IActionResult> GetDayOrders(DateTime day)
-        {
-            var orders = await service.GetDayOrderAsync(day);
-            return Ok(orders);
-        }
+        _orderService = orderService;
+    }
+    
+    [HttpGet("GetDayOrders")]
+    public async Task<ActionResult<IList<Order>>> GetDayOrders(DateTime day)
+    {
+        var orders = await _orderService.GetDayOrderAsync(day);
+        return Ok(orders);
+    }
 
-        [HttpGet("GetWeekOrders")]
-        async Task<IActionResult> GetWeekOrders(DateTime week)
-        {
-            var orders = await service.GetWeekOrderAsync(week);
-            return Ok(orders);
-        }
+    [HttpGet("GetWeekOrders")]
+    public async Task<ActionResult<IList<Order>>> GetWeekOrders(DateTime week)
+    {
+        var orders = await _orderService.GetWeekOrderAsync(week);
+        return Ok(orders);
+    }
 
-        [HttpGet("GetMonthOrders")]
-        async Task<IActionResult> GetMonthOrders(DateTime month)
-        {
-            var orders = await service.GetMonthOrderAsync(month);
-            return Ok(orders);
-        }
+    [HttpGet("GetMonthOrders")]
+    public async Task<ActionResult<IList<Order>>> GetMonthOrders(DateTime month)
+    {
+        var orders = await _orderService.GetMonthOrderAsync(month);
+        return Ok(orders);
     }
 }

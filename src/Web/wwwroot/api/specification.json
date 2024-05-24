@@ -1270,6 +1270,108 @@
         }
       }
     },
+    "/api/Order/GetDayOrders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_GetDayOrders",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Order/GetWeekOrders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_GetWeekOrders",
+        "parameters": [
+          {
+            "name": "week",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Order/GetMonthOrders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "operationId": "Order_GetMonthOrders",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Order": {
       "get": {
         "tags": [

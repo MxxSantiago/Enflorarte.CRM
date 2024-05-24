@@ -137,6 +137,44 @@ class ApiClient {
     return id;
   };
 
+  public async executeCustomMethod(
+    entityName: string,
+    customMethodName: string,
+    refresh: boolean = false,
+    args: any
+  ) {
+    if (!this.clients[entityName]) {
+      throw new Error("Invalid entity name");
+    }
+
+    const client = this.clients[entityName];
+    const method = client[entityName + "_" + customMethodName];
+
+    if (typeof method === "function") {
+      const cacheKey = `${entityName}_${customMethodName}_${JSON.stringify(
+        args
+      )}`;
+      const cachedResult = this.cacheManager.getCachedResult(cacheKey, refresh);
+
+      if (cachedResult) {
+        return cachedResult;
+      }
+
+      const boundMethod = method.bind(client);
+      const result = await boundMethod(args);
+
+      if (customMethodName.indexOf("Get") !== -1) {
+        this.cacheManager.updateCache(cacheKey, result);
+      }
+
+      return result;
+    } else {
+      throw new Error(
+        `Method ${customMethodName} does not exist on ${entityName}Client`
+      );
+    }
+  }
+
   private async executeHttpMethod(
     entityName: string,
     methodName: MethodNames,
@@ -198,7 +236,13 @@ export function createLookupEntityPayload(properties: any) {
     ...Object.entries(properties).reduce(
       (acc, [key, value]) => ({
         ...acc,
-        [key]: key.toLowerCase().indexOf("id") !== -1 && key !== "id" && key[key.toLowerCase().indexOf("id") - 1] === key[key.toLowerCase().indexOf("id") - 1].toUpperCase() ? Number(value) : value,
+        [key]:
+          key.toLowerCase().indexOf("id") !== -1 &&
+          key !== "id" &&
+          key[key.toLowerCase().indexOf("id") - 1] ===
+            key[key.toLowerCase().indexOf("id") - 1].toUpperCase()
+            ? Number(value)
+            : value,
       }),
       {}
     ),

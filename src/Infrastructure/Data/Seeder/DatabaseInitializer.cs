@@ -280,7 +280,9 @@ public class DatabaseInitializer
                         IsPaid = false,
                         WasDelivered = false,
                         RecipientName = "John Doe",
-                        RecipientCellphoneNumber = "1234567890"
+                        RecipientCellphoneNumber = "1234567890",
+                        ReferenceImage = "https://i.pinimg.com/736x/7d/e7/1b/7de71bb12557eb7e5893f00f7364ff17.jpg",
+                        ResultImage = "https://i.pinimg.com/736x/7d/e7/1b/7de71bb12557eb7e5893f00f7364ff17.jpg"
                     },
                     new Order {
                         DeliveryDate = DateTime.Now.AddDays(7),
@@ -299,7 +301,9 @@ public class DatabaseInitializer
                         IsPaid = false,
                         WasDelivered = false,
                         RecipientName = "Jane Doe",
-                        RecipientCellphoneNumber = "0987654321"
+                        RecipientCellphoneNumber = "0987654321",
+                        ReferenceImage = "https://i.pinimg.com/736x/e6/8e/16/e68e16bd2b33609b179b077c3073e28f--wedding-parties-wedding-reception.jpg",
+                        ResultImage = "https://i.pinimg.com/736x/e6/8e/16/e68e16bd2b33609b179b077c3073e28f--wedding-parties-wedding-reception.jpg"
                     },
                     new Order {
                         DeliveryDate = DateTime.Now.AddDays(7),
@@ -318,7 +322,9 @@ public class DatabaseInitializer
                         IsPaid = false,
                         WasDelivered = false,
                         RecipientName = "Alice Smith",
-                        RecipientCellphoneNumber = "1357924680"
+                        RecipientCellphoneNumber = "1357924680",
+                        ReferenceImage = "https://i.pinimg.com/originals/60/55/30/60553029945458665d7165b1d9e1d04c.jpg",
+                        ResultImage = "https://i.pinimg.com/originals/60/55/30/60553029945458665d7165b1d9e1d04c.jpg"
                     },
                     new Order {
                         DeliveryDate = DateTime.Now.AddDays(7),
@@ -337,7 +343,9 @@ public class DatabaseInitializer
                         IsPaid = false,
                         WasDelivered = false,
                         RecipientName = "Bob Smith",
-                        RecipientCellphoneNumber = "2468135790"
+                        RecipientCellphoneNumber = "2468135790",
+                        ReferenceImage = "https://i.pinimg.com/originals/38/7b/5a/387b5a0fa2865efd15a3c16b55718220.jpg",
+                        ResultImage = "https://i.pinimg.com/originals/38/7b/5a/387b5a0fa2865efd15a3c16b55718220.jpg"
                     }
                 };
                 _context.Order.AddRange(orders);

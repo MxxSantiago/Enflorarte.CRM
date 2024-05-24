@@ -1,28 +1,17 @@
 import WeeklyOrdersKanban from "./WeeklyOrdersKanban";
-import {useGetQuery} from "../../../../core/hooks/useApiClientHooks";
+import useGetOrdersByPeriod from "../../hooks/useGetOrdersByPeriod.tsx";
 
 const OrdersViewBody = ({ colorMode, mode }) => {
-    // API calls, high state management, etc.
+  const { data } = useGetOrdersByPeriod("Week");
 
-    const {
-        data: orderData,
-        isLoading: isOrderLoading,
-        refetch,
-    } = useGetQuery("order");
-
-    return (
-      <>
+  return (
+    <>
+      {
         {
-          {
-            week: (
-              <WeeklyOrdersKanban
-                colorMode={colorMode}
-                orders={orderData}
-              />
-            ),
-          }[mode]
-        }
-      </>
-    );
-  };
-  export default OrdersViewBody;
+          week: <WeeklyOrdersKanban colorMode={colorMode} orders={data} />,
+        }[mode]
+      }
+    </>
+  );
+};
+export default OrdersViewBody;
