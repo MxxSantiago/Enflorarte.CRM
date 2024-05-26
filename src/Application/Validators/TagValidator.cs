@@ -7,8 +7,8 @@ public class TagValidator : AbstractValidator<Tag>
 {
     public TagValidator()
     {
-        RuleFor(tag => tag.Name).MaximumLength(30)
-            .NotEmpty();
+        RuleFor(tag => tag.Name).MaximumLength(30).WithMessage("La longitud del nombre de la etiqueta tiene un máximo de 30 caracteres.")
+            .NotEmpty().WithMessage("El nombre de la etiqueta es requerido.");
         
         RuleFor(tag => tag.Color).Length(7)
             .NotEmpty()
