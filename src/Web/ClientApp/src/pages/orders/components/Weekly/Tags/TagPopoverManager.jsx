@@ -8,7 +8,7 @@ import {
 import TagTemplate from "./TagTemplate";
 import TagForm from "./TagForm";
 import { useState, useEffect } from "react";
-import { usePostQuery } from "../../../../../core/hooks/useApiClientHooks";
+import { usePostQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
 import { saveChangesText } from "../../../../../core/constants.ts";
 
 const TagPopoverManager = ({
@@ -22,10 +22,7 @@ const TagPopoverManager = ({
     name: "",
     color: "#000000",
   });
-  const { postEntity, isSuccess, isPostLoading } = usePostQuery(
-    "tag",
-    properties
-  );
+  const { execute, isSuccess, isPostLoading } = usePostQuery("tag", properties);
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
@@ -77,7 +74,7 @@ const TagPopoverManager = ({
             mt={3}
             w="100%"
             onClick={() => {
-              postEntity(properties);
+              execute(properties);
             }}
             isDisabled={isDisabled}
           >

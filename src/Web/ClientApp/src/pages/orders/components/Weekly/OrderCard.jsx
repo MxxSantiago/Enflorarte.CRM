@@ -32,7 +32,6 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
             userSelect="none"
             w="100%"
             objectFit="cover"
-            radius
           />
         </Box>
         <HStack spacing={2} h="20%" overflowX="auto" pl={1.5}>

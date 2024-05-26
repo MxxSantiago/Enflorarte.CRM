@@ -16,11 +16,8 @@ import CreateArrangmentTemplate from "./CreateArrangement.jsx";
 import ArrangementsFilter from "./ArrangementsFilter.jsx";
 import { useState, useEffect } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
-import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
-import {
-  createColorScheme,
-  primaryColorScheme,
-} from "../../../core/constants.ts";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";
+import { createColorScheme } from "../../../core/constants.ts";
 
 const ArrangementsView = () => {
   const {
@@ -45,7 +42,8 @@ const ArrangementsView = () => {
   const { data: flowerVariantsData, isFlowerVariantsLoading } =
     useGetQuery("flowerVariant");
 
-  const [filteredArrangements, setFilteredArrangements] = useState(arrangementsData);
+  const [filteredArrangements, setFilteredArrangements] =
+    useState(arrangementsData);
 
   const isLoading =
     isArrangementsLoading ||
@@ -68,7 +66,7 @@ const ArrangementsView = () => {
         >
           <Box>
             <Box pt={5}>
-              <Flex px={8}>
+              <Flex pb={3} px={8}>
                 <Text margin={0} fontSize="3xl">
                   Tus Plantillas
                 </Text>
@@ -101,7 +99,7 @@ const ArrangementsView = () => {
             {!isLoading && arrangementsData.length > 0 && (
               <Collapse in={isHeaderOpen}>
                 <Box>
-                  <Flex px={8} pt={8} direction="column">
+                  <Flex pb={5} px={8} pt={5} direction="column">
                     <ArrangementsFilter
                       arrangements={arrangementsData}
                       setFilteredArrangements={setFilteredArrangements}

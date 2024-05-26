@@ -20,7 +20,7 @@ import {
 import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.helper.ts";
 import { Arrangement } from "../../../web-api-client.ts";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect.jsx";
-import { usePostQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { usePostQuery } from "../../../core/hooks/useApiClientHooks.tsx";
 import {
   cancelChangesText,
   saveChangesText,
@@ -51,7 +51,7 @@ const CreateArrangmentTemplate = ({
     isTemplate: isTemplate,
   });
 
-  const { isSuccess, postEntity } = usePostQuery(
+  const { isSuccess, execute } = usePostQuery(
     "arrangement",
     createLookupEntityPayload(properties)
   );
@@ -63,7 +63,7 @@ const CreateArrangmentTemplate = ({
 
   const handleCreate = (event) => {
     event.preventDefault();
-    postEntity();
+    execute();
   };
 
   const handleSelectedItemChange = (propertySelectedItems, property) => {

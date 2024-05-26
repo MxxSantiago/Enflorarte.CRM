@@ -2,9 +2,9 @@ import OrdersView from "./components/Weekly/OrdersView";
 import { Navigate } from "react-router-dom";
 
 const ordersRoutes = [
-  { path: "/", element: <Navigate to="week" />, ignore: true },
+  { path: "/", element: <Navigate to="semana" />, ignore: true },
   {
-    path: "/week",
+    path: "semana",
     element: <OrdersView mode="week" />,
   },
   /**{

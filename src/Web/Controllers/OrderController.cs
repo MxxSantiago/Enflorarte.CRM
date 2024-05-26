@@ -1,14 +1,20 @@
 ﻿using Enflorarte.CRM.Application.Services;
+using Enflorarte.CRM.Domain.Constants;
 using Enflorarte.CRM.Domain.Entities;
+using Enflorarte.CRM.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Enflorarte.CRM.Web.Controllers;
 
 public class OrderController : BaseController<Order, OrderService>
 {
+    protected override string RolesForCommands => $"{Roles.Administrator},{Roles.Operator}";
+
     private readonly OrderService _orderService;
     
-    public OrderController(OrderService service, OrderService orderService) : base(service)
+    public OrderController(OrderService service, OrderService orderService, UserManager<ApplicationUser> userManager
+    ) : base(service, userManager)
     {
         _orderService = orderService;
     }

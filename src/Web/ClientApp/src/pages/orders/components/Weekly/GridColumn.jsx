@@ -10,7 +10,7 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder";
 import UpdateOrder from "./UpdateOrder";
-import { useGetQuery } from "../../../../core/hooks/useApiClientHooks";
+import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
 
 const GridColumn = ({ date, orders, colorMode }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";

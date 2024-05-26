@@ -27,7 +27,7 @@ import { AutocompleteMultiSelect } from "../../../../components/shared/Autocompl
 import TagForm from "./Tags/TagForm";
 import React, { useEffect, useState } from "react";
 import { Order } from "../../../../web-api-client.ts";
-import { usePostQuery } from "../../../../core/hooks/useApiClientHooks";
+import { usePostQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
 import { createLookupEntityPayload } from "../../../../core/helpers/web-api-client.helper.ts";
 import {
   saveChangesText,
@@ -72,7 +72,7 @@ const CreateOrder = ({
     wasDelivered: false,
   });
 
-  const { isSuccess, postEntity } = usePostQuery(
+  const { isSuccess, execute } = usePostQuery(
     "order",
     createLookupEntityPayload(properties)
   );
@@ -94,8 +94,7 @@ const CreateOrder = ({
 
   const handleCreate = (event) => {
     event.preventDefault();
-    console.log(properties);
-    postEntity();
+    execute();
   };
 
   const handleSelectedItemChange = (propertySelectedItems, property) => {

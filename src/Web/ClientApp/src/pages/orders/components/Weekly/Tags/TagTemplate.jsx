@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { Tag, Box, IconButton } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
-import { useDeleteQuery } from "../../../../../core/hooks/useApiClientHooks";
+import { useDeleteQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
 
 const TagTemplate = ({ tag, refetch, setIsEditing, setTagToEdit }) => {
-  const { isSuccess, deleteEntity, isLoading } = useDeleteQuery("tag", tag.id);
+  const { isSuccess, execute, isLoading } = useDeleteQuery("tag", tag.id);
 
   useEffect(() => {
     if (isSuccess) {
@@ -43,7 +43,7 @@ const TagTemplate = ({ tag, refetch, setIsEditing, setTagToEdit }) => {
           color="white"
           variant="ghost"
           icon={<MdDeleteOutline />}
-          onClick={() => deleteEntity()}
+          onClick={() => execute()}
           isDisabled={isLoading}
         ></IconButton>
       </Box>

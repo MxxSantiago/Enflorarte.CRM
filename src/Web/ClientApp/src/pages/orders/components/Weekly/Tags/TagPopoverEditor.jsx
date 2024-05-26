@@ -1,7 +1,7 @@
 import { Button, PopoverBody, PopoverFooter } from "@chakra-ui/react";
 import TagForm from "./TagForm";
 import { useState, useEffect } from "react";
-import { usePutQuery } from "../../../../../core/hooks/useApiClientHooks";
+import { usePutQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
 import {
   cancelChangesText,
   saveChangesText,
@@ -13,7 +13,7 @@ const TagPopoverEditor = ({ tag, refetch, setIsEditing }) => {
     name: tag.name,
     color: tag.color,
   });
-  const { putEntity, isSuccess, isLoading } = usePutQuery("tag", properties);
+  const { execute, isSuccess, isLoading } = usePutQuery("tag", properties);
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const TagPopoverEditor = ({ tag, refetch, setIsEditing }) => {
           size="sm"
           w="49%"
           onClick={() => {
-            putEntity(properties);
+            execute(properties);
           }}
           isDisabled={isDisabled}
         >

@@ -15,3 +15,8 @@ export const saveColorScheme = "green";
 export const saveChangesText = "Guardar";
 export const deleteText = "Eliminar";
 export const cancelChangesText = "Cancelar";
+
+export enum Roles {
+  Administrator = "Administrator",
+  Operator = "Operator",
+}

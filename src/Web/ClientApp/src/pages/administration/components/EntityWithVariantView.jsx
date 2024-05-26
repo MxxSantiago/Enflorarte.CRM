@@ -2,7 +2,7 @@ import { Divider, Box, Text, Grid, useBreakpointValue } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 import { removeReferenceObjectProperties } from "../../../core/helpers/web-api-client.helper.ts";
-import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 
 const EntityWithVariantView = ({

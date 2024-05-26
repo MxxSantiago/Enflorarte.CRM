@@ -25,10 +25,10 @@ import { FaRegUser } from "react-icons/fa6";
 import { Navigate } from "react-router-dom";
 
 const administrationRoutes = [
-  { path: "/", element: <Navigate to="branch" />, ignore: true },
+  { path: "/", element: <Navigate to="sucursales" />, ignore: true },
   {
     name: "Sucursales",
-    path: "branch",
+    path: "sucursales",
     element: (
       <EntityView
         title="Crear Nueva Sucursal"
@@ -40,7 +40,7 @@ const administrationRoutes = [
   },
   {
     name: "Tipo de Entrega",
-    path: "deliverytype",
+    path: "metodos-entrega",
     element: (
       <EntityView
         title="Crear Tipo de Entrega"
@@ -52,7 +52,7 @@ const administrationRoutes = [
   },
   {
     name: "Comunicación",
-    path: "communicationtype",
+    path: "tipos-comunicacion",
     element: (
       <EntityView
         title="Crear Tipo de Comunicación"
@@ -64,7 +64,7 @@ const administrationRoutes = [
   },
   {
     name: "Responsables",
-    path: "responsible",
+    path: "responsables",
     element: (
       <EntityView
         title="Crear Nuevo Responsable"
@@ -76,7 +76,7 @@ const administrationRoutes = [
   },
   {
     name: "Clientes",
-    path: "client",
+    path: "clientes",
     element: (
       <EntityView
         title="Crear Nuevo Cliente"
@@ -89,7 +89,7 @@ const administrationRoutes = [
   },
   {
     name: "Envolturas",
-    path: "wrapper",
+    path: "envolturas",
     element: (
       <EntityWithVariantView
         title="Crear Nueva Envoltura"
@@ -104,7 +104,7 @@ const administrationRoutes = [
   },
   {
     name: "Flores",
-    path: "flower",
+    path: "flores",
     element: (
       <EntityWithVariantView
         title="Crear Nueva Flor"
@@ -119,7 +119,7 @@ const administrationRoutes = [
   },
   {
     name: "Tipo de arreglos",
-    path: "arrangementtype",
+    path: "tipos-arreglo",
     element: (
       <EntityView
         title="Crear nuevo tipo de arreglo"

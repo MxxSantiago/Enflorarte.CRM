@@ -21,6 +21,7 @@ import {
 import { Link } from "react-router-dom";
 import ToggleTheme from "./ToggleTheme.jsx";
 import mainRoutes from "../../AppRoutes.js";
+import { userHasRole } from "../../core/helpers/session.ts";
 const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
 const Header = ({ showSidebar }) => (
@@ -51,20 +52,24 @@ const Header = ({ showSidebar }) => (
         direction="row"
         height="fit-content"
       >
-        {mainRoutes.map(({ name, path }) => (
-          <ChakraLink
-            key={name}
-            marginBottom="0"
-            fontWeight="bold"
-            fontSize="lg"
-            marginLeft="3rem"
-            to={path}
-            _hover={{ color: primaryColorScheme }}
-            _focus={{ color: primaryColorScheme }}
-          >
-            {name}
-          </ChakraLink>
-        ))}
+        {mainRoutes.map(({ name, path, roles }) => {
+          if (roles && !userHasRole(roles)) return null;
+
+          return (
+            <ChakraLink
+              key={name}
+              marginBottom="0"
+              fontWeight="bold"
+              fontSize="lg"
+              marginLeft="3rem"
+              to={path}
+              _hover={{ color: primaryColorScheme }}
+              _focus={{ color: primaryColorScheme }}
+            >
+              {name}
+            </ChakraLink>
+          );
+        })}
       </Stack>
       <ButtonGroup display={{ base: "none", md: "flex" }} marginLeft="auto">
         <ToggleTheme />
@@ -86,16 +91,20 @@ const Header = ({ showSidebar }) => (
           }}
         ></MenuButton>
         <MenuList zIndex={2}>
-          {mainRoutes.map(({ name, path }) => (
-            <MenuItem
-              key={name}
-              as={Link}
-              to={path}
-              _hover={{ color: "currentcolor" }}
-            >
-              {name}
-            </MenuItem>
-          ))}
+          {mainRoutes.map(({ name, path, roles }) => {
+            if (roles && !userHasRole(roles)) return null;
+
+            return (
+              <MenuItem
+                key={name}
+                as={Link}
+                to={path}
+                _hover={{ color: "currentcolor" }}
+              >
+                {name}
+              </MenuItem>
+            );
+          })}
           <MenuItem
             onClick={() => (window.location.href = "/Identity/Account/Manage")}
           >

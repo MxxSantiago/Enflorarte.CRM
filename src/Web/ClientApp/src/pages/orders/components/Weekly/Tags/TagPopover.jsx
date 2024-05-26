@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@chakra-ui/react";
 import { IoPricetags } from "react-icons/io5";
-import { useGetQuery } from "../../../../../core/hooks/useApiClientHooks";
+import { useGetQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
 import TagPopoverManager from "./TagPopoverManager";
 import TagPopoverEditor from "./TagPopoverEditor";
 import { useState } from "react";

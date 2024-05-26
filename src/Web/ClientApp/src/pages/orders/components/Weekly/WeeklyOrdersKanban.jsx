@@ -20,8 +20,6 @@ const WeeklyOrdersKanban = ({ colorMode, orders }) => {
     "Saturday",
   ];
 
-  console.log(orders);
-
   const ordersByDate = {};
   daysOfWeek.forEach((day) => {
     ordersByDate[day] = [...orders];

@@ -52,6 +52,7 @@ public class DatabaseInitializer
         {
             await TrySeedAsync();
             await SeedAdminUserAsync();
+            await SeedOperatorUserAsync();
         }
         catch (Exception ex)
         {
@@ -487,6 +488,27 @@ public class DatabaseInitializer
             if (!string.IsNullOrWhiteSpace(administratorRole.Name))
             {
                 await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
+            }
+        }
+    }
+    
+    private async Task SeedOperatorUserAsync()
+    {
+        var operatorRole = new IdentityRole(Roles.Operator);
+
+        if (_roleManager.Roles.All(r => r.Name != operatorRole.Name))
+        {
+            await _roleManager.CreateAsync(operatorRole);
+        }
+
+        var operatorUser = new ApplicationUser { UserName = "operator@localhost", Email = "operator@localhost" };
+
+        if (_userManager.Users.All(u => u.UserName != operatorUser.UserName))
+        {
+            await _userManager.CreateAsync(operatorUser, "Operator1!");
+            if (!string.IsNullOrWhiteSpace(operatorRole.Name))
+            {
+                await _userManager.AddToRolesAsync(operatorUser, new [] { operatorRole.Name });
             }
         }
     }

@@ -12,6 +12,7 @@ import {
   WrapperClient,
   WrapperVariantClient,
   TagClient,
+  AuthClient,
 } from "../../web-api-client.ts";
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
@@ -71,9 +72,15 @@ class ApiClient {
     wrapperVariant: new WrapperVariantClient(),
     order: new OrderClient(),
     tag: new TagClient(),
+    auth: new AuthClient(),
   };
 
   constructor(private cacheManager = new CacheManager()) {}
+
+  public async getCurrentUser() {
+    const user = await this.clients.auth.auth_GetCurrentUser();
+    return user;
+  }
 
   public async getAllEntities(
     entityName: string,
@@ -115,16 +122,18 @@ class ApiClient {
     return result;
   }
 
-  public deleteEntity = (entityName: string, id: number) => {
-    this.executeHttpMethod(entityName, "Delete", id);
+  public deleteEntity = async (entityName: string, id: number) => {
+    const result = await this.executeHttpMethod(entityName, "Delete", id);
     this.cacheManager.removeCache(`${entityName}_${id}`);
     this.cacheManager.removeEntityFromCache(entityName, id);
+    return result;
   };
 
-  public updateEntity = (entityName: string, args: any) => {
-    this.executeHttpMethod(entityName, "Put", args);
+  public updateEntity = async (entityName: string, args: any) => {
+    const result = await this.executeHttpMethod(entityName, "Put", args);
     this.cacheManager.updateCache(`${entityName}_${args.id}`, args);
     this.cacheManager.updateEntityInCache(entityName, args);
+    return result;
   };
 
   public createEntity = async (
@@ -189,9 +198,18 @@ class ApiClient {
 
     if (typeof method === "function") {
       const boundMethod = method.bind(client);
-      return methodName === "Put"
-        ? await boundMethod(args[0].id, ...args)
-        : await boundMethod(...args);
+      try {
+        return methodName === "Put"
+          ? await boundMethod(args[0].id, ...args)
+          : await boundMethod(...args);
+      } catch (err) {
+        if (err.response) {
+          const parsedError = JSON.parse(err.response);
+          throw parsedError;
+        } else {
+          throw err;
+        }
+      }
     } else {
       throw new Error(
         `Method ${entityName}_${methodName} does not exist on ${entityName}Client`

@@ -18,7 +18,7 @@ import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelec
 import {
   useGetQuery,
   usePostQuery,
-} from "../../../core/hooks/useApiClientHooks.jsx";
+} from "../../../core/hooks/useApiClientHooks.tsx";
 import { IoMdAdd } from "react-icons/io";
 import {
   cancelChangesText,
@@ -41,7 +41,7 @@ function CreateEntity({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
-  const { isSuccess, postEntity, isLoading } = usePostQuery(
+  const { isSuccess, execute, isLoading } = usePostQuery(
     entityName,
     properties
   );
@@ -57,7 +57,7 @@ function CreateEntity({
 
   const handleCreate = async (event) => {
     event.preventDefault();
-    postEntity(createLookupEntityPayload(properties));
+    execute(createLookupEntityPayload(properties));
   };
 
   const isDisabled = () => {
