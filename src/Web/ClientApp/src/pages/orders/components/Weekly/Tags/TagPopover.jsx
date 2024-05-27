@@ -19,7 +19,7 @@ const TagPopover = ({ colorMode, mode }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <Popover>
+    <Popover placement="bottom-end">
       <PopoverTrigger>
         <IconButton
           mr={5}

@@ -9,7 +9,10 @@ import TagTemplate from "./TagTemplate";
 import TagForm from "./TagForm";
 import { useState, useEffect } from "react";
 import { usePostQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
-import { saveChangesText } from "../../../../../core/constants.ts";
+import {
+  saveChangesText,
+  spinnerConfiguration,
+} from "../../../../../core/constants.ts";
 
 const TagPopoverManager = ({
   tags,
@@ -46,7 +49,7 @@ const TagPopoverManager = ({
         <Box h="100%">
           <Box h="200px" overflow="auto">
             {isLoading ? (
-              <Spinner />
+              <Spinner {...spinnerConfiguration} size="sm" />
             ) : (
               tags.map((item, index) => (
                 <TagTemplate

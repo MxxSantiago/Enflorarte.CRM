@@ -1,4 +1,5 @@
 import { Tag, Card, HStack, Box, Image, Skeleton } from "@chakra-ui/react";
+import { getAppropiateTextColor } from "../../../../core/helpers/adjustColor.helper.ts";
 
 const OrderCard = ({ order, index, colorMode, isLoading, ...props }) => (
   <Skeleton
@@ -53,6 +54,7 @@ const OrderCard = ({ order, index, colorMode, isLoading, ...props }) => (
                 borderRadius="full"
                 variant="solid"
                 bg={tag.color}
+                color={getAppropiateTextColor(tag.color)}
               >
                 {tag.name}
               </Tag>

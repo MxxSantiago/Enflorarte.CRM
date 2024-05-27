@@ -3,9 +3,11 @@ import { Tag, Box, IconButton } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDeleteQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
+import { getAppropiateTextColor } from "../../../../../core/helpers/adjustColor.helper.ts";
 
 const TagTemplate = ({ tag, refetch, setIsEditing, setTagToEdit }) => {
   const { isSuccess, execute, isLoading } = useDeleteQuery("tag", tag.id);
+  const textColor = getAppropiateTextColor(tag.color);
 
   useEffect(() => {
     if (isSuccess) {
@@ -20,7 +22,7 @@ const TagTemplate = ({ tag, refetch, setIsEditing, setTagToEdit }) => {
 
   return (
     <Tag
-      color="white"
+      color={textColor}
       size="lg"
       variant="solid"
       bg={tag.color}
@@ -33,15 +35,15 @@ const TagTemplate = ({ tag, refetch, setIsEditing, setTagToEdit }) => {
         <IconButton
           size="xs"
           mr={2}
-          color="white"
-          variant="ghost"
+          color={textColor}
+          variant="link"
           icon={<FaEdit />}
           onClick={() => handleEdit()}
         ></IconButton>
         <IconButton
           size="xs"
-          color="white"
-          variant="ghost"
+          color={textColor}
+          variant="link"
           icon={<MdDeleteOutline />}
           onClick={() => execute()}
           isDisabled={isLoading}
