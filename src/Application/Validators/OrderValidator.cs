@@ -7,15 +7,15 @@ public class OrderValidator : AbstractValidator<Order>
     public OrderValidator()
     {
         RuleFor(order => order.DeliveryDate)
-            .NotEmpty();
+            .NotEmpty().WithMessage("La fecha de entrega es requerida.");
 
         RuleFor(order => order.DeliveryFrom)
-            .NotEmpty();
+            .NotEmpty().WithMessage("La hora de inicio de la entrega es requerida.");
 
         RuleFor(order => order.IsPaid)
-            .Must(x => x == false || x == true);
+            .Must(x => x == false || x == true).WithMessage("El estado de pago debe ser verdadero o falso.");
 
         RuleFor(order => order.WasDelivered)
-            .Must(x => x == false || x == true);
+            .Must(x => x == false || x == true).WithMessage("El estado de entrega debe ser verdadero o falso.");
     }
 }
