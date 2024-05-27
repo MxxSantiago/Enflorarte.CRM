@@ -17,7 +17,10 @@ import ArrangementsFilter from "./ArrangementsFilter.jsx";
 import { useState, useEffect } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";
-import { createColorScheme } from "../../../core/constants.ts";
+import {
+  createColorScheme,
+  spinnerConfiguration,
+} from "../../../core/constants.ts";
 
 const ArrangementsView = () => {
   const {
@@ -117,7 +120,7 @@ const ArrangementsView = () => {
           </Box>
           {isLoading ? (
             <Flex alignItems="center" justifyContent="center">
-              <Spinner size="xl" />
+              <Spinner {...spinnerConfiguration} />
             </Flex>
           ) : (
             arrangementsData.length === 0 && (

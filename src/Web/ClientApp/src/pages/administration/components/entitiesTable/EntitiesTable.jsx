@@ -51,7 +51,7 @@ const EntitiesTable = ({
       {...props}
     >
       <Box overflowY="auto">
-        <Skeleton isLoaded={!isLoading} height="100%">
+        <Skeleton isLoaded={!isLoading} height="100%" fadeDuration={1}>
           <TableContainer overflowX="unset" overflowY="unset">
             <Table variant="striped" colorScheme={primaryColorScheme}>
               <EntitiesTableHeader entity={entity} />
