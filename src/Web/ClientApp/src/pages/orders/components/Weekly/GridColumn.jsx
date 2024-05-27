@@ -10,6 +10,7 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder";
 import UpdateOrder from "./UpdateOrder";
+import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
 
 const GridColumn = ({
   date,
@@ -25,6 +26,7 @@ const GridColumn = ({
 }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
+  const { refetch } = useGetQuery("tag");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenUpdate,
@@ -106,6 +108,7 @@ const GridColumn = ({
         branchData={branchData}
         deliveryTypeData={deliveryTypeData}
         tagData={tagData}
+        refetch={refetch}
       />
       <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate} />
     </>

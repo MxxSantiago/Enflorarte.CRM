@@ -54,6 +54,35 @@ const CreateOrder = ({
     onClose: onCloseTag,
   } = disclosure;
 
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const [propertiesTag, setPropertiesTag] = useState({
+    name: "",
+    color: "#000000",
+  });
+
+  useEffect(() => {
+    if (!propertiesTag.name || !propertiesTag.color) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [propertiesTag]);
+
+  const {
+    execute: executeTag,
+    isSuccess: isSuccessTag,
+    isPostLoading,
+  } = usePostQuery("tag", propertiesTag);
+
+  useEffect(() => {
+    if (isSuccessTag) {
+      propertiesTag.name = "";
+      propertiesTag.color = "#000000";
+      refetch();
+    }
+  }, [isSuccessTag]);
+
   const [selectedItems, setSelectedItems] = useState({
     responsible: [],
     communicationType: [],
@@ -71,6 +100,7 @@ const CreateOrder = ({
     arrangement: [],
     deliveryType: [],
     tag: [],
+    isPaid: false,
     wasDelivered: false,
   });
 
@@ -88,7 +118,8 @@ const CreateOrder = ({
       branch: [],
       arrangement: [],
       deliveryType: [],
-      tag:[],
+      tag: [],
+      isPaid: false,
       wasDelivered: false,
     });
     onClose();
@@ -96,6 +127,7 @@ const CreateOrder = ({
 
   const handleCreate = (event) => {
     event.preventDefault();
+    console.log(properties);
     execute();
   };
 
@@ -454,10 +486,18 @@ const CreateOrder = ({
                         })
                       }
                     />
-                     <Text marginY={2} marginTop={8}>
+                    <Text marginY={2} marginTop={8}>
                       Estado de pago
                     </Text>
-                    <Select>
+                    <Select
+                    value={properties.paymentStatus ?? ""}
+                      onChange={(e) => {
+                        setProperties({
+                          ...properties,
+                          paymentStatus: e.target.value,
+                        });
+                      }}
+                    >
                       <option>Pendiente</option>
                       <option>Cancelado</option>
                       <option>Pagado</option>
@@ -478,10 +518,7 @@ const CreateOrder = ({
                       }))}
                       _selectedItems={selectedItems.tagData}
                       onSelectedItemsChange={(changes) =>
-                        handleSelectedItemChange(
-                          changes.selectedItems,
-                          "tag"
-                        )
+                        handleSelectedItemChange(changes.selectedItems, "tag")
                       }
                     />
                     <Box mt={3}>
@@ -509,14 +546,25 @@ const CreateOrder = ({
                       <ModalHeader>Crear Etiqueta</ModalHeader>
                       <ModalCloseButton />
                       <ModalBody>
-                        <TagForm />
+                        <TagForm
+                          tagName={propertiesTag.name}
+                          tagColor={propertiesTag.tagColor}
+                          setProperties={setPropertiesTag}
+                        />
                       </ModalBody>
 
                       <ModalFooter>
                         <Button colorScheme="gray" mr={3} onClick={onCloseTag}>
                           Cerrar
                         </Button>
-                        <Button colorScheme="pink" mr={3}>
+                        <Button
+                          colorScheme="pink"
+                          mr={3}
+                          onClick={() => {
+                            executeTag(propertiesTag);
+                          }}
+                          isDisabled={isDisabled}
+                        >
                           Guardar
                         </Button>
                       </ModalFooter>
