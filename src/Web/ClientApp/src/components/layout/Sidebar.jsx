@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Card, Flex, Button, Image, Stack } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -6,10 +6,11 @@ import {
   sidebarDesktopWidth,
   sidebarMobileWidth,
 } from "../../core/constants.ts";
-import { userHasRole } from "../../core/helpers/session.ts";
+import { UserSessionContext } from "../../core/auth/UserSessionContext.jsx";
 const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
 const Sidebar = ({ routes }) => {
+  const { userHasRole } = useContext(UserSessionContext);
   const location = useLocation();
   const navigate = useNavigate();
 
