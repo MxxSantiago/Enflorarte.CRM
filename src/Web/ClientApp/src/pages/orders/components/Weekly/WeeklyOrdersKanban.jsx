@@ -98,6 +98,7 @@ const WeeklyOrdersKanban = ({
   communicationTypeData,
   branchData,
   deliveryTypeData,
+  tagData,
 }) => {
   return (
     <WeekHandler orders={orders}>
@@ -149,6 +150,7 @@ const WeeklyOrdersKanban = ({
                     communicationTypeData={communicationTypeData}
                     branchData={branchData}
                     deliveryTypeData={deliveryTypeData}
+                    tagData={tagData}
                   />
                 );
               })}

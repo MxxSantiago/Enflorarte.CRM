@@ -15,6 +15,8 @@ const OrdersViewBody = ({ colorMode, mode }) => {
   const { data: brancData, isLoading: branchLoading } = useGetQuery("branch");
   const { data: deliveryTypeData, isLoading: deliveryTypeDataLoading } =
     useGetQuery("deliveryType");
+    const { data: tagData, isLoading: tagLoading } = useGetQuery("tag");
+
 
   const isLoading =
     isLoadingOrders ||
@@ -37,6 +39,7 @@ const OrdersViewBody = ({ colorMode, mode }) => {
               communicationTypeData={communicationTypeData}
               branchData={brancData}
               deliveryTypeData={deliveryTypeData}
+              tagData={tagData}
               isLoading={isLoading}
             />
           ),

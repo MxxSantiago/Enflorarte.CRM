@@ -45,6 +45,7 @@ const CreateOrder = ({
   branchData,
   refetch,
   communicationTypeData,
+  tagData,
 }) => {
   const disclosure = useDisclosure();
   const {
@@ -59,6 +60,7 @@ const CreateOrder = ({
     branch: [],
     arrangement: [],
     deliveryType: [],
+    tag: [],
   });
 
   const [properties, setProperties] = useState({
@@ -68,7 +70,7 @@ const CreateOrder = ({
     branch: [],
     arrangement: [],
     deliveryType: [],
-    isPaid: false,
+    tag: [],
     wasDelivered: false,
   });
 
@@ -86,7 +88,7 @@ const CreateOrder = ({
       branch: [],
       arrangement: [],
       deliveryType: [],
-      isPaid: false,
+      tag:[],
       wasDelivered: false,
     });
     onClose();
@@ -142,7 +144,7 @@ const CreateOrder = ({
                 alignItems="center"
               >
                 <Image
-                  src={Imagen}
+                  src={properties.referenceImage}
                   objectFit="cover"
                   borderRadius="10px"
                   boxSize="500px"
@@ -384,10 +386,6 @@ const CreateOrder = ({
                       }
                     />
                     <Text marginY={2} marginTop={8}>
-                      Estado del Pedido
-                    </Text>
-                    <Select></Select>
-                    <Text marginY={2} marginTop={8}>
                       Entregado
                     </Text>
                     <Checkbox
@@ -456,17 +454,14 @@ const CreateOrder = ({
                         })
                       }
                     />
-                    <Text marginY={2} marginTop={8}>
-                      Pagado
+                     <Text marginY={2} marginTop={8}>
+                      Estado de pago
                     </Text>
-                    <Checkbox
-                      onChange={(e) =>
-                        setProperties({
-                          ...properties,
-                          isPaid: e.target.checked,
-                        })
-                      }
-                    />
+                    <Select>
+                      <option>Pendiente</option>
+                      <option>Cancelado</option>
+                      <option>Pagado</option>
+                    </Select>
                   </Card>
 
                   <Card p={4} mt={4}>
@@ -476,7 +471,19 @@ const CreateOrder = ({
                       </Heading>
                     </CardHeader>
                     <Text>Etiquetas</Text>
-                    <Select></Select>
+                    <AutocompleteMultiSelect
+                      items={tagData.map((item) => ({
+                        value: item,
+                        label: item.name,
+                      }))}
+                      _selectedItems={selectedItems.tagData}
+                      onSelectedItemsChange={(changes) =>
+                        handleSelectedItemChange(
+                          changes.selectedItems,
+                          "tag"
+                        )
+                      }
+                    />
                     <Box mt={3}>
                       <Flex>
                         <Button

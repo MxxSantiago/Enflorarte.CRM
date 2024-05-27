@@ -21,6 +21,7 @@ const GridColumn = ({
   communicationTypeData,
   branchData,
   deliveryTypeData,
+  tagData,
 }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
@@ -104,6 +105,7 @@ const GridColumn = ({
         communicationTypeData={communicationTypeData}
         branchData={branchData}
         deliveryTypeData={deliveryTypeData}
+        tagData={tagData}
       />
       <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate} />
     </>
