@@ -1,11 +1,21 @@
-import { Tag, Card, HStack, Box, Image } from "@chakra-ui/react";
-import Imagen from "./Assets/spiderman.jpg";
+import { Tag, Card, HStack, Box, Image, Skeleton } from "@chakra-ui/react";
 
-const OrderCard = ({ order, index, colorMode, ...props }) => {
-  return (
+const OrderCard = ({ order, index, colorMode, isLoading, ...props }) => (
+  <Skeleton
+    isLoaded={!isLoading}
+    borderRadius="xl"
+    fadeDuration={0.75}
+    height="260px"
+    width="100%"
+    marginTop={index > 0 ? 0 : "1.5rem"}
+    backgroundColor={colorMode === "dark" ? "gray.600" : "#fff"}
+    transition="all 0.30s ease-in .15s"
+    {...props}
+  >
     <Card
       borderRadius="xl"
       height="260px"
+      width="100%"
       marginTop={index > 0 ? 0 : "1.5rem"}
       backgroundColor={colorMode === "dark" ? "gray.600" : "#fff"}
       transition="all 0.30s ease-in .15s"
@@ -26,7 +36,7 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
           cursor={"pointer"}
         >
           <Image
-            src={order.referenceImage || Imagen}
+            src={order?.referenceImage}
             h="100%"
             onDragStart={(e) => e.preventDefault()}
             userSelect="none"
@@ -35,7 +45,7 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
           />
         </Box>
         <HStack spacing={2} h="20%" overflowX="auto" pl={1.5}>
-          {order.tags.map((tag) => (
+          {order?.tags?.map((tag) => (
             <Box key={tag.id}>
               <Tag
                 key={tag.id}
@@ -51,7 +61,7 @@ const OrderCard = ({ order, index, colorMode, ...props }) => {
         </HStack>
       </Box>
     </Card>
-  );
-};
+  </Skeleton>
+);
 
 export default OrderCard;

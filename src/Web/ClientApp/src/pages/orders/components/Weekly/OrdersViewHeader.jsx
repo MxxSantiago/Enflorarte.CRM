@@ -67,6 +67,7 @@ const OrdersViewHeader = ({ colorMode, mode }) => {
                 icon={<MdCalendarViewWeek />}
                 variant={mode === "week" ? "solid" : "outline"}
                 onClick={() => navigate("/week")}
+                isDisabled={mode === "week"}
                 color={
                   mode === "week"
                     ? colorMode === "dark"
@@ -87,6 +88,7 @@ const OrdersViewHeader = ({ colorMode, mode }) => {
               <IconButton
                 title="Pedidos por mes"
                 icon={<MdCalendarViewMonth />}
+                isDisabled={mode === "month"}
                 variant={mode === "month" ? "solid" : "outline"}
                 onClick={() => navigate("/month")}
                 color={

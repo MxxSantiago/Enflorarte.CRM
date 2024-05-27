@@ -10,9 +10,18 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder";
 import UpdateOrder from "./UpdateOrder";
-import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
 
-const GridColumn = ({ date, orders, colorMode }) => {
+const GridColumn = ({
+  date,
+  orders,
+  colorMode,
+  isLoading,
+  arrangementData,
+  responsibleData,
+  communicationTypeData,
+  branchData,
+  deliveryTypeData,
+}) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -21,23 +30,6 @@ const GridColumn = ({ date, orders, colorMode }) => {
     onOpen: onOpenUpdate,
     onClose: onCloseUpdate,
   } = useDisclosure();
-
-  const { data: arrangementData, isArrangementLoading } =
-    useGetQuery("arrangement");
-  const { data: responsibleData, responsibleLoading } =
-    useGetQuery("responsible");
-  const { data: communicationTypeData, communicationTypeLoading } =
-    useGetQuery("communicationType");
-  const { data: brancData, branchLoading } = useGetQuery("branch");
-  const { data: deliveryTypeData, deliveryTypeDataLoading } =
-    useGetQuery("deliveryType");
-
-  const isLoading =
-    isArrangementLoading ||
-    responsibleLoading ||
-    communicationTypeLoading ||
-    branchLoading ||
-    deliveryTypeDataLoading;
 
   return (
     <>
@@ -70,9 +62,7 @@ const GridColumn = ({ date, orders, colorMode }) => {
           backgroundColor={backColor}
         >
           <Text fontSize="xl" margin={0}>
-            {date
-              .toLocaleDateString("es-ES", { weekday: "long" })
-              .toUpperCase()}
+            {date}
           </Text>
           <Tag
             size="lg"
@@ -83,12 +73,26 @@ const GridColumn = ({ date, orders, colorMode }) => {
           >
             &nbsp;{orders.length}&nbsp;
           </Tag>
-          <IconButton marginLeft="auto" icon={<AddIcon />} onClick={onOpen} />
+          <IconButton
+            isDisabled={isLoading}
+            marginLeft="auto"
+            icon={<AddIcon />}
+            onClick={onOpen}
+          />
         </Box>
-
         <Box padding={5} paddingTop={0}>
-          {orders.map((order) => (
-            <OrderCard key={order.id} order={order} colorMode={colorMode} />
+          {(isLoading
+            ? Array.from({ length: 5 }, (_, i) => ({
+                id: i,
+              }))
+            : orders
+          ).map((order) => (
+            <OrderCard
+              isLoading={isLoading}
+              key={order.id}
+              order={order}
+              colorMode={colorMode}
+            />
           ))}
         </Box>
       </GridItem>
@@ -98,7 +102,7 @@ const GridColumn = ({ date, orders, colorMode }) => {
         arrangementData={arrangementData}
         responsibleData={responsibleData}
         communicationTypeData={communicationTypeData}
-        branchData={brancData}
+        branchData={branchData}
         deliveryTypeData={deliveryTypeData}
       />
       <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate} />
