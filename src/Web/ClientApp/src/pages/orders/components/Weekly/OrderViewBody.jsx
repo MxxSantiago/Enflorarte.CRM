@@ -1,6 +1,7 @@
 import WeeklyOrdersKanban from "./WeeklyOrdersKanban";
 import useGetOrdersByPeriod from "../../hooks/useGetOrdersByPeriod.tsx";
 import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
+import MonthlyOrdersCalendar from "../Monthly/MonthlyOrdersCalendar.jsx";
 
 const OrdersViewBody = ({ colorMode, mode }) => {
   const { data: ordersData, isLoading: isLoadingOrders } =
@@ -39,6 +40,7 @@ const OrdersViewBody = ({ colorMode, mode }) => {
               isLoading={isLoading}
             />
           ),
+          month: (<MonthlyOrdersCalendar colorMode={colorMode} ordersByDate={ordersData} /> ),
         }[mode]
       }
     </>

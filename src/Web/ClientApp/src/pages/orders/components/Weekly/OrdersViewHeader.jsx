@@ -90,7 +90,7 @@ const OrdersViewHeader = ({ colorMode, mode }) => {
                 icon={<MdCalendarViewMonth />}
                 isDisabled={mode === "month"}
                 variant={mode === "month" ? "solid" : "outline"}
-                onClick={() => navigate("/month")}
+                onClick={() => navigate("/mes")}
                 color={
                   mode === "week"
                     ? colorMode === "dark"

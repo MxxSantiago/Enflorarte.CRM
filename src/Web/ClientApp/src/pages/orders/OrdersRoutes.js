@@ -7,10 +7,10 @@ const ordersRoutes = [
     path: "semana",
     element: <OrdersView mode="week" />,
   },
-  /**{
-    path: "/month",
+  {
+    path: "mes",
     element: <OrdersView mode="month" />,
-  },**/
+  },
 ];
 
 export default ordersRoutes;
