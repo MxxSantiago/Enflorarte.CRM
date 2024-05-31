@@ -1,26 +1,26 @@
-import { useState, useEffect } from "react";
-import { apiClient } from "../helpers/web-api-client.helper.ts";
-import { useToast } from "@chakra-ui/react";
+import {useEffect, useState} from "react";
+import {apiClient} from "../helpers/web-api-client.helper.ts";
+import {useToast} from "@chakra-ui/react";
 
 interface CommandResponse {
-  data: any;
-  setData: any;
-  error: ApiError | undefined;
-  setError: any;
-  isLoading: boolean;
-  setIsLoading: any;
-  isSuccess: boolean;
-  setIsSuccess: any;
-  isError: boolean;
-  setIsError: any;
+    data: any;
+    setData: any;
+    error: ApiError | undefined;
+    setError: any;
+    isLoading: boolean;
+    setIsLoading: any;
+    isSuccess: boolean;
+    setIsSuccess: any;
+    isError: boolean;
+    setIsError: any;
 }
 
 interface ApiError {
-  title: string;
-  status: number;
-  errors: {
-    [key: string]: string[];
-  };
+    title: string;
+    status: number;
+    errors: {
+        [key: string]: string[];
+    };
 }
 
 /**
@@ -40,64 +40,64 @@ interface ApiError {
  * - setIsError: A function to set the error state.
  */
 const useApiRequest = (initialData: any): CommandResponse => {
-  const toast = useToast();
-  const [data, setData] = useState(initialData);
-  const [errors, setErrors] = useState<ApiError>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
+    const toast = useToast();
+    const [data, setData] = useState(initialData);
+    const [errors, setErrors] = useState<ApiError>();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    if (isSuccess) {
-      toast({
-        title: `Operación realizada correctamente`,
-        status: "success",
-        isClosable: true,
-        position: "bottom-right",
-      });
-    } else if (isError) {
-      if (errors!.status === 401) {
-        toast({
-          title: "Acción no autorizada para el usuario actual",
-          status: "error",
-          isClosable: true,
-          position: "bottom-right",
-        });
-      } else {
-        if (errors?.errors == null) {
-          toast({
-            title: errors!.title,
-            status: "error",
-            isClosable: true,
-            position: "bottom-right",
-          });
-          return;
+    useEffect(() => {
+        if (isSuccess) {
+            toast({
+                title: `Operación realizada correctamente`,
+                status: "success",
+                isClosable: true,
+                position: "bottom-right",
+            });
+        } else if (isError) {
+            if (errors!.status === 401) {
+                toast({
+                    title: "Acción no autorizada para el usuario actual",
+                    status: "error",
+                    isClosable: true,
+                    position: "bottom-right",
+                });
+            } else {
+                if (errors?.errors == null) {
+                    toast({
+                        title: errors!.title,
+                        status: "error",
+                        isClosable: true,
+                        position: "bottom-right",
+                    });
+                    return;
+                }
+
+                Object.entries(errors!.errors).forEach((error) => {
+                    toast({
+                        title: error[1],
+                        status: "error",
+                        isClosable: true,
+                        position: "bottom-right",
+                    });
+                });
+            }
         }
+    }, [isSuccess, isError]);
 
-        Object.entries(errors!.errors).forEach((error) => {
-          toast({
-            title: error[1],
-            status: "error",
-            isClosable: true,
-            position: "bottom-right",
-          });
-        });
-      }
-    }
-  }, [isSuccess, isError]);
-
-  return {
-    data,
-    setData,
-    error: errors,
-    setError: setErrors,
-    isLoading,
-    setIsLoading,
-    isSuccess,
-    setIsSuccess,
-    isError,
-    setIsError,
-  };
+    return {
+        data,
+        setData,
+        error: errors,
+        setError: setErrors,
+        isLoading,
+        setIsLoading,
+        isSuccess,
+        setIsSuccess,
+        isError,
+        setIsError,
+    };
 };
 
 /**
@@ -112,66 +112,66 @@ const useApiRequest = (initialData: any): CommandResponse => {
  * - execute: A function to execute the command.
  */
 const useCommandQuery = (command) => {
-  const {
-    data,
-    setData,
-    error,
-    setError,
-    isLoading,
-    setIsLoading,
-    isSuccess,
-    setIsSuccess,
-    isError,
-    setIsError,
-  } = useApiRequest(null);
+    const {
+        data,
+        setData,
+        error,
+        setError,
+        isLoading,
+        setIsLoading,
+        isSuccess,
+        setIsSuccess,
+        isError,
+        setIsError,
+    } = useApiRequest(null);
 
-  const executeCommand = async (...args: any[]) => {
-    setIsLoading(true);
-    setIsSuccess(false);
-    setIsError(false);
-    try {
-      const result = await command(...args);
-      setData(result);
-      setIsSuccess(true);
-    } catch (err) {
-      setError(err);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const executeCommand = async (...args: any[]) => {
+        setIsLoading(true);
+        setIsSuccess(false);
+        setIsError(false);
+        try {
+            const result = await command(...args);
+            setData(result);
+            setIsSuccess(true);
+        } catch (err) {
+            setError(err);
+            setIsError(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  return {
-    data,
-    error,
-    isLoading,
-    isSuccess,
-    isError,
-    execute: executeCommand,
-  };
+    return {
+        data,
+        error,
+        isLoading,
+        isSuccess,
+        isError,
+        execute: executeCommand,
+    };
 };
 
 const usePostQuery = (entityName: string, entity: any) => {
-  const { execute, ...rest } = useCommandQuery(apiClient.createEntity);
-  return { execute: () => execute(entityName, entity), ...rest };
+    const {execute, ...rest} = useCommandQuery(apiClient.createEntity);
+    return {execute: () => execute(entityName, entity), ...rest};
 };
 
 const usePutQuery = (entityName, entity) => {
-  const { execute, ...rest } = useCommandQuery(apiClient.updateEntity);
+    const {execute, ...rest} = useCommandQuery(apiClient.updateEntity);
 
-  return {
-    execute: () =>
-      execute(entityName, {
-        ...entity,
-        id: entity.id,
-      }),
-    ...rest,
-  };
+    return {
+        execute: () =>
+            execute(entityName, {
+                ...entity,
+                id: entity.id,
+            }),
+        ...rest,
+    };
 };
 
 const useDeleteQuery = (entityName, id) => {
-  const { execute, ...rest } = useCommandQuery(apiClient.deleteEntity);
-  return { execute: () => execute(entityName, id), ...rest };
+    const {execute, ...rest} = useCommandQuery(apiClient.deleteEntity);
+    return {execute: () => execute(entityName, id), ...rest};
 };
 
 /**
@@ -189,94 +189,94 @@ const useDeleteQuery = (entityName, id) => {
  * - refetch: A function to manually trigger a refetch of the data.
  */
 const useGetQuery = (entityName, id) => {
-  const {
-    data,
-    setData,
-    error,
-    setError,
-    isLoading,
-    setIsLoading,
-    isSuccess,
-    setIsSuccess,
-    isError,
-    setIsError,
-  } = useApiRequest([]);
+    const {
+        data,
+        setData,
+        error,
+        setError,
+        isLoading,
+        setIsLoading,
+        isSuccess,
+        setIsSuccess,
+        isError,
+        setIsError,
+    } = useApiRequest([]);
 
-  const [clearCache, setClearCache] = useState(false);
-  const [isUninitialized, setIsUninitialized] = useState(true);
-  const [refetchCount, setRefetchCount] = useState(0);
+    const [clearCache, setClearCache] = useState(false);
+    const [isUninitialized, setIsUninitialized] = useState(true);
+    const [refetchCount, setRefetchCount] = useState(0);
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [entityName, id]);
+    useEffect(() => {
+        setIsLoading(true);
+    }, [entityName, id]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!entityName) {
-        setIsSuccess(false);
-        setIsError(false);
-        setIsLoading(false);
-        return;
-      }
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!entityName) {
+                setIsSuccess(false);
+                setIsError(false);
+                setIsLoading(false);
+                return;
+            }
 
-      try {
-        if (data.length === 0 || clearCache) {
-          setIsSuccess(false);
-          setIsError(false);
-        }
+            try {
+                if (data.length === 0 || clearCache) {
+                    setIsSuccess(false);
+                    setIsError(false);
+                }
 
-        let result;
-        if (id) {
-          if (clearCache) {
-            result = await apiClient.getEntity(entityName, id, true);
-          } else {
-            result = await apiClient.getEntity(entityName, id);
-          }
-        } else {
-          if (clearCache) {
-            result = await apiClient.getAllEntities(entityName, false, true);
-          } else {
-            result = await apiClient.getAllEntities(entityName);
-          }
-        }
+                let result;
+                if (id) {
+                    if (clearCache) {
+                        result = await apiClient.getEntity(entityName, id, true);
+                    } else {
+                        result = await apiClient.getEntity(entityName, id);
+                    }
+                } else {
+                    if (clearCache) {
+                        result = await apiClient.getAllEntities(entityName, false, true);
+                    } else {
+                        result = await apiClient.getAllEntities(entityName);
+                    }
+                }
 
-        setData(result);
-        setIsUninitialized(false);
-      } catch (err) {
-        console.error(err, entityName);
-        setIsSuccess(false);
-        setIsError(true);
-        setError(err);
-      } finally {
-        if (data.length === 0 || clearCache) {
-          setClearCache(false);
-        }
+                setData(result);
+                setIsUninitialized(false);
+            } catch (err) {
+                console.error(err, entityName);
+                setIsSuccess(false);
+                setIsError(true);
+                setError(err);
+            } finally {
+                if (data.length === 0 || clearCache) {
+                    setClearCache(false);
+                }
 
-        setIsLoading(false);
-      }
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [entityName, id, refetchCount]);
+
+    /**
+     * Function to manually trigger a refetch of the data.
+     * @param {boolean} clearCache - Determines whether the cache should be cleared before refetching the data.
+     */
+    const refetch = (clearCache = false) => {
+        setClearCache(clearCache);
+        setRefetchCount(refetchCount + 1);
     };
 
-    fetchData();
-  }, [entityName, id, refetchCount]);
-
-  /**
-   * Function to manually trigger a refetch of the data.
-   * @param {boolean} clearCache - Determines whether the cache should be cleared before refetching the data.
-   */
-  const refetch = (clearCache = false) => {
-    setClearCache(clearCache);
-    setRefetchCount(refetchCount + 1);
-  };
-
-  return {
-    data,
-    error,
-    isLoading: isLoading,
-    isSuccess: isSuccess,
-    isError: isError,
-    isUninitialized: isUninitialized,
-    refetch,
-  };
+    return {
+        data,
+        error,
+        isLoading: isLoading,
+        isSuccess: isSuccess,
+        isError: isError,
+        isUninitialized: isUninitialized,
+        refetch,
+    };
 };
 
-export { useGetQuery, usePostQuery, usePutQuery, useDeleteQuery };
+export {useGetQuery, usePostQuery, usePutQuery, useDeleteQuery};
