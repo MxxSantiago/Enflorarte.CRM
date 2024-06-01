@@ -17,9 +17,11 @@ public class OrderValidator : AbstractValidator<Order>
             .MaximumLength(255).WithMessage("La longitud de la descripción tiene un máximo de 255 caracteres.");
 
         RuleFor(order => order.DeliveryDate)
+            .NotNull().WithMessage("La fecha de entrega es requerida.")
             .NotEmpty().WithMessage("La fecha de entrega es requerida.");
 
         RuleFor(order => order.OrderDate)
+            .NotNull().WithMessage("La fecha de entrega es requerida.")
             .NotEmpty().WithMessage("La fecha del pedido es requerida.");
 
         RuleFor(order => order.RecipientName)
