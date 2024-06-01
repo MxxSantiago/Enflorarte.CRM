@@ -30,11 +30,6 @@ const GridColumn = ({
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
   const { refetch: refetchTags } = useGetQuery("tag");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenUpdate,
-    onOpen: onOpenUpdate,
-    onClose: onCloseUpdate,
-  } = useDisclosure();
 
   return (
     <>
@@ -94,12 +89,9 @@ const GridColumn = ({
           ).map((order) => (
             <OrderCard
               isLoading={isLoading}
-              onOpenUpdate={onOpenUpdate}
               key={order.id}
               order={order}
               colorMode={colorMode}
-              isOpen={isOpenUpdate}
-              onClose={onCloseUpdate}
               arrangementData={arrangementData}
               responsibleData={responsibleData}
               communicationTypeData={communicationTypeData}
