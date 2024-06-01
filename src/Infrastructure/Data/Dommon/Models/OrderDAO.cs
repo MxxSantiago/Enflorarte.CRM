@@ -17,9 +17,13 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
 
     public async Task<List<Order>> GetWeekOrderAsync(DateTime week)
     {
-        return await _context.Order
-            .Where(a => a.OrderDate.Date >= week.Date && a.OrderDate.Date <= week.Date.AddDays(7))
+        var asd = await _context.Order.ToListAsync();
+        
+        var result =  await _context.Order
+            .Where(a => a.DeliveryDate.Date >= week.Date && a.DeliveryDate.Date <= week.Date.AddDays(7))
             .ToListAsync();
+        
+        return result;
     }
 
     public async Task<List<Order>> GetMonthOrderAsync(DateTime month)
@@ -90,21 +94,12 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
             .SingleAsync(a => a.Id == entity.Id);
 
         existingEntity.DeliveryDate = entity.DeliveryDate;
-        existingEntity.DeliveryFrom = entity.DeliveryFrom;
-        existingEntity.DeliveryUntil = entity.DeliveryUntil;
         existingEntity.OrderDate = entity.OrderDate;
         existingEntity.PaymentStatus = entity.PaymentStatus;
         existingEntity.Address = entity.Address;
-        existingEntity.CommandGenerated = entity.CommandGenerated;
         existingEntity.Description = entity.Description;
         existingEntity.ReferenceImage = entity.ReferenceImage;
-        existingEntity.ResultImage = entity.ResultImage;
         existingEntity.OrderPrice = entity.OrderPrice;
-        existingEntity.RealizationPrice = entity.RealizationPrice;
-        existingEntity.ShippingPrice = entity.ShippingPrice;
-        existingEntity.MoneyPaid = entity.MoneyPaid;
-        existingEntity.IsPaid = entity.IsPaid;
-        existingEntity.WasDelivered = entity.WasDelivered;
         existingEntity.RecipientName = entity.RecipientName;
         existingEntity.RecipientCellphoneNumber = entity.RecipientCellphoneNumber;
 

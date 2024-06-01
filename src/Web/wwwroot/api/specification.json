@@ -2670,41 +2670,13 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-              "deliveryDate": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "deliveryFrom": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "deliveryUntil": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "responsible": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Responsible"
-                }
-              },
               "orderDate": {
                 "type": "string",
                 "format": "date-time"
               },
-              "deliveryType": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/DeliveryType"
-                }
-              },
-              "paymentStatus": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/PaymentStatus"
-                  }
-                ]
+              "deliveryDate": {
+                "type": "string",
+                "format": "date-time"
               },
               "orderStatus": {
                 "nullable": true,
@@ -2714,12 +2686,17 @@
                   }
                 ]
               },
+              "paymentStatus": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaymentStatus"
+                  }
+                ]
+              },
               "address": {
                 "type": "string",
                 "nullable": true
-              },
-              "commandGenerated": {
-                "type": "boolean"
               },
               "description": {
                 "type": "string",
@@ -2729,9 +2706,30 @@
                 "type": "string",
                 "nullable": true
               },
-              "resultImage": {
+              "recipientName": {
                 "type": "string",
                 "nullable": true
+              },
+              "recipientCellphoneNumber": {
+                "type": "string",
+                "nullable": true
+              },
+              "orderPrice": {
+                "type": "number",
+                "format": "decimal",
+                "nullable": true
+              },
+              "responsible": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Responsible"
+                }
+              },
+              "deliveryType": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DeliveryType"
+                }
               },
               "arrangement": {
                 "type": "array",
@@ -2745,45 +2743,11 @@
                   "$ref": "#/components/schemas/CommunicationType"
                 }
               },
-              "orderPrice": {
-                "type": "number",
-                "format": "decimal",
-                "nullable": true
-              },
-              "realizationPrice": {
-                "type": "number",
-                "format": "decimal",
-                "nullable": true
-              },
-              "shippingPrice": {
-                "type": "number",
-                "format": "decimal",
-                "nullable": true
-              },
-              "moneyPaid": {
-                "type": "number",
-                "format": "decimal",
-                "nullable": true
-              },
-              "isPaid": {
-                "type": "boolean"
-              },
-              "wasDelivered": {
-                "type": "boolean"
-              },
               "branch": {
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Branch"
                 }
-              },
-              "recipientName": {
-                "type": "string",
-                "nullable": true
-              },
-              "recipientCellphoneNumber": {
-                "type": "string",
-                "nullable": true
               },
               "tags": {
                 "type": "array",
@@ -2793,29 +2757,6 @@
               }
             }
           }
-        ]
-      },
-      "Responsible": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/LookupEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "PaymentStatus": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Paid",
-          "Pending"
-        ],
-        "enum": [
-          0,
-          1
         ]
       },
       "OrderStatus": {
@@ -2834,6 +2775,29 @@
           2,
           3,
           4
+        ]
+      },
+      "PaymentStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Paid",
+          "Pending"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "Responsible": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LookupEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
         ]
       },
       "Tag": {

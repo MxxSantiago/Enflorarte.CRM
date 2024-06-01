@@ -150,7 +150,8 @@ class ApiClient {
     entityName: string,
     customMethodName: string,
     refresh: boolean = false,
-    args: any
+    args: any,
+    useEntityGeneralCache: boolean = false
   ) {
     if (!this.clients[entityName]) {
       throw new Error("Invalid entity name");
@@ -160,9 +161,14 @@ class ApiClient {
     const method = client[entityName + "_" + customMethodName];
 
     if (typeof method === "function") {
-      const cacheKey = `${entityName}_${customMethodName}_${JSON.stringify(
-        args
-      )}`;
+      let cacheKey;
+
+      if (!useEntityGeneralCache) {
+        cacheKey = `${entityName}_${customMethodName}_${JSON.stringify(args)}`;
+      } else {
+        cacheKey = entityName;
+      }
+
       const cachedResult = this.cacheManager.getCachedResult(cacheKey, refresh);
 
       if (cachedResult) {
@@ -249,6 +255,20 @@ export function removeReferenceObjectProperties(payload: any) {
   return newPayload;
 }
 
+export function convertEmptyStringToNullInObject(obj: { [key: string]: any }): {
+  [key: string]: any;
+} {
+  const newObj = { ...obj };
+
+  Object.keys(newObj).forEach((key) => {
+    if (newObj[key] === "") {
+      newObj[key] = null;
+    }
+  });
+
+  return newObj;
+}
+
 export function createLookupEntityPayload(properties: any) {
   const payload = {
     ...Object.entries(properties).reduce(
@@ -256,7 +276,8 @@ export function createLookupEntityPayload(properties: any) {
         ...acc,
         [key]:
           key.toLowerCase().indexOf("id") !== -1 &&
-          key !== "id" && key !== "moneyPaid" &&
+          key !== "id" &&
+          key !== "moneyPaid" &&
           key[key.toLowerCase().indexOf("id") - 1] ===
             key[key.toLowerCase().indexOf("id") - 1].toUpperCase()
             ? Number(value)
@@ -267,5 +288,6 @@ export function createLookupEntityPayload(properties: any) {
     id: 0,
   };
   removeReferenceIdProperties(payload);
+  convertEmptyStringToNullInObject(payload);
   return payload;
 }

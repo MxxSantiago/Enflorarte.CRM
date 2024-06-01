@@ -8,12 +8,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import CreateOrder from "./CreateOrder";
-import UpdateOrder from "./UpdateOrder";
+import CreateOrder from "./CreateOrder.tsx";
+import UpdateOrder from "./UpdateOrder.tsx";
 import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
 
 const GridColumn = ({
+  dateLabel,
   date,
+  refetch,
   orders,
   colorMode,
   isLoading,
@@ -26,7 +28,7 @@ const GridColumn = ({
 }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
-  const { refetch } = useGetQuery("tag");
+  const { refetch: refetchTags } = useGetQuery("tag");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenUpdate,
@@ -65,7 +67,7 @@ const GridColumn = ({
           backgroundColor={backColor}
         >
           <Text fontSize="xl" margin={0}>
-            {date}
+            {dateLabel}
           </Text>
           <Tag
             size="lg"
@@ -92,25 +94,39 @@ const GridColumn = ({
           ).map((order) => (
             <OrderCard
               isLoading={isLoading}
+              onOpenUpdate={onOpenUpdate}
               key={order.id}
               order={order}
               colorMode={colorMode}
+              isOpen={isOpenUpdate}
+              onClose={onCloseUpdate}
+              arrangementData={arrangementData}
+              responsibleData={responsibleData}
+              communicationTypeData={communicationTypeData}
+              branchData={branchData}
+              deliveryTypeData={deliveryTypeData}
+              tagData={tagData}
+              refetch={refetch}
+              refetchTags={refetchTags}
             />
           ))}
         </Box>
       </GridItem>
-      <CreateOrder
-        isOpen={isOpen}
-        onClose={onClose}
-        arrangementData={arrangementData}
-        responsibleData={responsibleData}
-        communicationTypeData={communicationTypeData}
-        branchData={branchData}
-        deliveryTypeData={deliveryTypeData}
-        tagData={tagData}
-        refetch={refetch}
-      />
-      <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate} />
+      {isLoading ? null : (
+        <CreateOrder
+          isOpen={isOpen}
+          date={date}
+          onClose={onClose}
+          arrangementData={arrangementData}
+          responsibleData={responsibleData}
+          communicationTypeData={communicationTypeData}
+          branchData={branchData}
+          deliveryTypeData={deliveryTypeData}
+          tagData={tagData}
+          refetch={refetch}
+          refetchTags={refetchTags}
+        />
+      )}
     </>
   );
 };

@@ -20,7 +20,7 @@ const WeekHandler = ({ orders, children }) => {
 
   const startOfWeek = useMemo(() => {
     const date = new Date();
-    date.setDate(date.getDate() - date.getDay() + currentWeek * 7);
+    date.setDate(date.getDate() + currentWeek * 7);
     return date;
   }, [currentWeek]);
 
@@ -36,10 +36,24 @@ const WeekHandler = ({ orders, children }) => {
     return new Array(7).fill(null).map((_, index) => {
       return orders.filter((order) => {
         const deliveryDate = new Date(order.deliveryDate);
-        return deliveryDate.getDay() === index + 1;
+        deliveryDate.setHours(0, 0, 0, 0);
+
+        const startOfWeekMidnight = new Date(startOfWeek);
+        startOfWeekMidnight.setHours(0, 0, 0, 0);
+
+        const diffInDays = Math.floor(
+          (deliveryDate - startOfWeekMidnight) / (1000 * 60 * 60 * 24)
+        );
+        return diffInDays === index;
       });
     });
-  }, [orders, currentWeek]);
+  }, [orders, startOfWeek]);
+
+  const currentDayIndex = startOfWeek.getDay() - 1;
+  const adjustedDaysOfWeek = [
+    ...daysOfWeek.slice(currentDayIndex),
+    ...daysOfWeek.slice(0, currentDayIndex),
+  ];
 
   return children({
     currentWeek,
@@ -48,6 +62,7 @@ const WeekHandler = ({ orders, children }) => {
     ordersByDay,
     startOfWeek,
     weekDates,
+    daysOfWeek: adjustedDaysOfWeek,
   });
 };
 
@@ -92,6 +107,7 @@ const DragHandler = ({ children }) => {
 const WeeklyOrdersKanban = ({
   colorMode,
   orders,
+  refetch,
   isLoading,
   arrangementData,
   responsibleData,
@@ -102,7 +118,7 @@ const WeeklyOrdersKanban = ({
 }) => {
   return (
     <WeekHandler orders={orders}>
-      {({ weekDates, ordersByDay }) => (
+      {({ weekDates, ordersByDay, daysOfWeek }) => (
         <DragHandler>
           {({
             isDragging,
@@ -134,14 +150,16 @@ const WeeklyOrdersKanban = ({
               ref={gridRef}
             >
               {ordersByDay.map((ordersForDay, index) => {
-                const dateLabel = `${daysOfWeek[index]} ${
-                  weekDates[index].getDate() + 1
-                }/${weekDates[index].getMonth() + 1}`;
+                const dateLabel = `${daysOfWeek[index]} ${weekDates[
+                  index
+                ].getDate()}/${weekDates[index].getMonth() + 1}`;
 
                 return (
                   <GridColumn
-                    key={index}
-                    date={dateLabel}
+                    key={index + dateLabel}
+                    dateLabel={dateLabel}
+                    refetch={refetch}
+                    date={weekDates[index - 1]}
                     orders={ordersForDay}
                     colorMode={colorMode}
                     isLoading={isLoading}

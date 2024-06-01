@@ -3863,30 +3863,21 @@ export interface IDeliveryType extends ILookupEntity {
 }
 
 export class Order extends BaseEntity implements IOrder {
-    deliveryDate?: Date;
-    deliveryFrom?: Date;
-    deliveryUntil?: Date;
-    responsible?: Responsible[];
     orderDate?: Date;
-    deliveryType?: DeliveryType[];
-    paymentStatus?: PaymentStatus | undefined;
+    deliveryDate?: Date;
     orderStatus?: OrderStatus | undefined;
+    paymentStatus?: PaymentStatus | undefined;
     address?: string | undefined;
-    commandGenerated?: boolean;
     description?: string | undefined;
     referenceImage?: string | undefined;
-    resultImage?: string | undefined;
-    arrangement?: Arrangement[];
-    communicationType?: CommunicationType[];
-    orderPrice?: number | undefined;
-    realizationPrice?: number | undefined;
-    shippingPrice?: number | undefined;
-    moneyPaid?: number | undefined;
-    isPaid?: boolean;
-    wasDelivered?: boolean;
-    branch?: Branch[];
     recipientName?: string | undefined;
     recipientCellphoneNumber?: string | undefined;
+    orderPrice?: number | undefined;
+    responsible?: Responsible[];
+    deliveryType?: DeliveryType[];
+    arrangement?: Arrangement[];
+    communicationType?: CommunicationType[];
+    branch?: Branch[];
     tags?: Tag[];
 
     constructor(data?: IOrder) {
@@ -3896,27 +3887,26 @@ export class Order extends BaseEntity implements IOrder {
     override init(_data?: any) {
         super.init(_data);
         if (_data) {
+            this.orderDate = _data["orderDate"] ? new Date(_data["orderDate"].toString()) : <any>undefined;
             this.deliveryDate = _data["deliveryDate"] ? new Date(_data["deliveryDate"].toString()) : <any>undefined;
-            this.deliveryFrom = _data["deliveryFrom"] ? new Date(_data["deliveryFrom"].toString()) : <any>undefined;
-            this.deliveryUntil = _data["deliveryUntil"] ? new Date(_data["deliveryUntil"].toString()) : <any>undefined;
+            this.orderStatus = _data["orderStatus"];
+            this.paymentStatus = _data["paymentStatus"];
+            this.address = _data["address"];
+            this.description = _data["description"];
+            this.referenceImage = _data["referenceImage"];
+            this.recipientName = _data["recipientName"];
+            this.recipientCellphoneNumber = _data["recipientCellphoneNumber"];
+            this.orderPrice = _data["orderPrice"];
             if (Array.isArray(_data["responsible"])) {
                 this.responsible = [] as any;
                 for (let item of _data["responsible"])
                     this.responsible!.push(Responsible.fromJS(item));
             }
-            this.orderDate = _data["orderDate"] ? new Date(_data["orderDate"].toString()) : <any>undefined;
             if (Array.isArray(_data["deliveryType"])) {
                 this.deliveryType = [] as any;
                 for (let item of _data["deliveryType"])
                     this.deliveryType!.push(DeliveryType.fromJS(item));
             }
-            this.paymentStatus = _data["paymentStatus"];
-            this.orderStatus = _data["orderStatus"];
-            this.address = _data["address"];
-            this.commandGenerated = _data["commandGenerated"];
-            this.description = _data["description"];
-            this.referenceImage = _data["referenceImage"];
-            this.resultImage = _data["resultImage"];
             if (Array.isArray(_data["arrangement"])) {
                 this.arrangement = [] as any;
                 for (let item of _data["arrangement"])
@@ -3927,19 +3917,11 @@ export class Order extends BaseEntity implements IOrder {
                 for (let item of _data["communicationType"])
                     this.communicationType!.push(CommunicationType.fromJS(item));
             }
-            this.orderPrice = _data["orderPrice"];
-            this.realizationPrice = _data["realizationPrice"];
-            this.shippingPrice = _data["shippingPrice"];
-            this.moneyPaid = _data["moneyPaid"];
-            this.isPaid = _data["isPaid"];
-            this.wasDelivered = _data["wasDelivered"];
             if (Array.isArray(_data["branch"])) {
                 this.branch = [] as any;
                 for (let item of _data["branch"])
                     this.branch!.push(Branch.fromJS(item));
             }
-            this.recipientName = _data["recipientName"];
-            this.recipientCellphoneNumber = _data["recipientCellphoneNumber"];
             if (Array.isArray(_data["tags"])) {
                 this.tags = [] as any;
                 for (let item of _data["tags"])
@@ -3957,27 +3939,26 @@ export class Order extends BaseEntity implements IOrder {
 
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["orderDate"] = this.orderDate ? this.orderDate.toISOString() : <any>undefined;
         data["deliveryDate"] = this.deliveryDate ? this.deliveryDate.toISOString() : <any>undefined;
-        data["deliveryFrom"] = this.deliveryFrom ? this.deliveryFrom.toISOString() : <any>undefined;
-        data["deliveryUntil"] = this.deliveryUntil ? this.deliveryUntil.toISOString() : <any>undefined;
+        data["orderStatus"] = this.orderStatus;
+        data["paymentStatus"] = this.paymentStatus;
+        data["address"] = this.address;
+        data["description"] = this.description;
+        data["referenceImage"] = this.referenceImage;
+        data["recipientName"] = this.recipientName;
+        data["recipientCellphoneNumber"] = this.recipientCellphoneNumber;
+        data["orderPrice"] = this.orderPrice;
         if (Array.isArray(this.responsible)) {
             data["responsible"] = [];
             for (let item of this.responsible)
                 data["responsible"].push(item.toJSON());
         }
-        data["orderDate"] = this.orderDate ? this.orderDate.toISOString() : <any>undefined;
         if (Array.isArray(this.deliveryType)) {
             data["deliveryType"] = [];
             for (let item of this.deliveryType)
                 data["deliveryType"].push(item.toJSON());
         }
-        data["paymentStatus"] = this.paymentStatus;
-        data["orderStatus"] = this.orderStatus;
-        data["address"] = this.address;
-        data["commandGenerated"] = this.commandGenerated;
-        data["description"] = this.description;
-        data["referenceImage"] = this.referenceImage;
-        data["resultImage"] = this.resultImage;
         if (Array.isArray(this.arrangement)) {
             data["arrangement"] = [];
             for (let item of this.arrangement)
@@ -3988,19 +3969,11 @@ export class Order extends BaseEntity implements IOrder {
             for (let item of this.communicationType)
                 data["communicationType"].push(item.toJSON());
         }
-        data["orderPrice"] = this.orderPrice;
-        data["realizationPrice"] = this.realizationPrice;
-        data["shippingPrice"] = this.shippingPrice;
-        data["moneyPaid"] = this.moneyPaid;
-        data["isPaid"] = this.isPaid;
-        data["wasDelivered"] = this.wasDelivered;
         if (Array.isArray(this.branch)) {
             data["branch"] = [];
             for (let item of this.branch)
                 data["branch"].push(item.toJSON());
         }
-        data["recipientName"] = this.recipientName;
-        data["recipientCellphoneNumber"] = this.recipientCellphoneNumber;
         if (Array.isArray(this.tags)) {
             data["tags"] = [];
             for (let item of this.tags)
@@ -4012,31 +3985,35 @@ export class Order extends BaseEntity implements IOrder {
 }
 
 export interface IOrder extends IBaseEntity {
-    deliveryDate?: Date;
-    deliveryFrom?: Date;
-    deliveryUntil?: Date;
-    responsible?: Responsible[];
     orderDate?: Date;
-    deliveryType?: DeliveryType[];
-    paymentStatus?: PaymentStatus | undefined;
+    deliveryDate?: Date;
     orderStatus?: OrderStatus | undefined;
+    paymentStatus?: PaymentStatus | undefined;
     address?: string | undefined;
-    commandGenerated?: boolean;
     description?: string | undefined;
     referenceImage?: string | undefined;
-    resultImage?: string | undefined;
-    arrangement?: Arrangement[];
-    communicationType?: CommunicationType[];
-    orderPrice?: number | undefined;
-    realizationPrice?: number | undefined;
-    shippingPrice?: number | undefined;
-    moneyPaid?: number | undefined;
-    isPaid?: boolean;
-    wasDelivered?: boolean;
-    branch?: Branch[];
     recipientName?: string | undefined;
     recipientCellphoneNumber?: string | undefined;
+    orderPrice?: number | undefined;
+    responsible?: Responsible[];
+    deliveryType?: DeliveryType[];
+    arrangement?: Arrangement[];
+    communicationType?: CommunicationType[];
+    branch?: Branch[];
     tags?: Tag[];
+}
+
+export enum OrderStatus {
+    Pending = 0,
+    InProgress = 1,
+    Ready = 2,
+    Delivered = 3,
+    Cancelled = 4,
+}
+
+export enum PaymentStatus {
+    Paid = 0,
+    Pending = 1,
 }
 
 export class Responsible extends LookupEntity implements IResponsible {
@@ -4064,19 +4041,6 @@ export class Responsible extends LookupEntity implements IResponsible {
 }
 
 export interface IResponsible extends ILookupEntity {
-}
-
-export enum PaymentStatus {
-    Paid = 0,
-    Pending = 1,
-}
-
-export enum OrderStatus {
-    Pending = 0,
-    InProgress = 1,
-    Ready = 2,
-    Delivered = 3,
-    Cancelled = 4,
 }
 
 export class Tag extends BaseEntity implements ITag {

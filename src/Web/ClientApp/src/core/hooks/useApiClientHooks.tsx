@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { apiClient } from "../helpers/web-api-client.helper.ts";
+import {
+  apiClient,
+  convertEmptyStringToNullInObject,
+  createLookupEntityPayload,
+} from "../helpers/web-api-client.helper.ts";
 import { useToast } from "@chakra-ui/react";
 
 interface CommandResponse {
@@ -131,9 +135,11 @@ const useCommandQuery = (command) => {
     setIsError(false);
     try {
       const result = await command(...args);
+      console.log(result);
       setData(result);
       setIsSuccess(true);
     } catch (err) {
+      console.error(err);
       setError(err);
       setIsError(true);
     } finally {
@@ -153,7 +159,10 @@ const useCommandQuery = (command) => {
 
 const usePostQuery = (entityName: string, entity: any) => {
   const { execute, ...rest } = useCommandQuery(apiClient.createEntity);
-  return { execute: () => execute(entityName, entity), ...rest };
+  return {
+    execute: () => execute(entityName, createLookupEntityPayload(entity)),
+    ...rest,
+  };
 };
 
 const usePutQuery = (entityName, entity) => {
@@ -162,7 +171,7 @@ const usePutQuery = (entityName, entity) => {
   return {
     execute: () =>
       execute(entityName, {
-        ...entity,
+        ...convertEmptyStringToNullInObject(entity),
         id: entity.id,
       }),
     ...rest,

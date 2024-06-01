@@ -30,9 +30,7 @@ interface Result {
  */
 const useGetOrdersByPeriod = (
   period: Period,
-  fromDate: Date = new Date(
-    new Date().setHours(0, 0, 0, 0) - 7 * 24 * 60 * 60 * 1000
-  )
+  fromDate: Date = new Date()
 ): Result => {
   const entityName = "order";
   const restMethod = `Get${period}Orders`;
@@ -76,14 +74,16 @@ const useGetOrdersByPeriod = (
             entityName,
             restMethod,
             true,
-            fromDate
+            fromDate,
+            true
           );
         } else {
           result = await apiClient.executeCustomMethod(
             entityName,
             restMethod,
             false,
-            fromDate
+            fromDate,
+            true
           );
         }
 
