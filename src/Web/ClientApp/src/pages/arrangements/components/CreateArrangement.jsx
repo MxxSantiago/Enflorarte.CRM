@@ -51,7 +51,7 @@ const CreateArrangmentTemplate = ({
     isTemplate: isTemplate,
   });
 
-  const { isSuccess, execute } = usePostQuery(
+  const { isSuccess, execute, isLoading } = usePostQuery(
     "arrangement",
     createLookupEntityPayload(properties)
   );
@@ -223,7 +223,7 @@ const CreateArrangmentTemplate = ({
           </Grid>
         </ModalBody>
         <ModalFooter>
-          <Button mr={3} onClick={onClose}>
+          <Button mr={3} onClick={onClose} isLoading={isLoading}>
             {cancelChangesText}
           </Button>
           <Button colorScheme={saveColorScheme} onClick={handleCreate}>
