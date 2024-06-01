@@ -37,7 +37,7 @@ const AppBody = () => {
           <Route
             key={index}
             path={path}
-            element={ProtectedRoute(roles, element)}
+            element={<ProtectedRoute roles={roles} element={element} />}
           />
         );
       })}

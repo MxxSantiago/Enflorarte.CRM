@@ -9,6 +9,7 @@ import {
   MenuItem,
   ButtonGroup,
   Image,
+  Skeleton,
 } from "@chakra-ui/react";
 import { RiAlignJustify } from "react-icons/ri";
 import { ChakraLink } from "../shared/index.js";
@@ -21,12 +22,13 @@ import {
 import { Link } from "react-router-dom";
 import ToggleTheme from "./ToggleTheme.jsx";
 import mainRoutes from "../../AppRoutes.js";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserSessionContext } from "../../core/auth/UserSessionContext.jsx";
 const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
 const Header = ({ showSidebar }) => {
   const { userHasRole } = useContext(UserSessionContext);
+  const [imageLoading, setImageLoading] = useState(true);
 
   return (
     <Card
@@ -41,14 +43,24 @@ const Header = ({ showSidebar }) => {
       <Flex direction={{ base: "none", md: "row" }} alignItems="center">
         {!showSidebar && (
           <Flex>
-            <Image
-              src={logo}
-              ml={5}
-              height={{
+            <Skeleton
+              isLoaded={!imageLoading}
+              borderRadius="full"
+              ml={10}
+              width={{
                 base: `calc(${headerMobileHeight} - 20px)`,
                 md: `calc(${headerDesktopHeight} - 20px)`,
               }}
-            />
+            >
+              <Image
+                src={logo}
+                onLoad={() => setImageLoading(false)}
+                height={{
+                  base: `calc(${headerMobileHeight} - 20px)`,
+                  md: `calc(${headerDesktopHeight} - 20px)`,
+                }}
+              />
+            </Skeleton>
           </Flex>
         )}
         <Stack

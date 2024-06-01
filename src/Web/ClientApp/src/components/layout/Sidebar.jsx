@@ -1,5 +1,13 @@
-import React, { useContext } from "react";
-import { Box, Card, Flex, Button, Image, Stack } from "@chakra-ui/react";
+import React, { useContext, useState } from "react";
+import {
+  Box,
+  Card,
+  Flex,
+  Button,
+  Image,
+  Stack,
+  Skeleton,
+} from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   primaryColorScheme,
@@ -13,6 +21,7 @@ const Sidebar = ({ routes }) => {
   const { userHasRole } = useContext(UserSessionContext);
   const location = useLocation();
   const navigate = useNavigate();
+  const [imageLoading, setImageLoading] = useState(true);
 
   return (
     <Card
@@ -32,14 +41,23 @@ const Sidebar = ({ routes }) => {
           md: "18%",
         }}
       >
-        <Image
-          src={logo}
-          height={{
+        <Skeleton
+          isLoaded={!imageLoading}
+          width={{
             base: "70%",
             md: "80%",
           }}
-          fallbackSrc="https://via.placeholder.com/150"
-        />
+        >
+          <Image
+            onLoad={() => setImageLoading(false)}
+            src={logo}
+            height={{
+              base: "70%",
+              md: "80%",
+            }}
+            fallbackSrc="https://via.placeholder.com/150"
+          />
+        </Skeleton>
       </Flex>
       <Stack spacing={0}>
         {routes
