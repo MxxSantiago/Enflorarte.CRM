@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder.tsx";
-import UpdateOrder from "./UpdateOrder.tsx";
 import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
+import { memo } from "react";
 
 const GridColumn = ({
   dateLabel,
@@ -131,4 +131,5 @@ const GridColumn = ({
   );
 };
 
-export default GridColumn;
+const MemoizedGridColumn = memo(GridColumn);
+export default MemoizedGridColumn;

@@ -1,6 +1,7 @@
 import GridColumn from "./GridColumn";
 import { Grid } from "@chakra-ui/react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import useGetOrdersByPeriod from "../../hooks/useGetOrdersByPeriod.tsx";
 
 const daysOfWeek = [
   "Lunes",
@@ -22,7 +23,7 @@ const WeekHandler = ({ orders, children }) => {
     const date = new Date();
     date.setDate(date.getDate() + currentWeek * 7);
     return date;
-  }, [currentWeek]);
+  }, [orders, currentWeek]);
 
   const weekDates = useMemo(() => {
     return new Array(7).fill(null).map((_, index) => {
@@ -47,7 +48,7 @@ const WeekHandler = ({ orders, children }) => {
         return diffInDays === index;
       });
     });
-  }, [orders, startOfWeek]);
+  }, [startOfWeek]);
 
   const currentDayIndex = startOfWeek.getDay() - 1;
   const adjustedDaysOfWeek = [
@@ -72,27 +73,30 @@ const DragHandler = ({ children }) => {
   const [scrollLeft, setScrollLeft] = useState(0);
   const gridRef = useRef();
 
-  const onMouseDown = (e) => {
+  const onMouseDown = useCallback((e) => {
     setIsDragging(true);
     setStartX(e.pageX - gridRef.current.offsetLeft);
     setScrollLeft(gridRef.current.scrollLeft);
-  };
+  }, []);
 
-  const onMouseLeave = () => {
+  const onMouseLeave = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
-  const onMouseUp = () => {
+  const onMouseUp = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
-  const onMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - gridRef.current.offsetLeft;
-    const walk = x - startX;
-    gridRef.current.scrollLeft = scrollLeft - walk;
-  };
+  const onMouseMove = useCallback(
+    (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - gridRef.current.offsetLeft;
+      const walk = x - startX;
+      gridRef.current.scrollLeft = scrollLeft - walk;
+    },
+    [isDragging, startX, scrollLeft]
+  );
 
   return children({
     isDragging,
@@ -106,18 +110,22 @@ const DragHandler = ({ children }) => {
 
 const WeeklyOrdersKanban = ({
   colorMode,
-  orders,
-  refetch,
-  isLoading,
   arrangementData,
   responsibleData,
   communicationTypeData,
+  isLoading,
   branchData,
   deliveryTypeData,
   tagData,
 }) => {
+  const {
+    data,
+    isLoading: isOrdersLoading,
+    refetch,
+  } = useGetOrdersByPeriod("Week");
+
   return (
-    <WeekHandler orders={orders}>
+    <WeekHandler orders={data}>
       {({ weekDates, ordersByDay, daysOfWeek }) => (
         <DragHandler>
           {({
@@ -162,7 +170,7 @@ const WeeklyOrdersKanban = ({
                     date={weekDates[index - 1]}
                     orders={ordersForDay}
                     colorMode={colorMode}
-                    isLoading={isLoading}
+                    isLoading={isLoading || isOrdersLoading}
                     arrangementData={arrangementData}
                     responsibleData={responsibleData}
                     communicationTypeData={communicationTypeData}

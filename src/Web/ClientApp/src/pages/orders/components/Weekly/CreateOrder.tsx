@@ -133,17 +133,15 @@ const CreateOrder = ({
     initializeMockProperties();
   }, [isOpen]);
 
-  const { isSuccess, execute } = usePostQuery(
+  const { isSuccess, execute, isLoading } = usePostQuery(
     "order",
-    createLookupEntityPayload({
-      ...properties,
-    })
+    createLookupEntityPayload(properties)
   );
 
   useEffect(() => {
     if (isSuccess) {
-      refetch(true);
       onClose();
+      refetch();
     }
   }, [isSuccess]);
 
@@ -491,7 +489,11 @@ const CreateOrder = ({
             <Button mr={3} onClick={onClose}>
               {cancelChangesText}
             </Button>
-            <Button colorScheme={saveColorScheme} onClick={handleCreate}>
+            <Button
+              isLoading={isLoading}
+              colorScheme={saveColorScheme}
+              onClick={handleCreate}
+            >
               {saveChangesText}
             </Button>
           </Box>

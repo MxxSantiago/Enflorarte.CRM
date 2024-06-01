@@ -61,7 +61,7 @@ interface UpdateOrderProps {
   deliveryTypeData: DeliveryType[];
   responsibleData: Responsible[];
   branchData: Branch[];
-  refetch: (clearCache: boolean) => void;
+  refetch: (clearCache?: boolean) => void;
   communicationTypeData: CommunicationType[];
   tagData: Tag[];
 }
@@ -78,11 +78,16 @@ const UpdateOrder = ({
   communicationTypeData,
   tagData,
 }: UpdateOrderProps) => {
+  console.log("opened order", order);
   const [deliveryDate, setDeliveryDate] = useState(
-    order.deliveryDate?.toISOString().slice(0, 16)
+    typeof order.deliveryDate === "string"
+      ? order.deliveryDate
+      : order.deliveryDate?.toISOString().slice(0, 16)
   );
   const [orderDate, setOrderDate] = useState(
-    order.orderDate?.toISOString().slice(0, 16)
+    typeof order.orderDate === "string"
+      ? order.orderDate
+      : order.orderDate?.toISOString().slice(0, 16)
   );
 
   const cancelRef = React.useRef();
@@ -128,27 +133,34 @@ const UpdateOrder = ({
     setImageLoading(true);
   }, [isOpen]);
 
-  const { isSuccess, execute } = usePutQuery("order", {
+  const {
+    isSuccess,
+    execute,
+    isLoading: isUpdateLoading,
+  } = usePutQuery("order", {
     ...properties,
     deliveryDate: new Date(deliveryDate as any),
     orderDate: new Date(orderDate as any),
   });
 
-  const { isSuccess: isDeleteSuccess, execute: deleteEntity } = useDeleteQuery(
-    "order",
-    order.id
-  );
+  const {
+    isSuccess: isDeleteSuccess,
+    execute: deleteEntity,
+    isLoading: isDeleteLoading,
+  } = useDeleteQuery("order", order.id);
+
+  const isLoading = isUpdateLoading || isDeleteLoading;
 
   useEffect(() => {
     if (isSuccess) {
-      refetch(true);
+      refetch();
       onClose();
     }
   }, [isSuccess]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
-      refetch(true);
+      refetch();
     }
     onClose();
   }, [isDeleteSuccess]);
@@ -546,8 +558,15 @@ const UpdateOrder = ({
                 </AlertDialogBody>
 
                 <AlertDialogFooter>
-                  <Button onClick={onCloseDelete}>{cancelChangesText}</Button>
-                  <Button colorScheme="red" onClick={deleteEntity} ml={3}>
+                  <Button isDisabled={isDeleteLoading} onClick={onCloseDelete}>
+                    {cancelChangesText}
+                  </Button>
+                  <Button
+                    isDisabled={isDeleteLoading}
+                    colorScheme="red"
+                    onClick={deleteEntity}
+                    ml={3}
+                  >
                     {deleteText}
                   </Button>
                 </AlertDialogFooter>
@@ -556,10 +575,14 @@ const UpdateOrder = ({
           </AlertDialog>
 
           <Box display="flex">
-            <Button mr={3} onClick={onClose}>
+            <Button isDisabled={isUpdateLoading} mr={3} onClick={onClose}>
               {cancelChangesText}
             </Button>
-            <Button colorScheme={saveColorScheme} onClick={handleUpdate}>
+            <Button
+              colorScheme={saveColorScheme}
+              onClick={handleUpdate}
+              isLoading={isLoading}
+            >
               {saveChangesText}
             </Button>
           </Box>
