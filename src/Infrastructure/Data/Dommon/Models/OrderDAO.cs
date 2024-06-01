@@ -20,7 +20,7 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
         var asd = await _context.Order.ToListAsync();
         
         var result =  await _context.Order
-            .Where(a => a.DeliveryDate.Date >= week.Date && a.DeliveryDate.Date <= week.Date.AddDays(7))
+            .Where(a => a.DeliveryDate.Date >= week.Date && a.DeliveryDate.Date < week.Date.AddDays(7))
             .ToListAsync();
         
         return result;

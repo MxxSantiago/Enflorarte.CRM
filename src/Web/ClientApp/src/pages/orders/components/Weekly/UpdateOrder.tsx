@@ -78,7 +78,6 @@ const UpdateOrder = ({
   communicationTypeData,
   tagData,
 }: UpdateOrderProps) => {
-  console.log("opened order", order);
   const [deliveryDate, setDeliveryDate] = useState(
     typeof order.deliveryDate === "string"
       ? order.deliveryDate

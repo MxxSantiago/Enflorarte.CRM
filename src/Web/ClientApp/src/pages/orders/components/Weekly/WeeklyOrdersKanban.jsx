@@ -45,6 +45,7 @@ const WeekHandler = ({ orders, children }) => {
         const diffInDays = Math.floor(
           (deliveryDate - startOfWeekMidnight) / (1000 * 60 * 60 * 24)
         );
+
         return diffInDays === index;
       });
     });
@@ -167,7 +168,7 @@ const WeeklyOrdersKanban = ({
                     key={index + dateLabel}
                     dateLabel={dateLabel}
                     refetch={refetch}
-                    date={weekDates[index - 1]}
+                    date={weekDates[index]}
                     orders={ordersForDay}
                     colorMode={colorMode}
                     isLoading={isLoading || isOrdersLoading}

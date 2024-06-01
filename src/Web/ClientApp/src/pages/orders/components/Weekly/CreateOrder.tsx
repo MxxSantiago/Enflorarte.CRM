@@ -35,6 +35,7 @@ import {
   saveChangesText,
   saveColorScheme,
 } from "../../../../core/constants.ts";
+import { toLocalISOString } from "../../../../core/helpers/dates.helper.ts";
 
 const OrderEntity = new Order().toJSON();
 
@@ -77,8 +78,8 @@ const CreateOrder = ({
       tags: [tagData[0]],
       orderStatus: OrderStatus.Pending,
       referenceImage: picture,
-      orderDate: date?.toISOString().slice(0, 16),
-      deliveryDate: date?.toISOString().slice(0, 16),
+      orderDate: toLocalISOString(date),
+      deliveryDate: toLocalISOString(date),
       address: "Mexicali",
       recipientName: "Juan",
       recipientCellphoneNumber: "6861234567",

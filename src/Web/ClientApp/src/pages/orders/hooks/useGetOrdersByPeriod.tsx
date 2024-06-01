@@ -30,7 +30,7 @@ interface Result {
  */
 const useGetOrdersByPeriod = (
   period: Period,
-  fromDate: Date = new Date()
+  fromDate: Date = new Date(new Date().setDate(new Date().getDate() - 1))
 ): Result => {
   const entityName = "order";
   const restMethod = `Get${period}Orders`;
@@ -90,7 +90,6 @@ const useGetOrdersByPeriod = (
         setData(result);
         setIsUninitialized(false);
       } catch (err) {
-        console.error(err, entityName);
         setIsSuccess(false);
         setIsError(true);
         setError(err);
