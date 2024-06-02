@@ -209,7 +209,6 @@ const WeeklyOrdersKanban = ({
               paddingX={_paddingX}
               incrementWeek={incrementWeek}
               decrementWeek={decrementWeek}
-              _paddingX={_paddingX}
             />
           </>
         )}

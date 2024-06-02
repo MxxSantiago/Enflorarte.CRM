@@ -437,13 +437,6 @@ const UpdateOrder = ({
                         )
                       }
                     />
-                    <Box mt={3}>
-                      <Flex>
-                        <Button marginLeft="auto" colorScheme="gray" size="sm">
-                          Crear Arreglo
-                        </Button>
-                      </Flex>
-                    </Box>
                     <Text marginY={2} marginTop={8}>
                       Descripción
                     </Text>
