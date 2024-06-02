@@ -55,7 +55,7 @@ const ArrangementsView = () => {
     isFlowerVariantsLoading;
 
   useEffect(() => {
-    setFilteredArrangements(filteredArrangements);
+    setFilteredArrangements(arrangementsData);
   }, [arrangementsData]);
 
   return (

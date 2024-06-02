@@ -17,8 +17,6 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
 
     public async Task<List<Order>> GetWeekOrderAsync(DateTime week)
     {
-        var asd = await _context.Order.ToListAsync();
-        
         var result =  await _context.Order
             .Where(a => a.DeliveryDate.Date >= week.Date && a.DeliveryDate.Date < week.Date.AddDays(7))
             .ToListAsync();
@@ -29,7 +27,7 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
     public async Task<List<Order>> GetMonthOrderAsync(DateTime month)
     {
         return await _context.Order
-            .Where(a => a.OrderDate.Date >= month.Date && a.OrderDate.Date <= month.Date.AddMonths(1))
+            .Where(a => a.DeliveryDate.Date >= month.Date && a.DeliveryDate.Date <= month.Date.AddMonths(1))
             .ToListAsync();
     }
 

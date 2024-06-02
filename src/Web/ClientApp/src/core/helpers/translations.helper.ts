@@ -26,10 +26,10 @@
   true: "Disponible",
   false: "No disponible",
   pending: "Pendiente",
-  inprocess: "En proceso",
+  inprogress: "En progreso",
   ready: "Listo",
   delivered: "Entregado",
-  canceled: "Cancelado",
+  cancelled: "Cancelado",
   paid: "Pagado",
 };
 

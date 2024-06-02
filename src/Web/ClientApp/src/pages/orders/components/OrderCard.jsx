@@ -7,8 +7,8 @@ import {
   Skeleton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { getAppropiateTextColor } from "../../../../core/helpers/adjustColor.helper.ts";
-import UpdateOrder from "./UpdateOrder.tsx";
+import { getAppropiateTextColor } from "../../../core/helpers/adjustColor.helper.ts";
+import UpdateOrder from "./Weekly/UpdateOrder.tsx";
 
 const OrderCard = ({
   order,
@@ -20,9 +20,9 @@ const OrderCard = ({
   responsibleData,
   branchData,
   refetch,
-  refetchTags,
   communicationTypeData,
   tagData,
+  cacheKey,
   ...props
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -104,7 +104,7 @@ const OrderCard = ({
           deliveryTypeData={deliveryTypeData}
           tagData={tagData}
           refetch={refetch}
-          refetchTags={refetchTags}
+          cacheKey={cacheKey}
         />
       )}
     </>

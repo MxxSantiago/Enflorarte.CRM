@@ -135,11 +135,9 @@ const useCommandQuery = (command) => {
     setIsError(false);
     try {
       const result = await command(...args);
-      console.log(result);
       setData(result);
       setIsSuccess(true);
     } catch (err) {
-      console.error(err);
       setError(err);
       setIsError(true);
     } finally {
@@ -157,30 +155,35 @@ const useCommandQuery = (command) => {
   };
 };
 
-const usePostQuery = (entityName: string, entity: any) => {
+const usePostQuery = (entityName: string, entity: any, cacheKey?: string) => {
   const { execute, ...rest } = useCommandQuery(apiClient.createEntity);
   return {
-    execute: () => execute(entityName, createLookupEntityPayload(entity)),
+    execute: () =>
+      execute(entityName, createLookupEntityPayload(entity), cacheKey),
     ...rest,
   };
 };
 
-const usePutQuery = (entityName, entity) => {
+const usePutQuery = (entityName: string, entity: any, cacheKey?: string) => {
   const { execute, ...rest } = useCommandQuery(apiClient.updateEntity);
 
   return {
     execute: () =>
-      execute(entityName, {
-        ...convertEmptyStringToNullInObject(entity),
-        id: entity.id,
-      }),
+      execute(
+        entityName,
+        {
+          ...convertEmptyStringToNullInObject(entity),
+          id: entity.id,
+        },
+        cacheKey
+      ),
     ...rest,
   };
 };
 
-const useDeleteQuery = (entityName, id) => {
+const useDeleteQuery = (entityName: string, id: number, cacheKey?: string) => {
   const { execute, ...rest } = useCommandQuery(apiClient.deleteEntity);
-  return { execute: () => execute(entityName, id), ...rest };
+  return { execute: () => execute(entityName, id, cacheKey), ...rest };
 };
 
 /**
@@ -197,7 +200,7 @@ const useDeleteQuery = (entityName, id) => {
  * - isUninitialized: A boolean indicating whether the fetch operation has not yet been initiated.
  * - refetch: A function to manually trigger a refetch of the data.
  */
-const useGetQuery = (entityName, id) => {
+const useGetQuery = (entityName: string, id: number) => {
   const {
     data,
     setData,
@@ -221,6 +224,8 @@ const useGetQuery = (entityName, id) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+
       if (!entityName) {
         setIsSuccess(false);
         setIsError(false);
@@ -252,7 +257,6 @@ const useGetQuery = (entityName, id) => {
         setData(result);
         setIsUninitialized(false);
       } catch (err) {
-        console.error(err, entityName);
         setIsSuccess(false);
         setIsError(true);
         setError(err);

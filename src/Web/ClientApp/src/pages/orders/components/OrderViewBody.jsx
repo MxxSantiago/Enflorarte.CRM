@@ -1,8 +1,8 @@
-import WeeklyOrdersKanban from "./WeeklyOrdersKanban";
-import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
-import MonthlyOrdersCalendar from "../Monthly/MonthlyOrdersCalendar.jsx";
+import WeeklyOrdersKanban from "./Weekly/WeeklyOrdersKanban.jsx";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";
+import MonthlyOrdersCalendar from "./Monthly/MonthlyOrdersCalendar.tsx";
 
-const OrdersViewBody = ({ colorMode, mode }) => {
+const OrdersViewBody = ({ colorMode, mode, _paddingX }) => {
   const { data: arrangementData, isLoading: isArrangementLoading } =
     useGetQuery("arrangement");
   const { data: responsibleData, isLoading: responsibleLoading } =
@@ -36,9 +36,22 @@ const OrdersViewBody = ({ colorMode, mode }) => {
               deliveryTypeData={deliveryTypeData}
               tagData={tagData}
               isLoading={isLoading}
+              _paddingX={_paddingX}
             />
           ),
-          month: <MonthlyOrdersCalendar colorMode={colorMode} />,
+          month: (
+            <MonthlyOrdersCalendar
+              colorMode={colorMode}
+              arrangementData={arrangementData}
+              responsibleData={responsibleData}
+              communicationTypeData={communicationTypeData}
+              branchData={brancData}
+              deliveryTypeData={deliveryTypeData}
+              tagData={tagData}
+              isLoading={isLoading}
+              _paddingX={_paddingX}
+            />
+          ),
         }[mode]
       }
     </>

@@ -52,6 +52,7 @@ import {
   Tag,
 } from "../../../../web-api-client.ts";
 import { LANG } from "../../../../core/helpers/translations.helper.ts";
+import { toLocalISOString } from "../../../../core/helpers/dates.helper.ts";
 
 interface UpdateOrderProps {
   isOpen: boolean;
@@ -64,6 +65,7 @@ interface UpdateOrderProps {
   refetch: (clearCache?: boolean) => void;
   communicationTypeData: CommunicationType[];
   tagData: Tag[];
+  cacheKey: string;
 }
 
 const UpdateOrder = ({
@@ -77,16 +79,17 @@ const UpdateOrder = ({
   refetch,
   communicationTypeData,
   tagData,
+  cacheKey,
 }: UpdateOrderProps) => {
   const [deliveryDate, setDeliveryDate] = useState(
     typeof order.deliveryDate === "string"
       ? order.deliveryDate
-      : order.deliveryDate?.toISOString().slice(0, 16)
+      : toLocalISOString(order.deliveryDate)
   );
   const [orderDate, setOrderDate] = useState(
     typeof order.orderDate === "string"
       ? order.orderDate
-      : order.orderDate?.toISOString().slice(0, 16)
+      : toLocalISOString(order.orderDate)
   );
 
   const cancelRef = React.useRef();
@@ -136,17 +139,22 @@ const UpdateOrder = ({
     isSuccess,
     execute,
     isLoading: isUpdateLoading,
-  } = usePutQuery("order", {
-    ...properties,
-    deliveryDate: new Date(deliveryDate as any),
-    orderDate: new Date(orderDate as any),
-  });
+  } = usePutQuery(
+    "order",
+    {
+      ...properties,
+      referenceImage: properties.referenceImage,
+      deliveryDate: new Date(deliveryDate as any),
+      orderDate: new Date(orderDate as any),
+    },
+    cacheKey
+  );
 
   const {
     isSuccess: isDeleteSuccess,
     execute: deleteEntity,
     isLoading: isDeleteLoading,
-  } = useDeleteQuery("order", order.id);
+  } = useDeleteQuery("order", order.id!, cacheKey);
 
   const isLoading = isUpdateLoading || isDeleteLoading;
 

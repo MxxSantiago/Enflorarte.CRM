@@ -35,16 +35,25 @@ class CacheManager {
   }
 
   public addEntityToCache(cacheKey: string, entity: any) {
+    if (!this.cache[cacheKey]) {
+      this.cache[cacheKey] = [];
+    }
     this.cache[cacheKey] = [...this.cache[cacheKey], entity];
   }
 
   public removeEntityFromCache(cacheKey: string, id: number) {
+    if (!this.cache[cacheKey]) {
+      this.cache[cacheKey] = [];
+    }
     this.cache[cacheKey] = [
       ...this.cache[cacheKey].filter((entity: any) => entity.id !== id),
     ];
   }
 
   public updateEntityInCache(cacheKey: string, entity: any) {
+    if (!this.cache[cacheKey]) {
+      this.cache[cacheKey] = [];
+    }
     this.cache[cacheKey] = [
       ...this.cache[cacheKey].map((e: any) =>
         e.id === entity.id ? { ...e, ...entity } : e
@@ -122,27 +131,57 @@ class ApiClient {
     return result;
   }
 
-  public deleteEntity = async (entityName: string, id: number) => {
+  public deleteEntity = async (
+    entityName: string,
+    id: number,
+    customCacheKey?: string
+  ) => {
     const result = await this.executeHttpMethod(entityName, "Delete", id);
-    this.cacheManager.removeCache(`${entityName}_${id}`);
-    this.cacheManager.removeEntityFromCache(entityName, id);
+
+    if (customCacheKey) {
+      this.cacheManager.removeCache(`${customCacheKey}_${id}`);
+      this.cacheManager.removeEntityFromCache(customCacheKey, id);
+    } else {
+      this.cacheManager.removeCache(`${entityName}_${id}`);
+      this.cacheManager.removeEntityFromCache(entityName, id);
+    }
+
     return result;
   };
 
-  public updateEntity = async (entityName: string, args: any) => {
+  public updateEntity = async (
+    entityName: string,
+    args: any,
+    customCacheKey?: string
+  ) => {
     const result = await this.executeHttpMethod(entityName, "Put", args);
-    this.cacheManager.updateCache(`${entityName}_${args.id}`, args);
-    this.cacheManager.updateEntityInCache(entityName, args);
+
+    if (customCacheKey) {
+      this.cacheManager.updateCache(`${customCacheKey}_${args.id}`, args);
+      this.cacheManager.updateEntityInCache(customCacheKey, args);
+    } else {
+      this.cacheManager.updateCache(`${entityName}_${args.id}`, args);
+      this.cacheManager.updateEntityInCache(entityName, args);
+    }
+
     return result;
   };
 
   public createEntity = async (
     entityName: string,
-    args: any
+    args: any,
+    customCacheKey?: string
   ): Promise<number> => {
     const id = await this.executeHttpMethod(entityName, "Post", args);
-    this.cacheManager.updateCache(`${entityName}_${id}`, { ...args, id });
-    this.cacheManager.addEntityToCache(entityName, { ...args, id });
+
+    if (customCacheKey) {
+      this.cacheManager.updateCache(`${customCacheKey}_${id}`, { ...args, id });
+      this.cacheManager.addEntityToCache(customCacheKey, { ...args, id });
+    } else {
+      this.cacheManager.updateCache(`${entityName}_${id}`, { ...args, id });
+      this.cacheManager.addEntityToCache(entityName, { ...args, id });
+    }
+
     return id;
   };
 
@@ -151,7 +190,7 @@ class ApiClient {
     customMethodName: string,
     refresh: boolean = false,
     args: any,
-    useEntityGeneralCache: boolean = false
+    cacheKey: string
   ) {
     if (!this.clients[entityName]) {
       throw new Error("Invalid entity name");
@@ -161,14 +200,6 @@ class ApiClient {
     const method = client[entityName + "_" + customMethodName];
 
     if (typeof method === "function") {
-      let cacheKey;
-
-      if (!useEntityGeneralCache) {
-        cacheKey = `${entityName}_${customMethodName}_${JSON.stringify(args)}`;
-      } else {
-        cacheKey = entityName;
-      }
-
       const cachedResult = this.cacheManager.getCachedResult(cacheKey, refresh);
 
       if (cachedResult) {

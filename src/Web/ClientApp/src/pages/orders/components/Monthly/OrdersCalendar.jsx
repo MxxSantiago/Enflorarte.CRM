@@ -12,32 +12,52 @@ import {
   IconButton,
   Box,
   Button,
-  useColorMode, 
+  useColorMode,
 } from "@chakra-ui/react";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
-
-export const OrdersCalendar = ({ data, onDayClick }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [tabIndex, setTabIndex] = useState(new Date().getMonth() + 1);
-  const [selectedDay, setSelectedDay] = useState(null);
+export const OrdersCalendar = ({
+  data,
+  onDayClick,
+  setQueryDate,
+  queryDate,
+  selectedDay,
+  setSelectedDay,
+}) => {
+  const [currentMonth, setCurrentMonth] = useState(queryDate);
+  const [tabIndex, setTabIndex] = useState(queryDate.getMonth() + 1);
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    const today = new Date().toDateString();
-    setSelectedDay(today);
+    setSelectedDay(new Date(queryDate).toLocaleDateString());
   }, []);
 
-  const prevMonth = () =>
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+  const prevMonth = () => {
+    const newMonth = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() - 1,
+      1
     );
+    setCurrentMonth(newMonth);
+    const newDate = new Date(queryDate).setMonth(newMonth.getMonth());
+    const firstDay = new Date(newDate).setDate(1);
+    setQueryDate(new Date(firstDay));
+    setSelectedDay(new Date(firstDay).toLocaleDateString());
+  };
 
-  const nextMonth = () =>
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+  const nextMonth = () => {
+    const newMonth = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() + 1,
+      1
     );
+    setCurrentMonth(newMonth);
+    const newDate = new Date(queryDate).setMonth(newMonth.getMonth());
+    const firstDay = new Date(newDate).setDate(1);
+    setQueryDate(new Date(firstDay));
+    setSelectedDay(new Date(firstDay).toLocaleDateString());
+  };
 
   const renderDays = () => {
     const daysInMonth = new Date(
@@ -73,13 +93,13 @@ export const OrdersCalendar = ({ data, onDayClick }) => {
             currentMonth.getMonth(),
             day
           );
-          const dateKey = date.toDateString();
+          const dateKey = date.toLocaleDateString();
           const orderCount = data[dateKey] ? data[dateKey].length : 0;
           day++;
           return (
             <Td key={`${i}-${j}`} textAlign="center" px={1} py={2}>
               <Button
-                fontSize={{ base: "sm", lg: "lg" }}
+                fontSize={{ base: "sm", md: "md" }}
                 colorScheme={selectedDay === dateKey ? "blue" : "gray"}
                 backgroundColor={
                   selectedDay === dateKey ? "blue.400" : "transparent"

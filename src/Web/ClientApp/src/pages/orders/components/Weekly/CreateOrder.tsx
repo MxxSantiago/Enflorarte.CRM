@@ -50,6 +50,7 @@ const CreateOrder = ({
   refetch,
   communicationTypeData,
   tagData,
+  cacheKey,
 }) => {
   const [imageLoading, setImageLoading] = useState(true);
 
@@ -136,7 +137,8 @@ const CreateOrder = ({
 
   const { isSuccess, execute, isLoading } = usePostQuery(
     "order",
-    createLookupEntityPayload(properties)
+    createLookupEntityPayload(properties),
+    cacheKey
   );
 
   useEffect(() => {

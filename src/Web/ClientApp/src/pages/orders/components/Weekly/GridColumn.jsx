@@ -1,4 +1,4 @@
-import OrderCard from "./OrderCard";
+import OrderCard from "../OrderCard";
 import {
   Box,
   GridItem,
@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import CreateOrder from "./CreateOrder.tsx";
-import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
 import { memo } from "react";
 
 const GridColumn = ({
@@ -25,10 +24,10 @@ const GridColumn = ({
   branchData,
   deliveryTypeData,
   tagData,
+  cacheKey,
 }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
-  const { refetch: refetchTags } = useGetQuery("tag");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -86,12 +85,12 @@ const GridColumn = ({
                 id: i,
               }))
             : orders
-          ).map((order) => (
+          ).map((order, index) => (
             <OrderCard
-              isLoading={isLoading}
               key={order.id}
               order={order}
               colorMode={colorMode}
+              isLoading={isLoading}
               arrangementData={arrangementData}
               responsibleData={responsibleData}
               communicationTypeData={communicationTypeData}
@@ -99,7 +98,7 @@ const GridColumn = ({
               deliveryTypeData={deliveryTypeData}
               tagData={tagData}
               refetch={refetch}
-              refetchTags={refetchTags}
+              cacheKey={cacheKey}
             />
           ))}
         </Box>
@@ -116,7 +115,7 @@ const GridColumn = ({
           deliveryTypeData={deliveryTypeData}
           tagData={tagData}
           refetch={refetch}
-          refetchTags={refetchTags}
+          cacheKey={cacheKey}
         />
       )}
     </>
