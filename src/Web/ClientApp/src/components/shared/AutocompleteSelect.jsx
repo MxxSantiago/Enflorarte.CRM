@@ -304,7 +304,7 @@ const AutocompleteMultiSelect = (props) => {
     onCreateItem,
     icon: CustomIcon,
     hideToggleButton = false,
-    disableCreateItem = false,
+    disableCreateItem = true,
     createItemRenderer = defaultCreateItemRenderer,
     renderCustomInput,
     _selectedItems,
