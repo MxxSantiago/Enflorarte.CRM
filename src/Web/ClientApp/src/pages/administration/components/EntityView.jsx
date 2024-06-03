@@ -1,6 +1,5 @@
 import { Grid, Box, Text } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
-import { CommunicationType } from "../../../web-api-client.ts";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 import { removeReferenceIdProperties } from "../../../core/helpers/web-api-client.helper.ts";
 import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";

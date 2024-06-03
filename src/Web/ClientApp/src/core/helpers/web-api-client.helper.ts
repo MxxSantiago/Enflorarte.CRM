@@ -256,7 +256,8 @@ export function createLookupEntityPayload(properties: any) {
         ...acc,
         [key]:
           key.toLowerCase().indexOf("id") !== -1 &&
-          key !== "id" && key !== "moneyPaid" &&
+          key !== "id" &&
+          key !== "moneyPaid" &&
           key[key.toLowerCase().indexOf("id") - 1] ===
             key[key.toLowerCase().indexOf("id") - 1].toUpperCase()
             ? Number(value)
