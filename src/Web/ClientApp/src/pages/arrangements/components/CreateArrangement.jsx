@@ -16,6 +16,10 @@ import {
   Text,
   Textarea,
   Checkbox,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.helper.ts";
 import { Arrangement } from "../../../web-api-client.ts";
@@ -37,6 +41,7 @@ const CreateArrangmentTemplate = ({
   flowerVariantData,
   isTemplate = true,
   refetch,
+  arrangementsData,
 }) => {
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: [],
@@ -87,6 +92,20 @@ const CreateArrangmentTemplate = ({
       });
     }
   };
+  const [alreadyExists, setAlreadyExists] = useState(false);
+
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
+    const nameAlreadyExists = arrangementsData.some(
+      (item) => item.name.toLowerCase() === newName.toLowerCase()
+    );
+
+    setAlreadyExists(nameAlreadyExists);
+    setProperties({
+      ...properties,
+      name: newName,
+    });
+  };
 
   return (
     <Modal
@@ -127,13 +146,17 @@ const CreateArrangmentTemplate = ({
                 <Input
                   size={{ base: "md", md: "lg" }}
                   value={properties.name ?? ""}
-                  onChange={(e) =>
-                    setProperties({
-                      ...properties,
-                      name: e.target.value,
-                    })
-                  }
+                  onChange={handleNameChange}
                 />
+                {alreadyExists && (
+                  <Alert status="warning">
+                    <AlertIcon />
+                    <AlertTitle>Advertencia</AlertTitle>
+                    <AlertDescription>
+                      Este nombre de arreglo ya existe.
+                    </AlertDescription>
+                  </Alert>
+                )}
                 <Text marginY={2} marginTop={8}>
                   URL Imagen de Referencia
                 </Text>
