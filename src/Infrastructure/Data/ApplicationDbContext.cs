@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<WrapperVariant> WrapperVariant => Set<WrapperVariant>();
     public DbSet<Arrangement> Arrangement => Set<Arrangement>();
     public DbSet<ArrangementType> ArrangementType => Set<ArrangementType>();
+    public DbSet<Order> Order => Set<Order>();
+    public DbSet<Tag> Tag => Set<Tag>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

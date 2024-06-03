@@ -1,6 +1,9 @@
 ﻿using Enflorarte.CRM.Application.Common.Models;
 using Enflorarte.CRM.Domain.Common;
+using Enflorarte.CRM.Domain.Constants;
+using Enflorarte.CRM.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +15,14 @@ namespace Enflorarte.CRM.Web.Controllers;
 public abstract class BaseController<TEntity, TService> : ControllerBase
     where TEntity : BaseEntity where TService : BaseService<TEntity>
 {
+    protected virtual string RolesForCommands => Roles.Administrator;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly TService _service;
 
-    protected BaseController(TService service)
+    protected BaseController(TService service, 
+        UserManager<ApplicationUser> userManager)
     {
+        this._userManager = userManager;
         _service = service;
     }
 
@@ -40,6 +47,13 @@ public abstract class BaseController<TEntity, TService> : ControllerBase
     [HttpPut("{id}")]
     public virtual async Task<ActionResult<TEntity>> PutAsync(int id, TEntity entity)
     {
+        var authResult = await EvaluateRolesForCommands();
+        
+        if (!authResult)
+        {
+            return Unauthorized();
+        }
+        
         if (id != entity.Id)
         {
             return BadRequest();
@@ -66,6 +80,13 @@ public abstract class BaseController<TEntity, TService> : ControllerBase
     [HttpDelete("{id}")]
     public virtual async Task<ActionResult<TEntity>> DeleteAsync(int id)
     {
+        var authResult = await EvaluateRolesForCommands();
+        
+        if (!authResult)
+        {
+            return Unauthorized();
+        }
+        
         var entity = await _service.GetAsync(id);
         if (entity == null)
         {
@@ -80,7 +101,22 @@ public abstract class BaseController<TEntity, TService> : ControllerBase
     [HttpPost]
     public virtual async Task<ActionResult<int>> PostAsync(TEntity entity)
     {
+        var authResult = await EvaluateRolesForCommands();
+        
+        if (!authResult)
+        {
+            return Unauthorized();
+        }
+        
         int entityId = await _service.AddAsync(entity);
         return Ok(entityId);
+    }
+    
+    private async Task<bool> EvaluateRolesForCommands()
+    {
+        var roles = RolesForCommands.Split(',');
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var userRoles = await _userManager.GetRolesAsync(user);
+        return roles.Any(role => userRoles.Contains(role.Trim()));
     }
 }

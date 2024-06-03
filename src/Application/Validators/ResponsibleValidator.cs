@@ -7,7 +7,7 @@ public class ResponsibleValidator : AbstractValidator<Responsible>
     public ResponsibleValidator()
     {
         RuleFor(responsible => responsible.Name)
-            .NotEmpty()
-            .MaximumLength(100);
+            .NotEmpty().WithMessage("El nombre del responsable es requerido.")
+            .MaximumLength(100).WithMessage("La longitud del nombre del responsable tiene un máximo de 100 caracteres.");
     }
 }

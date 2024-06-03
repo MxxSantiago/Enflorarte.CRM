@@ -1,17 +1,55 @@
-export const sidebarDesktopWidth = "180px";
-export const sidebarMobileWidth = "60px";
+// View dimensions
+const sidebarDesktopWidth = "180px";
+const sidebarMobileWidth = "60px";
 
-export const headerDesktopHeight = "80px";
-export const headerMobileHeight = "50px";
+const headerDesktopHeight = "80px";
+const headerMobileHeight = "50px";
 
-export const primaryColorScheme = "gray";
+// Color schemes
+const primaryColorScheme = "gray";
 
-export const modifierColorScheme = "green";
-export const createColorScheme = "blue";
-export const deleteColorScheme = "red";
+const modifierColorScheme = "green";
+const createColorScheme = "blue";
+const deleteColorScheme = "red";
 
-export const saveColorScheme = "green";
+const saveColorScheme = "green";
 
-export const saveChangesText = "Guardar";
-export const deleteText = "Eliminar";
-export const cancelChangesText = "Cancelar";
+// Spinner configuration
+const spinnerConfiguration = {
+  thickness: "4px",
+  speed: "0.65s",
+  emptyColor: "gray.200",
+  color: "blue.500",
+  size: "xl",
+};
+
+// Texts
+const saveChangesText = "Guardar";
+const deleteText = "Eliminar";
+const cancelChangesText = "Cancelar";
+
+// Storage keys
+const sessionStorageKey = "session";
+
+enum Roles {
+  Administrator = "Administrator",
+  Operator = "Operator",
+}
+
+export {
+  sidebarDesktopWidth,
+  sidebarMobileWidth,
+  headerDesktopHeight,
+  headerMobileHeight,
+  primaryColorScheme,
+  modifierColorScheme,
+  createColorScheme,
+  deleteColorScheme,
+  saveColorScheme,
+  spinnerConfiguration,
+  saveChangesText,
+  deleteText,
+  cancelChangesText,
+  sessionStorageKey,
+  Roles,
+};

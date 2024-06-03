@@ -55,6 +55,21 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.ToTable("ArrangementFlowerVariant");
                 });
 
+            modelBuilder.Entity("ArrangementOrder", b =>
+                {
+                    b.Property<int>("ArrangementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArrangementId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ArrangementOrder");
+                });
+
             modelBuilder.Entity("ArrangementWrapperVariant", b =>
                 {
                     b.Property<int>("ArrangementId")
@@ -68,6 +83,51 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasIndex("WrapperVariantsId");
 
                     b.ToTable("ArrangementWrapperVariant");
+                });
+
+            modelBuilder.Entity("BranchOrder", b =>
+                {
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BranchId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("BranchOrder");
+                });
+
+            modelBuilder.Entity("CommunicationTypeOrder", b =>
+                {
+                    b.Property<int>("CommunicationTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CommunicationTypeId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("CommunicationTypeOrder");
+                });
+
+            modelBuilder.Entity("DeliveryTypeOrder", b =>
+                {
+                    b.Property<int>("DeliveryTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DeliveryTypeId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("DeliveryTypeOrder");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Arrangement", b =>
@@ -255,6 +315,90 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.ToTable("FlowerVariant");
                 });
 
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("CommandGenerated")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeliveryFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeliveryUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("MoneyPaid")
+                        .IsRequired()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("OrderPrice")
+                        .IsRequired()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("RealizationPrice")
+                        .IsRequired()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("RecipientCellphoneNumber")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("RecipientName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ReferenceImage")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ResultImage")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal?>("ShippingPrice")
+                        .IsRequired()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("WasDelivered")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
+                });
+
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Responsible", b =>
                 {
                     b.Property<int>("Id")
@@ -271,6 +415,29 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Responsible");
+                });
+
+            modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("Enflorarte.CRM.Domain.Entities.Wrapper", b =>
@@ -516,6 +683,36 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("OrderResponsible", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResponsibleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ResponsibleId");
+
+                    b.HasIndex("ResponsibleId");
+
+                    b.ToTable("OrderResponsible");
+                });
+
+            modelBuilder.Entity("OrderTag", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("OrderTag");
+                });
+
             modelBuilder.Entity("ArrangementArrangementType", b =>
                 {
                     b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
@@ -546,6 +743,21 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ArrangementOrder", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
+                        .WithMany()
+                        .HasForeignKey("ArrangementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ArrangementWrapperVariant", b =>
                 {
                     b.HasOne("Enflorarte.CRM.Domain.Entities.Arrangement", null)
@@ -557,6 +769,51 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasOne("Enflorarte.CRM.Domain.Entities.WrapperVariant", null)
                         .WithMany()
                         .HasForeignKey("WrapperVariantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BranchOrder", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Branch", null)
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CommunicationTypeOrder", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.CommunicationType", null)
+                        .WithMany()
+                        .HasForeignKey("CommunicationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DeliveryTypeOrder", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.DeliveryType", null)
+                        .WithMany()
+                        .HasForeignKey("DeliveryTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -641,6 +898,36 @@ namespace Enflorarte.CRM.Infrastructure.Data.Migrations
                     b.HasOne("Enflorarte.CRM.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrderResponsible", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Responsible", null)
+                        .WithMany()
+                        .HasForeignKey("ResponsibleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrderTag", b =>
+                {
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enflorarte.CRM.Domain.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

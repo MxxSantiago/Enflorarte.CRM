@@ -16,10 +16,10 @@ import CreateArrangmentTemplate from "./CreateArrangement.jsx";
 import ArrangementsFilter from "./ArrangementsFilter.jsx";
 import { useState, useEffect } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
-import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";
 import {
   createColorScheme,
-  primaryColorScheme,
+  spinnerConfiguration,
 } from "../../../core/constants.ts";
 
 const ArrangementsView = () => {
@@ -45,7 +45,8 @@ const ArrangementsView = () => {
   const { data: flowerVariantsData, isFlowerVariantsLoading } =
     useGetQuery("flowerVariant");
 
-  const [filteredArrangements, setFilteredArrangements] = useState([]);
+  const [filteredArrangements, setFilteredArrangements] =
+    useState(arrangementsData);
 
   const isLoading =
     isArrangementsLoading ||
@@ -54,7 +55,7 @@ const ArrangementsView = () => {
     isFlowerVariantsLoading;
 
   useEffect(() => {
-    setFilteredArrangements(arrangementsData);
+    setFilteredArrangements(filteredArrangements);
   }, [arrangementsData]);
 
   return (
@@ -68,7 +69,7 @@ const ArrangementsView = () => {
         >
           <Box>
             <Box pt={5}>
-              <Flex px={8}>
+              <Flex pb={3} px={8}>
                 <Text margin={0} fontSize="3xl">
                   Tus Plantillas
                 </Text>
@@ -101,7 +102,7 @@ const ArrangementsView = () => {
             {!isLoading && arrangementsData.length > 0 && (
               <Collapse in={isHeaderOpen}>
                 <Box>
-                  <Flex px={8} pt={8} direction="column">
+                  <Flex pb={5} px={8} pt={5} direction="column">
                     <ArrangementsFilter
                       arrangements={arrangementsData}
                       setFilteredArrangements={setFilteredArrangements}
@@ -119,7 +120,7 @@ const ArrangementsView = () => {
           </Box>
           {isLoading ? (
             <Flex alignItems="center" justifyContent="center">
-              <Spinner size="xl" />
+              <Spinner {...spinnerConfiguration} />
             </Flex>
           ) : (
             arrangementsData.length === 0 && (

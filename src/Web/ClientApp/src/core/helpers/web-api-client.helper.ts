@@ -7,9 +7,12 @@ import {
   DeliveryTypeClient,
   FlowerClient,
   FlowerVariantClient,
+  OrderClient,
   ResponsibleClient,
   WrapperClient,
   WrapperVariantClient,
+  TagClient,
+  AuthClient,
 } from "../../web-api-client.ts";
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
@@ -67,9 +70,17 @@ class ApiClient {
     responsible: new ResponsibleClient(),
     wrapper: new WrapperClient(),
     wrapperVariant: new WrapperVariantClient(),
+    order: new OrderClient(),
+    tag: new TagClient(),
+    auth: new AuthClient(),
   };
 
   constructor(private cacheManager = new CacheManager()) {}
+
+  public async getCurrentUser() {
+    const user = await this.clients.auth.auth_GetCurrentUser();
+    return user;
+  }
 
   public async getAllEntities(
     entityName: string,
@@ -111,16 +122,18 @@ class ApiClient {
     return result;
   }
 
-  public deleteEntity = (entityName: string, id: number) => {
-    this.executeHttpMethod(entityName, "Delete", id);
+  public deleteEntity = async (entityName: string, id: number) => {
+    const result = await this.executeHttpMethod(entityName, "Delete", id);
     this.cacheManager.removeCache(`${entityName}_${id}`);
     this.cacheManager.removeEntityFromCache(entityName, id);
+    return result;
   };
 
-  public updateEntity = (entityName: string, args: any) => {
-    this.executeHttpMethod(entityName, "Put", args);
+  public updateEntity = async (entityName: string, args: any) => {
+    const result = await this.executeHttpMethod(entityName, "Put", args);
     this.cacheManager.updateCache(`${entityName}_${args.id}`, args);
     this.cacheManager.updateEntityInCache(entityName, args);
+    return result;
   };
 
   public createEntity = async (
@@ -132,6 +145,44 @@ class ApiClient {
     this.cacheManager.addEntityToCache(entityName, { ...args, id });
     return id;
   };
+
+  public async executeCustomMethod(
+    entityName: string,
+    customMethodName: string,
+    refresh: boolean = false,
+    args: any
+  ) {
+    if (!this.clients[entityName]) {
+      throw new Error("Invalid entity name");
+    }
+
+    const client = this.clients[entityName];
+    const method = client[entityName + "_" + customMethodName];
+
+    if (typeof method === "function") {
+      const cacheKey = `${entityName}_${customMethodName}_${JSON.stringify(
+        args
+      )}`;
+      const cachedResult = this.cacheManager.getCachedResult(cacheKey, refresh);
+
+      if (cachedResult) {
+        return cachedResult;
+      }
+
+      const boundMethod = method.bind(client);
+      const result = await boundMethod(args);
+
+      if (customMethodName.indexOf("Get") !== -1) {
+        this.cacheManager.updateCache(cacheKey, result);
+      }
+
+      return result;
+    } else {
+      throw new Error(
+        `Method ${customMethodName} does not exist on ${entityName}Client`
+      );
+    }
+  }
 
   private async executeHttpMethod(
     entityName: string,
@@ -147,9 +198,18 @@ class ApiClient {
 
     if (typeof method === "function") {
       const boundMethod = method.bind(client);
-      return methodName === "Put"
-        ? await boundMethod(args[0].id, ...args)
-        : await boundMethod(...args);
+      try {
+        return methodName === "Put"
+          ? await boundMethod(args[0].id, ...args)
+          : await boundMethod(...args);
+      } catch (err) {
+        if (err.response) {
+          const parsedError = JSON.parse(err.response);
+          throw parsedError;
+        } else {
+          throw err;
+        }
+      }
     } else {
       throw new Error(
         `Method ${entityName}_${methodName} does not exist on ${entityName}Client`
@@ -194,7 +254,14 @@ export function createLookupEntityPayload(properties: any) {
     ...Object.entries(properties).reduce(
       (acc, [key, value]) => ({
         ...acc,
-        [key]: key.toLowerCase().indexOf("id") !== -1 ? Number(value) : value,
+        [key]:
+          key.toLowerCase().indexOf("id") !== -1 &&
+          key !== "id" &&
+          key !== "moneyPaid" &&
+          key[key.toLowerCase().indexOf("id") - 1] ===
+            key[key.toLowerCase().indexOf("id") - 1].toUpperCase()
+            ? Number(value)
+            : value,
       }),
       {}
     ),

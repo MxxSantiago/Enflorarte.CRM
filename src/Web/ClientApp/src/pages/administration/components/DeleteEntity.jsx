@@ -12,14 +12,14 @@ import {
 import { useEffect, useRef } from "react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { MdDeleteOutline } from "react-icons/md";
-import { useDeleteQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { useDeleteQuery } from "../../../core/hooks/useApiClientHooks.tsx";
 import { cancelChangesText, deleteText } from "../../../core/constants.ts";
 
 function DeleteEntity({ entityName, entity, refetch }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
-  const { isSuccess, deleteEntity, isLoading } = useDeleteQuery(
+  const { isSuccess, execute, isLoading } = useDeleteQuery(
     entityName,
     entity.id
   );
@@ -62,7 +62,7 @@ function DeleteEntity({ entityName, entity, refetch }) {
                 ml={3}
                 isLoading={isLoading}
                 colorScheme="red"
-                onClick={deleteEntity}
+                onClick={execute}
               >
                 {deleteText}
               </Button>

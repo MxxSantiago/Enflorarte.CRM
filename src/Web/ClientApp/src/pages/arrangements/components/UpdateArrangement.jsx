@@ -28,7 +28,7 @@ import { AutocompleteMultiSelect } from "../../../components/shared/Autocomplete
 import {
   useDeleteQuery,
   usePutQuery,
-} from "../../../core/hooks/useApiClientHooks.jsx";
+} from "../../../core/hooks/useApiClientHooks.tsx";
 import {
   cancelChangesText,
   deleteText,
@@ -64,8 +64,11 @@ function UpdateArrangement({
   });
   const [properties, setProperties] = useState({ ...arrangement });
 
-  const { isSuccess, putEntity } = usePutQuery("arrangement", properties);
-  const { isSuccess: isDeleteSuccess, deleteEntity } = useDeleteQuery(
+  const { isSuccess, execute: putEntity } = usePutQuery(
+    "arrangement",
+    properties
+  );
+  const { isSuccess: isDeleteSuccess, execute: deleteEntity } = useDeleteQuery(
     "arrangement",
     arrangement.id
   );

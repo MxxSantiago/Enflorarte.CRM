@@ -8,6 +8,7 @@ import {
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "../api-authorization/ProtectedRoute.jsx";
 
 const Layout = ({ routes, showSidebar }) => (
   <Grid
@@ -38,8 +39,17 @@ const Layout = ({ routes, showSidebar }) => (
       >
         <Routes>
           {routes.map((route, index) => {
-            const { element, ...rest } = route;
-            return <Route key={index} {...rest} element={element} />;
+            const { element, role, ...rest } = route;
+            return role ? (
+              <ProtectedRoute
+                key={index}
+                {...rest}
+                element={element}
+                role={role}
+              />
+            ) : (
+              <Route key={index} {...rest} element={element} />
+            );
           })}
           <Route path="*" element={routes[0].element} />
         </Routes>

@@ -2,7 +2,7 @@ import { Divider, Box, Text, Grid, useBreakpointValue } from "@chakra-ui/react";
 import CreateEntity from "./CreateEntity.jsx";
 import EntitiesTable from "./entitiesTable/EntitiesTable.jsx";
 import { removeReferenceObjectProperties } from "../../../core/helpers/web-api-client.helper.ts";
-import { useGetQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { useGetQuery } from "../../../core/hooks/useApiClientHooks.tsx";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 
 const EntityWithVariantView = ({
@@ -23,11 +23,17 @@ const EntityWithVariantView = ({
     xl: "auto 1fr",
   });
 
-  const { data: entitiesData, refetch: refetchEntity } =
-    useGetQuery(entityName);
+  const {
+    data: entitiesData,
+    isLoading: isEntitiesLoading,
+    refetch: refetchEntity,
+  } = useGetQuery(entityName);
 
-  const { data: variantsData, refetch: refetchVariant } =
-    useGetQuery(variantName);
+  const {
+    data: variantsData,
+    isLoading: isVariantsLoading,
+    refetch: refetchVariant,
+  } = useGetQuery(variantName);
 
   return (
     <Grid
@@ -76,6 +82,7 @@ const EntityWithVariantView = ({
         entity={entity}
         entityName={entityName}
         entitiesData={entitiesData}
+        isLoading={isEntitiesLoading}
         refetch={refetchEntity}
         order={{ xl: 3 }}
         height={{
@@ -122,6 +129,7 @@ const EntityWithVariantView = ({
         fatherEntityName={entityName}
         fatherEntityData={entitiesData}
         entitiesData={variantsData}
+        isLoading={isVariantsLoading}
         refetch={refetchVariant}
         order={{ xl: 4 }}
         height={{

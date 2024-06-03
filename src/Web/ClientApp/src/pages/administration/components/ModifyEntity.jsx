@@ -13,7 +13,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
 import { FaRegEdit } from "react-icons/fa";
 import { AutocompleteSelect } from "../../../components/shared/AutocompleteSelect.jsx";
-import { usePutQuery } from "../../../core/hooks/useApiClientHooks.jsx";
+import { usePutQuery } from "../../../core/hooks/useApiClientHooks.tsx";
 import {
   cancelChangesText,
   modifierColorScheme,
@@ -48,10 +48,7 @@ function ModifyEntity({
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
-  const { isSuccess, putEntity, isLoading } = usePutQuery(
-    entityName,
-    properties
-  );
+  const { isSuccess, execute, isLoading } = usePutQuery(entityName, properties);
 
   useEffect(() => {
     if (isSuccess) {
@@ -156,7 +153,7 @@ function ModifyEntity({
                 isLoading={isLoading}
                 ml={3}
                 colorScheme={saveColorScheme}
-                onClick={putEntity}
+                onClick={execute}
                 isDisabled={isDisabled()}
               >
                 {saveChangesText}

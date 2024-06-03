@@ -1,5 +1,6 @@
 ﻿using Enflorarte.CRM.Domain.Constants;
 using Enflorarte.CRM.Domain.Entities;
+using Enflorarte.CRM.Domain.Enums;
 using Enflorarte.CRM.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +52,7 @@ public class DatabaseInitializer
         {
             await TrySeedAsync();
             await SeedAdminUserAsync();
+            await SeedOperatorUserAsync();
         }
         catch (Exception ex)
         {
@@ -193,6 +195,16 @@ public class DatabaseInitializer
                 );
             }
             
+            if (!await _context.Tag.AnyAsync())
+            {
+                _context.Tag.AddRange(
+                    new Tag {  Name = "Tag 1", Color = "#dd2020" },
+                    new Tag {  Name = "Tag 2", Color = "#3020dd" },
+                    new Tag {  Name = "Tag 3", Color = "#179124" },
+                    new Tag {  Name = "Tag 4", Color = "#681791" }
+                );
+            }
+            
             if (!await _context.Arrangement.AnyAsync())
             {
                 _context.Arrangement.AddRange(
@@ -247,6 +259,99 @@ public class DatabaseInitializer
                 _context.ArrangementType.AddRange(arrangementTypes);
             }
 
+            if (!await _context.Order.AnyAsync())
+            {
+                List<Order> orders = new()
+                {
+                    new Order
+                    {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "123 Main St",
+                        CommandGenerated = false,
+                        Description = "Test order",
+                        OrderPrice = 100.0m,
+                        RealizationPrice = 80.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "John Doe",
+                        RecipientCellphoneNumber = "1234567890",
+                        ReferenceImage = "https://i.pinimg.com/736x/7d/e7/1b/7de71bb12557eb7e5893f00f7364ff17.jpg",
+                        ResultImage = "https://i.pinimg.com/736x/7d/e7/1b/7de71bb12557eb7e5893f00f7364ff17.jpg"
+                    },
+                    new Order {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "456 Elm St",
+                        CommandGenerated = false,
+                        Description = "Test order 2",
+                        OrderPrice = 200.0m,
+                        RealizationPrice = 180.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "Jane Doe",
+                        RecipientCellphoneNumber = "0987654321",
+                        ReferenceImage = "https://i.pinimg.com/736x/e6/8e/16/e68e16bd2b33609b179b077c3073e28f--wedding-parties-wedding-reception.jpg",
+                        ResultImage = "https://i.pinimg.com/736x/e6/8e/16/e68e16bd2b33609b179b077c3073e28f--wedding-parties-wedding-reception.jpg"
+                    },
+                    new Order {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "789 Oak St",
+                        CommandGenerated = false,
+                        Description = "Test order 3",
+                        OrderPrice = 300.0m,
+                        RealizationPrice = 280.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "Alice Smith",
+                        RecipientCellphoneNumber = "1357924680",
+                        ReferenceImage = "https://i.pinimg.com/originals/60/55/30/60553029945458665d7165b1d9e1d04c.jpg",
+                        ResultImage = "https://i.pinimg.com/originals/60/55/30/60553029945458665d7165b1d9e1d04c.jpg"
+                    },
+                    new Order {
+                        DeliveryDate = DateTime.Now.AddDays(7),
+                        DeliveryFrom = DateTime.Now.AddDays(7).AddHours(10),
+                        DeliveryUntil = DateTime.Now.AddDays(7).AddHours(12),
+                        OrderDate = DateTime.Now,
+                        PaymentStatus = PaymentStatus.Pending,
+                        OrderStatus = OrderStatus.Pending,
+                        Address = "012 Pine St",
+                        CommandGenerated = false,
+                        Description = "Test order 4",
+                        OrderPrice = 400.0m,
+                        RealizationPrice = 380.0m,
+                        ShippingPrice = 20.0m,
+                        MoneyPaid = 0.0m,
+                        IsPaid = false,
+                        WasDelivered = false,
+                        RecipientName = "Bob Smith",
+                        RecipientCellphoneNumber = "2468135790",
+                        ReferenceImage = "https://i.pinimg.com/originals/38/7b/5a/387b5a0fa2865efd15a3c16b55718220.jpg",
+                        ResultImage = "https://i.pinimg.com/originals/38/7b/5a/387b5a0fa2865efd15a3c16b55718220.jpg"
+                    }
+                };
+                _context.Order.AddRange(orders);
+            }
+
             await _context.SaveChangesAsync();
             await SeedManyToManyRelationshipsAsync();
         } catch (Exception ex)
@@ -294,6 +399,74 @@ public class DatabaseInitializer
                 }
             }
         }
+        
+        // Seed orders with all the many to many relationships
+        var orders = await _context.Order
+            .Include(order => order.Arrangement)
+            .Include(order => order.Responsible)
+            .Include(order => order.CommunicationType)
+            .Include(order => order.Branch)
+            .Include(order => order.DeliveryType)
+            .Include(order => order.Tags)
+            .ToListAsync();
+        
+        var responsibles = await _context.Responsible.ToListAsync();
+        var communicationTypes = await _context.CommunicationType.ToListAsync();
+        var branches = await _context.Branch.ToListAsync();
+        var deliveryTypes = await _context.DeliveryType.ToListAsync();
+        var tags = await _context.Tag.ToListAsync();
+        
+        if (orders.Count == 0) return;
+        foreach (var order in orders)
+        {
+            if (order.Arrangement.Count == 0 && arrangements.Count > 0)
+            {
+                foreach (var arrangement in arrangements)
+                {
+                    order.Arrangement.Add(arrangement);
+                }
+            }
+            
+            if (order.Responsible.Count == 0 && responsibles.Count > 0)
+            {
+                foreach (var responsible in responsibles)
+                {
+                    order.Responsible.Add(responsible);
+                }
+            }
+            
+            if (order.CommunicationType.Count == 0 && communicationTypes.Count > 0)
+            {
+                foreach (var communicationType in communicationTypes)
+                {
+                    order.CommunicationType.Add(communicationType);
+                }
+            }
+            
+            if (order.Branch.Count == 0 && branches.Count > 0)
+            {
+                foreach (var branch in branches)
+                {
+                    order.Branch.Add(branch);
+                }
+            }
+            
+            if (order.DeliveryType.Count == 0 && deliveryTypes.Count > 0)
+            {
+                foreach (var deliveryType in deliveryTypes)
+                {
+                    order.DeliveryType.Add(deliveryType);
+                }
+            }
+            
+            if (order.Tags.Count == 0 && tags.Count > 0)
+            {
+                foreach (var tag in tags)
+                {
+                    order.Tags.Add(tag);
+                }
+            }
+        }
 
         await _context.SaveChangesAsync();
     }
@@ -315,6 +488,27 @@ public class DatabaseInitializer
             if (!string.IsNullOrWhiteSpace(administratorRole.Name))
             {
                 await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
+            }
+        }
+    }
+    
+    private async Task SeedOperatorUserAsync()
+    {
+        var operatorRole = new IdentityRole(Roles.Operator);
+
+        if (_roleManager.Roles.All(r => r.Name != operatorRole.Name))
+        {
+            await _roleManager.CreateAsync(operatorRole);
+        }
+
+        var operatorUser = new ApplicationUser { UserName = "operator@localhost", Email = "operator@localhost" };
+
+        if (_userManager.Users.All(u => u.UserName != operatorUser.UserName))
+        {
+            await _userManager.CreateAsync(operatorUser, "Operator1!");
+            if (!string.IsNullOrWhiteSpace(operatorRole.Name))
+            {
+                await _userManager.AddToRolesAsync(operatorUser, new [] { operatorRole.Name });
             }
         }
     }
