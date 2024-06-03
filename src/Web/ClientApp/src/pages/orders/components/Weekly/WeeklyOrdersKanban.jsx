@@ -1,6 +1,8 @@
 import GridColumn from "./GridColumn";
 import { Grid } from "@chakra-ui/react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import useGetOrdersByPeriod from "../../hooks/useGetOrdersByPeriod.tsx";
+import WeeklyOrdersFooter from "../OrderViewFooter.jsx";
 
 const daysOfWeek = [
   "Lunes",
@@ -12,42 +14,74 @@ const daysOfWeek = [
   "Domingo",
 ];
 
-const WeekHandler = ({ orders, children }) => {
-  const [currentWeek, setCurrentWeek] = useState(0);
+const WeekHandler = ({ children }) => {
+  const [queryDate, setQueryDate] = useState(() => {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // Set to midnight, this to avoid timezone issues
+    return now;
+  });
 
-  const incrementWeek = () => setCurrentWeek(currentWeek + 1);
-  const decrementWeek = () => setCurrentWeek(currentWeek - 1);
+  const incrementWeek = () => {
+    const newDate = new Date(queryDate);
+    newDate.setDate(newDate.getDate() + 7);
+    setQueryDate(newDate);
+  };
 
-  const startOfWeek = useMemo(() => {
-    const date = new Date();
-    date.setDate(date.getDate() - date.getDay() + currentWeek * 7);
-    return date;
-  }, [currentWeek]);
+  const decrementWeek = () => {
+    const newDate = new Date(queryDate);
+    newDate.setDate(newDate.getDate() - 7);
+    setQueryDate(newDate);
+  };
+
+  const {
+    data: orders,
+    isLoading: isOrdersLoading,
+    refetch,
+    cacheKey,
+  } = useGetOrdersByPeriod("Week", queryDate);
 
   const weekDates = useMemo(() => {
     return new Array(7).fill(null).map((_, index) => {
-      const date = new Date(startOfWeek);
+      const date = new Date(queryDate);
       date.setDate(date.getDate() + index);
       return date;
     });
-  }, [startOfWeek]);
+  }, [queryDate]);
 
   const ordersByDay = useMemo(() => {
     return new Array(7).fill(null).map((_, index) => {
       return orders.filter((order) => {
         const deliveryDate = new Date(order.deliveryDate);
-        return deliveryDate.getDay() === index + 1;
+        deliveryDate.setHours(0, 0, 0, 0);
+
+        const startOfWeekMidnight = new Date(queryDate);
+        startOfWeekMidnight.setHours(0, 0, 0, 0);
+
+        const diffInDays = Math.floor(
+          (deliveryDate - startOfWeekMidnight) / (1000 * 60 * 60 * 24)
+        );
+
+        return diffInDays === index;
       });
     });
-  }, [orders, currentWeek]);
+  }, [orders, queryDate]);
+
+  const currentDayIndex = queryDate.getDay() - 1;
+  const adjustedDaysOfWeek = [
+    ...daysOfWeek.slice(currentDayIndex),
+    ...daysOfWeek.slice(0, currentDayIndex),
+  ];
 
   return children({
-    currentWeek,
+    currentWeek: queryDate,
     incrementWeek,
     decrementWeek,
     ordersByDay,
-    startOfWeek,
     weekDates,
+    daysOfWeek: adjustedDaysOfWeek,
+    isOrdersLoading,
+    refetch,
+    cacheKey,
   });
 };
 
@@ -57,27 +91,30 @@ const DragHandler = ({ children }) => {
   const [scrollLeft, setScrollLeft] = useState(0);
   const gridRef = useRef();
 
-  const onMouseDown = (e) => {
+  const onMouseDown = useCallback((e) => {
     setIsDragging(true);
     setStartX(e.pageX - gridRef.current.offsetLeft);
     setScrollLeft(gridRef.current.scrollLeft);
-  };
+  }, []);
 
-  const onMouseLeave = () => {
+  const onMouseLeave = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
-  const onMouseUp = () => {
+  const onMouseUp = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
-  const onMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - gridRef.current.offsetLeft;
-    const walk = x - startX;
-    gridRef.current.scrollLeft = scrollLeft - walk;
-  };
+  const onMouseMove = useCallback(
+    (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - gridRef.current.offsetLeft;
+      const walk = x - startX;
+      gridRef.current.scrollLeft = scrollLeft - walk;
+    },
+    [isDragging, startX, scrollLeft]
+  );
 
   return children({
     isDragging,
@@ -91,32 +128,42 @@ const DragHandler = ({ children }) => {
 
 const WeeklyOrdersKanban = ({
   colorMode,
-  orders,
-  isLoading,
   arrangementData,
   responsibleData,
   communicationTypeData,
+  isLoading,
   branchData,
   deliveryTypeData,
   tagData,
-}) => {
-  return (
-    <WeekHandler orders={orders}>
-      {({ weekDates, ordersByDay }) => (
-        <DragHandler>
-          {({
-            isDragging,
-            onMouseDown,
-            onMouseLeave,
-            onMouseUp,
-            onMouseMove,
-            gridRef,
-          }) => (
+  _paddingX,
+}) => (
+  <WeekHandler>
+    {({
+      weekDates,
+      ordersByDay,
+      daysOfWeek,
+      incrementWeek,
+      decrementWeek,
+      isOrdersLoading,
+      refetch,
+      cacheKey,
+    }) => (
+      <DragHandler>
+        {({
+          isDragging,
+          onMouseDown,
+          onMouseLeave,
+          onMouseUp,
+          onMouseMove,
+          gridRef,
+        }) => (
+          <>
             <Grid
-              paddingBottom="2rem"
+              paddingBottom="1rem"
+              paddingX={_paddingX}
               templateColumns="repeat(7, 300px)"
               gap="3rem"
-              height="100%"
+              height={"calc(100% - 130px)"}
               overflowX="auto"
               css={{
                 "&::-webkit-scrollbar": {
@@ -125,7 +172,6 @@ const WeeklyOrdersKanban = ({
                 msOverflowStyle: "none",
                 scrollbarWidth: "none",
               }}
-              paddingX="3rem"
               onMouseDown={onMouseDown}
               onMouseLeave={onMouseLeave}
               onMouseUp={onMouseUp}
@@ -134,32 +180,41 @@ const WeeklyOrdersKanban = ({
               ref={gridRef}
             >
               {ordersByDay.map((ordersForDay, index) => {
-                const dateLabel = `${daysOfWeek[index]} ${
-                  weekDates[index].getDate() + 1
-                }/${weekDates[index].getMonth() + 1}`;
+                const dateLabel = `${daysOfWeek[index]} ${weekDates[
+                  index
+                ].getDate()}/${weekDates[index].getMonth() + 1}`;
 
                 return (
                   <GridColumn
-                    key={index}
-                    date={dateLabel}
+                    key={index + dateLabel}
+                    dateLabel={dateLabel}
+                    refetch={refetch}
+                    date={weekDates[index]}
                     orders={ordersForDay}
                     colorMode={colorMode}
-                    isLoading={isLoading}
+                    isLoading={isLoading || isOrdersLoading}
                     arrangementData={arrangementData}
                     responsibleData={responsibleData}
                     communicationTypeData={communicationTypeData}
                     branchData={branchData}
                     deliveryTypeData={deliveryTypeData}
                     tagData={tagData}
+                    cacheKey={cacheKey}
                   />
                 );
               })}
             </Grid>
-          )}
-        </DragHandler>
-      )}
-    </WeekHandler>
-  );
-};
+            <WeeklyOrdersFooter
+              height="40px"
+              paddingX={_paddingX}
+              incrementWeek={incrementWeek}
+              decrementWeek={decrementWeek}
+            />
+          </>
+        )}
+      </DragHandler>
+    )}
+  </WeekHandler>
+);
 
 export default WeeklyOrdersKanban;

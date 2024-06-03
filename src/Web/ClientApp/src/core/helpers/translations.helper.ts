@@ -25,6 +25,12 @@
   isavailable: "Disponibilidad",
   true: "Disponible",
   false: "No disponible",
+  pending: "Pendiente",
+  inprogress: "En progreso",
+  ready: "Listo",
+  delivered: "Entregado",
+  cancelled: "Cancelado",
+  paid: "Pagado",
 };
 
 export function LANG(word) {

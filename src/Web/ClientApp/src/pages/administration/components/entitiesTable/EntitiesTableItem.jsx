@@ -9,7 +9,9 @@ const EntitiesTableItem = ({
   fatherEntityName,
   fatherEntityData,
   refetch,
-}) => (
+}) => {
+
+  return(
   <Tr key={item.id}>
     {Object.keys(item)
       .filter((key) => key.toLowerCase().indexOf("id") === -1)
@@ -34,6 +36,7 @@ const EntitiesTableItem = ({
       </Flex>
     </Td>
   </Tr>
-);
+  );
+}
 
 export default EntitiesTableItem;

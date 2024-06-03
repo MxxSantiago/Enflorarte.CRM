@@ -55,7 +55,7 @@ const ArrangementsView = () => {
     isFlowerVariantsLoading;
 
   useEffect(() => {
-    setFilteredArrangements(filteredArrangements);
+    setFilteredArrangements(arrangementsData);
   }, [arrangementsData]);
 
   return (
@@ -165,6 +165,7 @@ const ArrangementsView = () => {
         wrappingVariantData={wrapperVariantsData}
         flowerVariantData={flowerVariantsData}
         refetch={refetch}
+        arrangementsData={arrangementsData}
       />
     </>
   );

@@ -11,6 +11,10 @@ import {
   AlertDialogOverlay,
   IconButton,
   useDisclosure,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { createLookupEntityPayload } from "../../../core/helpers/web-api-client.helper.ts";
 import { LANG } from "../../../core/helpers/translations.helper.ts";
@@ -32,6 +36,9 @@ function CreateEntity({
   entity,
   fatherEntityName,
   refetch,
+  entitiesData,
+  refetchVariant,
+  variantName,
   ...props
 }) {
   const [properties, setProperties] = useState({ ...entity });
@@ -45,13 +52,22 @@ function CreateEntity({
     entityName,
     properties
   );
+  
+  const [alreadyExists, setAlreadyExists] = useState(false);
 
   useEffect(() => setProperties({ ...entity }), [entity]);
+
+  useEffect(() => {
+    setAlreadyExists(false);
+  }, []);
 
   useEffect(() => {
     if (isSuccess) {
       refetch();
       onClose();
+      if(variantName === "wrapperVariant" || variantName === "flowerVariant"){
+        window.location.reload();
+      }
     }
   }, [isSuccess]);
 
@@ -80,6 +96,23 @@ function CreateEntity({
         [property]: "",
       });
     }
+  };
+
+  const handleInputChange = (property, newValue) => {
+    let alreadyExists = false;
+  
+    if (entitiesData) {
+      alreadyExists = entitiesData.some(
+        (entity) => entity.name && entity.name.toLowerCase() === newValue.toLowerCase()
+      );
+    }
+  
+    setAlreadyExists(alreadyExists);
+  
+    setProperties({
+      ...properties,
+      [property]: newValue,
+    });
   };
 
   return (
@@ -140,15 +173,21 @@ function CreateEntity({
                         size={{ base: "md", md: "lg" }}
                         value={properties[property] ?? ""}
                         onChange={(e) =>
-                          setProperties({
-                            ...properties,
-                            [property]: e.target.value,
-                          })
+                          handleInputChange(property, e.target.value)
                         }
                       />
                     )}
                   </Box>
                 ))}
+              {alreadyExists && (
+                <Alert status="warning">
+                  <AlertIcon />
+                  <AlertTitle>Advertencia</AlertTitle>
+                  <AlertDescription>
+                    Este valor ya existe en {LANG(entityName)}.
+                  </AlertDescription>
+                </Alert>
+              )}
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose} isDisabled={isLoading}>

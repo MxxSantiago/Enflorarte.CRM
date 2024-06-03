@@ -2,6 +2,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { apiClient } from "../../../core/helpers/web-api-client.helper.ts";
 import { useToast } from "@chakra-ui/react";
 import { Order } from "../../../web-api-client";
+import { toLocalISOString } from "../../../core/helpers/dates.helper.ts";
 
 type Period = "Day" | "Week" | "Month";
 
@@ -13,6 +14,7 @@ interface Result {
   isError: boolean;
   isUninitialized: boolean;
   refetch: (clearCache?: boolean) => void;
+  cacheKey?: string;
 }
 
 /**
@@ -30,9 +32,7 @@ interface Result {
  */
 const useGetOrdersByPeriod = (
   period: Period,
-  fromDate: Date = new Date(
-    new Date().setHours(0, 0, 0, 0) - 7 * 24 * 60 * 60 * 1000
-  )
+  fromDate: Date = new Date(new Date().setDate(new Date().getDate() - 1))
 ): Result => {
   const entityName = "order";
   const restMethod = `Get${period}Orders`;
@@ -46,16 +46,29 @@ const useGetOrdersByPeriod = (
   const [isError, setIsError] = useState(false);
   const [isUninitialized, setIsUninitialized] = useState(true);
   const [refetchCount, setRefetchCount] = useState(0);
+  const [cacheKey, setCacheKey] = useState(
+    `orders_${period}/${toLocalISOString(fromDate)}`
+  );
+
+  useEffect(() => {
+    setCacheKey(`orders_${period}/${toLocalISOString(fromDate)}`);
+  }, [fromDate]);
 
   useEffect(() => {
     setIsLoading(true);
   }, [entityName]);
 
   useEffect(() => {
+    setClearCache(true);
+  }, [fromDate, period]);
+
+  useEffect(() => {
     /**
      * Fetches the data from the API based on the entity name and ID.
      */
     const fetchData = async () => {
+      setIsLoading(true);
+
       if (!entityName) {
         setIsSuccess(false);
         setIsError(false);
@@ -76,21 +89,22 @@ const useGetOrdersByPeriod = (
             entityName,
             restMethod,
             true,
-            fromDate
+            fromDate,
+            cacheKey
           );
         } else {
           result = await apiClient.executeCustomMethod(
             entityName,
             restMethod,
             false,
-            fromDate
+            fromDate,
+            cacheKey
           );
         }
 
         setData(result);
         setIsUninitialized(false);
       } catch (err) {
-        console.error(err, entityName);
         setIsSuccess(false);
         setIsError(true);
         setError(err);
@@ -104,7 +118,7 @@ const useGetOrdersByPeriod = (
     };
 
     fetchData();
-  }, [entityName, refetchCount, period]);
+  }, [entityName, refetchCount, period, fromDate, cacheKey]);
 
   useEffect(() => {
     if (isError) {
@@ -136,6 +150,7 @@ const useGetOrdersByPeriod = (
     isError: isError,
     isUninitialized: isUninitialized,
     refetch,
+    cacheKey,
   };
 };
 

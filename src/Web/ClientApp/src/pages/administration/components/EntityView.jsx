@@ -41,6 +41,7 @@ const EntityView = ({ title, entityName, entity, fatherEntityName }) => {
           entity={removeReferenceIdProperties(entity)}
           fatherEntityName="communicationType"
           refetch={refetch}
+          entitiesData={entitiesData}
           marginLeft="auto"
         />
       </Box>

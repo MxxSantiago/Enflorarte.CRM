@@ -1,4 +1,4 @@
-export const getAppropiateTextColor = (color: string) => {
+export const getAppropiateTextColor = (color: string = "#000000") => {
   const hex = color.replace("#", "");
   const r = parseInt(hex.slice(0, 2), 16);
   const g = parseInt(hex.slice(2, 4), 16);

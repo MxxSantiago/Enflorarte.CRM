@@ -1,4 +1,4 @@
-import OrderCard from "./OrderCard";
+import OrderCard from "../OrderCard";
 import {
   Box,
   GridItem,
@@ -8,12 +8,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import CreateOrder from "./CreateOrder";
-import UpdateOrder from "./UpdateOrder";
-import { useGetQuery } from "../../../../core/hooks/useApiClientHooks.tsx";
+import CreateOrder from "./CreateOrder.tsx";
+import { memo } from "react";
 
 const GridColumn = ({
+  dateLabel,
   date,
+  refetch,
   orders,
   colorMode,
   isLoading,
@@ -23,16 +24,11 @@ const GridColumn = ({
   branchData,
   deliveryTypeData,
   tagData,
+  cacheKey,
 }) => {
   const backColor = colorMode === "dark" ? "gray.700" : "gray.100";
   const borderColor = colorMode === "dark" ? "gray.600" : "gray.200";
-  const { refetch } = useGetQuery("tag");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenUpdate,
-    onOpen: onOpenUpdate,
-    onClose: onCloseUpdate,
-  } = useDisclosure();
 
   return (
     <>
@@ -65,7 +61,7 @@ const GridColumn = ({
           backgroundColor={backColor}
         >
           <Text fontSize="xl" margin={0}>
-            {date}
+            {dateLabel}
           </Text>
           <Tag
             size="lg"
@@ -89,30 +85,42 @@ const GridColumn = ({
                 id: i,
               }))
             : orders
-          ).map((order) => (
+          ).map((order, index) => (
             <OrderCard
-              isLoading={isLoading}
               key={order.id}
               order={order}
               colorMode={colorMode}
+              isLoading={isLoading}
+              arrangementData={arrangementData}
+              responsibleData={responsibleData}
+              communicationTypeData={communicationTypeData}
+              branchData={branchData}
+              deliveryTypeData={deliveryTypeData}
+              tagData={tagData}
+              refetch={refetch}
+              cacheKey={cacheKey}
             />
           ))}
         </Box>
       </GridItem>
-      <CreateOrder
-        isOpen={isOpen}
-        onClose={onClose}
-        arrangementData={arrangementData}
-        responsibleData={responsibleData}
-        communicationTypeData={communicationTypeData}
-        branchData={branchData}
-        deliveryTypeData={deliveryTypeData}
-        tagData={tagData}
-        refetch={refetch}
-      />
-      <UpdateOrder isOpen={isOpenUpdate} onClose={onCloseUpdate} />
+      {isLoading ? null : (
+        <CreateOrder
+          isOpen={isOpen}
+          date={date}
+          onClose={onClose}
+          arrangementData={arrangementData}
+          responsibleData={responsibleData}
+          communicationTypeData={communicationTypeData}
+          branchData={branchData}
+          deliveryTypeData={deliveryTypeData}
+          tagData={tagData}
+          refetch={refetch}
+          cacheKey={cacheKey}
+        />
+      )}
     </>
   );
 };
 
-export default GridColumn;
+const MemoizedGridColumn = memo(GridColumn);
+export default MemoizedGridColumn;

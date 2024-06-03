@@ -75,6 +75,7 @@ const EntityWithVariantView = ({
           title={title}
           entity={entity}
           refetch={refetchEntity}
+          entitiesData={entitiesData}
           marginLeft="auto"
         />
       </Box>
@@ -120,6 +121,7 @@ const EntityWithVariantView = ({
           entity={removeReferenceObjectProperties(variant)}
           fatherEntityName={entityName}
           refetch={refetchVariant}
+          variantName={variantName}
           marginLeft="auto"
         />
       </Box>
