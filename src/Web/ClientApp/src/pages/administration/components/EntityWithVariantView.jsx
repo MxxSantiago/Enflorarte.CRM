@@ -121,6 +121,7 @@ const EntityWithVariantView = ({
           entity={removeReferenceObjectProperties(variant)}
           fatherEntityName={entityName}
           refetch={refetchVariant}
+          variantName={variantName}
           marginLeft="auto"
         />
       </Box>

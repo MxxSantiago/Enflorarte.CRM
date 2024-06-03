@@ -37,6 +37,8 @@ function CreateEntity({
   fatherEntityName,
   refetch,
   entitiesData,
+  refetchVariant,
+  variantName,
   ...props
 }) {
   const [properties, setProperties] = useState({ ...entity });
@@ -50,6 +52,7 @@ function CreateEntity({
     entityName,
     properties
   );
+  
   const [alreadyExists, setAlreadyExists] = useState(false);
 
   useEffect(() => setProperties({ ...entity }), [entity]);
@@ -62,6 +65,9 @@ function CreateEntity({
     if (isSuccess) {
       refetch();
       onClose();
+      if(variantName === "wrapperVariant" || variantName === "flowerVariant"){
+        window.location.reload();
+      }
     }
   }, [isSuccess]);
 
