@@ -75,6 +75,7 @@ const EntityWithVariantView = ({
           title={title}
           entity={entity}
           refetch={refetchEntity}
+          entitiesData={entitiesData}
           marginLeft="auto"
         />
       </Box>

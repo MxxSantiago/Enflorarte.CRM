@@ -165,6 +165,7 @@ const ArrangementsView = () => {
         wrappingVariantData={wrapperVariantsData}
         flowerVariantData={flowerVariantsData}
         refetch={refetch}
+        arrangementsData={arrangementsData}
       />
     </>
   );

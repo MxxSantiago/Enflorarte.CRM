@@ -36,6 +36,8 @@ import {
   saveColorScheme,
 } from "../../../../core/constants.ts";
 import { toLocalISOString } from "../../../../core/helpers/dates.helper.ts";
+import { LANG } from "../../../../core/helpers/translations.helper.ts";
+
 
 const OrderEntity = new Order().toJSON();
 
@@ -132,7 +134,6 @@ const CreateOrder = ({
 
   useEffect(() => {
     setImageLoading(true);
-    initializeMockProperties();
   }, [isOpen]);
 
   const { isSuccess, execute, isLoading } = usePostQuery(
@@ -345,18 +346,29 @@ const CreateOrder = ({
                   </CardHeader>
                   <Text marginY={2}>Estado del pedido</Text>
                   <Select
-                    value={properties.paymentStatus}
-                    onChange={(e) => {
-                      setProperties({
-                        ...properties,
-                        paymentStatus: e.target.value,
-                      });
-                    }}
-                  >
-                    <option>Pendiente</option>
-                    <option>Cancelado</option>
-                    <option>Pagado</option>
-                  </Select>
+                      value={properties.orderStatus as OrderStatus}
+                      onChange={(e) => {
+                        setProperties({
+                          ...properties,
+                          orderStatus: e.target.value as unknown as OrderStatus,
+                        });
+                      }}
+                    >
+                      {Object.entries(OrderStatus).map(([key]) => {
+                        if (isNaN(Number(key))) {
+                          return (
+                            <option
+                              key={key}
+                              value={
+                                OrderStatus[key as keyof typeof OrderStatus]
+                              }
+                            >
+                              {LANG(key)}
+                            </option>
+                          );
+                        }
+                      })}
+                    </Select>
                   <Text marginY={2} marginTop={8}>
                     Arreglo
                   </Text>
@@ -436,6 +448,31 @@ const CreateOrder = ({
                   <Text marginY={2} marginTop={8}>
                     Estado de pago
                   </Text>
+                  <Select
+                      value={properties.paymentStatus as PaymentStatus}
+                      onChange={(e) => {
+                        setProperties({
+                          ...properties,
+                          paymentStatus: e.target
+                            .value as unknown as PaymentStatus,
+                        });
+                      }}
+                    >
+                      {Object.entries(PaymentStatus).map(([key]) => {
+                        if (isNaN(Number(key))) {
+                          return (
+                            <option
+                              key={key}
+                              value={
+                                PaymentStatus[key as keyof typeof PaymentStatus]
+                              }
+                            >
+                              {LANG(key)}
+                            </option>
+                          );
+                        }
+                      })}
+                    </Select>
                 </Card>
 
                 <Card p={4} mt={4}>
