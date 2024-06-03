@@ -35,7 +35,9 @@ const MonthlyOrdersCalendar = ({
     now.setHours(0, 0, 0, 0); // Set to midnight, this to avoid timezone issues
     return now;
   });
-  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(
+    queryDate.toLocaleDateString()
+  );
 
   const {
     data: orders,
@@ -69,8 +71,7 @@ const MonthlyOrdersCalendar = ({
   };
 
   useEffect(() => {
-    const today = queryDate.toLocaleDateString();
-    const orders = ordersByDate[today] || [];
+    const orders = ordersByDate[selectedDay] || [];
     setSelectedDayOrders(orders);
   }, [ordersByDate]);
 
