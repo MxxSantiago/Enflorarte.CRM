@@ -388,6 +388,71 @@
         }
       }
     },
+    "/api/Auth/updateUser": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_UpdateUser",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/deleteUser": {
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_DeleteUser",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/createUser": {
       "post": {
         "tags": [
@@ -1473,6 +1538,7 @@
         "tags": [
           "Order"
         ],
+<<<<<<< HEAD
         "operationId": "Order_GetWeekOrders",
         "parameters": [
           {
@@ -1720,6 +1786,8 @@
         "tags": [
           "Responsible"
         ],
+=======
+>>>>>>> develop
         "operationId": "Responsible_Post",
         "requestBody": {
           "x-name": "entity",
@@ -1738,6 +1806,7 @@
             "description": "",
             "content": {
               "application/json": {
+<<<<<<< HEAD
                 "schema": {
                   "type": "integer",
                   "format": "int32"
@@ -1845,6 +1914,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Responsible"
+=======
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+>>>>>>> develop
                 }
               }
             }
@@ -2541,6 +2615,36 @@
           "concurrencyStamp": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "UpdateCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DeleteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
           }
         }
       },

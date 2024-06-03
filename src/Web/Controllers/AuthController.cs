@@ -12,45 +12,28 @@ namespace Enflorarte.CRM.Web.Controllers;
 [Authorize]
 [ApiController]
 public class AuthController(
-        IUser userInSession, 
-        UserManager<ApplicationUser> userManager, 
-        RoleManager<IdentityRole> roleManager
-    ) : ControllerBase
+    IUser userInSession,
+    UserManager<ApplicationUser> userManager,
+    RoleManager<IdentityRole> roleManager
+) : ControllerBase
 {
-    public record UserDto(
-        string Id,
-        string UserName,
-        string Email,
-        List<string> Roles
-    );
-    
-    public record RegisterCommand(
-        string Email,
-        string UserName,
-        string Password,
-        List<string> Roles
-    );
-
-    public record RemoveRoleToUserCommand(string Id, string Role);
-    public record AddRoleToUserCommand(string Id, string Role);
-
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         string? id = userInSession.Id;
-        
+
         if (id is null)
         {
             return BadRequest("No hay usuario en sesión");
         }
-        
-        var user = await userManager.FindByIdAsync(id);
-        
+
+        ApplicationUser? user = await userManager.FindByIdAsync(id);
+
         if (user is null)
         {
             return NotFound("Usuario no encontrado");
         }
-        
+
         IList<string> roles = await userManager.GetRolesAsync(user);
 
         UserDto userDto = new(
@@ -59,27 +42,29 @@ public class AuthController(
             user.Email ?? "noemail@noemail.com",
             roles.ToList()
         );
-        
+
         return Ok(userDto);
     }
-    
+
     [HttpGet("roles")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<List<IdentityRole>> GetRoles() =>
-        await roleManager.Roles.ToListAsync();
-    
+    public async Task<List<IdentityRole>> GetRoles()
+    {
+        return await roleManager.Roles.ToListAsync();
+    }
+
     [HttpGet("users")]
     [Authorize(Roles = Roles.Administrator)]
     public async Task<List<UserDto>> GetUsers()
     {
         List<ApplicationUser> users = await userManager.Users.ToListAsync();
-        
+
         List<UserDto> usersDtos = new();
-        
+
         foreach (ApplicationUser user in users)
         {
             IList<string> roles = await userManager.GetRolesAsync(user);
-            
+
             usersDtos.Add(new UserDto(
                 user.Id,
                 user.UserName ?? "Anonymous",
@@ -87,24 +72,35 @@ public class AuthController(
                 roles.ToList()
             ));
         }
-        
+
         return usersDtos;
     }
-    
-    [HttpPost("createUser")]
+
+    [HttpPut("updateUser")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<ActionResult<UserDto>> Register(RegisterCommand request)
+    public async Task<ActionResult<UserDto>> UpdateUser(UpdateCommand request)
     {
-        ApplicationUser user = await CreateUser(request);
+        ApplicationUser? user = await userManager.FindByIdAsync(request.Id);
+        if (user is null)
+        {
+            return NotFound("Usuario no encontrado");
+        }
 
-        IdentityResult transactionResult = await userManager.CreateAsync(user, request.Password);
+        user.UserName = request.UserName;
 
+        IdentityResult transactionResult = await userManager.UpdateAsync(user);
         if (!transactionResult.Succeeded)
         {
             return BadRequest(transactionResult.Errors);
         }
-        
-        var roleResult = await userManager.AddToRolesAsync(user, request.Roles);
+
+        IList<string> userRoles = await userManager.GetRolesAsync(user);
+        foreach (var rol in userRoles)
+        {
+            await userManager.RemoveFromRoleAsync(user, rol);
+        }
+
+        IdentityResult roleResult = await userManager.AddToRolesAsync(user, request.Roles);
         if (!roleResult.Succeeded)
         {
             return BadRequest(roleResult.Errors);
@@ -119,7 +115,54 @@ public class AuthController(
 
         return Ok(userDto);
     }
-    
+
+    [HttpDelete("deleteUser")]
+    [Authorize(Roles = Roles.Administrator)]
+    public async Task<ActionResult> DeleteUser(DeleteCommand request)
+    {
+        ApplicationUser? user = await userManager.FindByIdAsync(request.Id);
+
+        if (user is null)
+        {
+            return NotFound("Usuario no encontrado");
+        }
+
+        IdentityResult transactionResult = await userManager.DeleteAsync(user);
+
+        return transactionResult.Succeeded
+            ? Ok()
+            : BadRequest(transactionResult.Errors);
+    }
+
+    [HttpPost("createUser")]
+    [Authorize(Roles = Roles.Administrator)]
+    public async Task<ActionResult<UserDto>> Register(RegisterCommand request)
+    {
+        ApplicationUser user = await CreateUser(request);
+
+        IdentityResult transactionResult = await userManager.CreateAsync(user, request.Password);
+
+        if (!transactionResult.Succeeded)
+        {
+            return BadRequest(transactionResult.Errors);
+        }
+
+        IdentityResult roleResult = await userManager.AddToRolesAsync(user, request.Roles);
+        if (!roleResult.Succeeded)
+        {
+            return BadRequest(roleResult.Errors);
+        }
+
+        UserDto userDto = new(
+            user.Id,
+            user.UserName ?? "Anonymous",
+            user.Email ?? "noemail@noemail.com",
+            request.Roles
+        );
+
+        return Ok(userDto);
+    }
+
     [HttpPost("removeRoleToUser")]
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult> RemoveRoleToUser(RemoveRoleToUserCommand request)
@@ -144,7 +187,7 @@ public class AuthController(
             ? Ok()
             : BadRequest(result.Errors);
     }
-    
+
     [HttpPost("addRoleToUser")]
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult> AddRoleToUser(AddRoleToUserCommand request)
@@ -195,4 +238,31 @@ public class AuthController(
             throw new Exception("El nombre de usuario ya está en uso");
         }
     }
+
+    public record UserDto(
+        string Id,
+        string UserName,
+        string Email,
+        List<string> Roles
+    );
+
+    public record DeleteCommand(string Id);
+
+    public record UpdateCommand(
+        string Id,
+        string UserName,
+        string Email,
+        List<string> Roles
+    );
+
+    public record RegisterCommand(
+        string Email,
+        string UserName,
+        string Password,
+        List<string> Roles
+    );
+
+    public record RemoveRoleToUserCommand(string Id, string Role);
+
+    public record AddRoleToUserCommand(string Id, string Role);
 }

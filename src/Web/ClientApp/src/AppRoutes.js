@@ -2,6 +2,7 @@ import AdministrationLayout from "./pages/administration/AdministrationLayout.js
 import ArrangementsLayout from "./pages/arrangements/ArrangementsLayout.jsx";
 import OrdersLayout from "./pages/orders/OrdersLayout.jsx";
 import { Roles } from "./core/constants.ts";
+import UsersLayout from "./pages/users/UsersLayout";
 
 const mainRoutes = [
   {
@@ -20,6 +21,12 @@ const mainRoutes = [
     element: <AdministrationLayout />,
     roles: [Roles.Administrator],
   },
+  {
+    name: "Usuarios",
+    path: "/usuarios/",
+    element: <UsersLayout />,
+    roles: [Roles.Administrator],
+  }
 ];
 
 export default mainRoutes;
