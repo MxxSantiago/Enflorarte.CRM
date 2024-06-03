@@ -310,49 +310,11 @@ const UpdateOrder = ({
                       onChange={(e) => setDeliveryDate(e.target.value)}
                     />
                   </Card>
-
+                  
                   <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
                         Cliente
-                      </Heading>
-                    </CardHeader>
-                    <Text marginY={2}>Nombre del Responsable</Text>
-                    <AutocompleteMultiSelect
-                      items={responsibleData.map((item) => ({
-                        value: item,
-                        label: item.name,
-                      }))}
-                      _selectedItems={selectedItems.responsible}
-                      onSelectedItemsChange={(changes) =>
-                        handleSelectedItemChange(
-                          changes.selectedItems,
-                          "responsible"
-                        )
-                      }
-                    />
-                    <Text marginY={2} marginTop={8}>
-                      Forma de Comunicación
-                    </Text>
-                    <AutocompleteMultiSelect
-                      items={communicationTypeData.map((item) => ({
-                        value: item,
-                        label: item.name,
-                      }))}
-                      _selectedItems={selectedItems.communicationType}
-                      onSelectedItemsChange={(changes) =>
-                        handleSelectedItemChange(
-                          changes.selectedItems,
-                          "communicationType"
-                        )
-                      }
-                    />
-                  </Card>
-
-                  <Card p={4} mt={4}>
-                    <CardHeader>
-                      <Heading size="md" display="flex" justifyContent="center">
-                        Receptor
                       </Heading>
                     </CardHeader>
                     <Text marginY={2}>Nombre</Text>
@@ -379,6 +341,22 @@ const UpdateOrder = ({
                         })
                       }
                     />
+                      <Text marginY={2} marginTop={8}>
+                      Forma de Comunicación
+                    </Text>
+                    <AutocompleteMultiSelect
+                      items={communicationTypeData.map((item) => ({
+                        value: item,
+                        label: item.name,
+                      }))}
+                      _selectedItems={selectedItems.communicationType}
+                      onSelectedItemsChange={(changes) =>
+                        handleSelectedItemChange(
+                          changes.selectedItems,
+                          "communicationType"
+                        )
+                      }
+                    />
                     <Text marginY={2} marginTop={8}>
                       Número Telefónico
                     </Text>
@@ -400,6 +378,20 @@ const UpdateOrder = ({
                         Pedido
                       </Heading>
                     </CardHeader>
+                    <Text marginY={2}>Nombre del Responsable</Text>
+                    <AutocompleteMultiSelect
+                      items={responsibleData.map((item) => ({
+                        value: item,
+                        label: item.name,
+                      }))}
+                      _selectedItems={selectedItems.responsible}
+                      onSelectedItemsChange={(changes) =>
+                        handleSelectedItemChange(
+                          changes.selectedItems,
+                          "responsible"
+                        )
+                      }
+                    />
                     <Text marginY={2}>Estado del pedido</Text>
                     <Select
                       value={properties.orderStatus as OrderStatus}

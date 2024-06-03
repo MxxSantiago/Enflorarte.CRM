@@ -12,7 +12,6 @@ import {
 import { CgPrinter } from "react-icons/cg";
 const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
-
 function Ticket({ printData }) {
   const generatePdf = async () => {
     const element = document.getElementById("content-to-export");
@@ -37,9 +36,35 @@ function Ticket({ printData }) {
   };
   const fecha = new Date();
   const year = fecha.getFullYear();
-  const month = String(fecha.getMonth() + 1).padStart(2, '0'); // Meses van de 0-11
-  const day = String(fecha.getDate()).padStart(2, '0');
+  const month = String(fecha.getMonth() + 1).padStart(2, "0");
+  const day = String(fecha.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
+
+  const estadoPago = () => {
+    if (printData.paymentStatus === 1) {
+      return "Pendiente"
+    } else {
+      return "Pagado"
+    }
+  };
+
+  const estadoOrden = () => {
+    if (printData.orderStatus === 0) {
+      return "Pendiente"
+    } else if(printData.orderStatus === 1){
+      return "En progreso"
+    }
+    else if(printData.orderStatus === 2){
+      return "Listo"
+    }
+    else if(printData.orderStatus === 3){
+      return "Entregado"
+    }
+    else if(printData.orderStatus === 4){
+      return "Cancelado"
+    }
+
+  };
 
   return (
     <Box>
@@ -51,10 +76,9 @@ function Ticket({ printData }) {
         ></IconButton>
       </Box>
       <VStack id="content-to-export" border="1px">
-
-      <Image src={logo} alt='logo' w="90px" h="90px" pt={2}/>
-      <Text>Impreso el: {formattedDate}</Text>
-      <strong>Fechas</strong>
+        <Image src={logo} alt="logo" w="90px" h="90px" pt={2} />
+        <Text>Impreso el: {formattedDate}</Text>
+        <strong>Fechas</strong>
 
         <Text className="text-xl self-center mb-1">
           <strong>Fecha de orden: </strong>
@@ -90,7 +114,7 @@ function Ticket({ printData }) {
         </Text>
         <Text className="text-lg">
           <strong>Estado del pedido: </strong>
-          {printData.orderStatus}
+          {estadoOrden()}
         </Text>
         <Text className="text-lg">
           <strong>Arreglos: </strong>
@@ -109,7 +133,7 @@ function Ticket({ printData }) {
         </Text>
         <Text className="text-lg">
           <strong>Estado de pago: </strong>
-          {printData.paymentStatus}
+          {estadoPago()}
         </Text>
         <Divider />
 
@@ -124,7 +148,6 @@ function Ticket({ printData }) {
           <strong>Sucursal encargada: </strong>
           {printData.branch.join(", ")}
         </Text>
-
       </VStack>
     </Box>
   );

@@ -260,44 +260,6 @@ const CreateOrder = ({
                       Cliente
                     </Heading>
                   </CardHeader>
-                  <Text marginY={2}>Nombre del Responsable</Text>
-                  <AutocompleteMultiSelect
-                    items={responsibleData.map((item) => ({
-                      value: item,
-                      label: item.name,
-                    }))}
-                    _selectedItems={selectedItems.responsible}
-                    onSelectedItemsChange={(changes) =>
-                      handleSelectedItemChange(
-                        changes.selectedItems,
-                        "responsible"
-                      )
-                    }
-                  />
-                  <Text marginY={2} marginTop={8}>
-                    Forma de Comunicación
-                  </Text>
-                  <AutocompleteMultiSelect
-                    items={communicationTypeData.map((item) => ({
-                      value: item,
-                      label: item.name,
-                    }))}
-                    _selectedItems={selectedItems.communicationType}
-                    onSelectedItemsChange={(changes) =>
-                      handleSelectedItemChange(
-                        changes.selectedItems,
-                        "communicationType"
-                      )
-                    }
-                  />
-                </Card>
-
-                <Card p={4} mt={4}>
-                  <CardHeader>
-                    <Heading size="md" display="flex" justifyContent="center">
-                      Receptor
-                    </Heading>
-                  </CardHeader>
                   <Text marginY={2}>Nombre</Text>
                   <Input
                     size={{ base: "md", md: "lg" }}
@@ -323,6 +285,22 @@ const CreateOrder = ({
                     }
                   />
                   <Text marginY={2} marginTop={8}>
+                    Forma de Comunicación
+                  </Text>
+                  <AutocompleteMultiSelect
+                    items={communicationTypeData.map((item) => ({
+                      value: item,
+                      label: item.name,
+                    }))}
+                    _selectedItems={selectedItems.communicationType}
+                    onSelectedItemsChange={(changes) =>
+                      handleSelectedItemChange(
+                        changes.selectedItems,
+                        "communicationType"
+                      )
+                    }
+                  />
+                  <Text marginY={2} marginTop={8}>
                     Número Telefónico
                   </Text>
                   <Input
@@ -343,6 +321,20 @@ const CreateOrder = ({
                       Pedido
                     </Heading>
                   </CardHeader>
+                  <Text marginY={2}>Nombre del Responsable</Text>
+                  <AutocompleteMultiSelect
+                    items={responsibleData.map((item) => ({
+                      value: item,
+                      label: item.name,
+                    }))}
+                    _selectedItems={selectedItems.responsible}
+                    onSelectedItemsChange={(changes) =>
+                      handleSelectedItemChange(
+                        changes.selectedItems,
+                        "responsible"
+                      )
+                    }
+                  />
                   <Text marginY={2}>Estado del pedido</Text>
                   <Select
                     value={properties.orderStatus as OrderStatus}
