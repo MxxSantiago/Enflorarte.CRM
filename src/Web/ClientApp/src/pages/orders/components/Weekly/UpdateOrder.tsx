@@ -9,7 +9,6 @@ import {
   Button,
   Card,
   CardHeader,
-  Flex,
   Grid,
   GridItem,
   Heading,
@@ -109,27 +108,27 @@ const UpdateOrder = ({
 
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: any[] }>({
     responsible: order.responsible!.map((item) => ({
-      value: item.id,
+      value: item,
       label: item.name,
     })),
     communicationType: order.communicationType!.map((item) => ({
-      value: item.id,
+      value: item,
       label: item.name,
     })),
     branch: order.branch!.map((item) => ({
-      value: item.id,
+      value: item,
       label: item.name,
     })),
     arrangement: order.arrangement!.map((item) => ({
-      value: item.id,
+      value: item,
       label: item.name,
     })),
     deliveryType: order.deliveryType!.map((item) => ({
-      value: item.id,
+      value: item,
       label: item.name,
     })),
-    tag: order.tags!.map((item) => ({
-      value: item.id,
+    tags: order.tags!.map((item) => ({
+      value: item,
       label: item.name,
     })),
   });
@@ -184,7 +183,12 @@ const UpdateOrder = ({
     execute();
   };
 
-  const handleSelectedItemChange = (propertySelectedItems, property) => {
+  const handleSelectedItemChange = (
+    propertySelectedItems: any[],
+    property: string
+  ) => {
+    console.log(propertySelectedItems);
+
     if (propertySelectedItems.length) {
       setSelectedItems({
         ...selectedItems,
@@ -228,7 +232,7 @@ const UpdateOrder = ({
     ),
     orderPrice: properties.orderPrice,
     paymentStatus: properties.paymentStatus,
-    tag: selectedItems.tag.map((item: { label: string }) => item.label),
+    tag: selectedItems.tags.map((item: { label: string }) => item.label),
     branch: selectedItems.branch.map((item: { label: string }) => item.label),
   };
 
@@ -506,8 +510,9 @@ const UpdateOrder = ({
                       onChange={(e) => {
                         setProperties({
                           ...properties,
-                          paymentStatus: e.target
-                            .value as unknown as PaymentStatus,
+                          paymentStatus: Number(
+                            e.target.value
+                          ) as unknown as PaymentStatus,
                         });
                       }}
                     >
@@ -540,9 +545,9 @@ const UpdateOrder = ({
                         value: item,
                         label: item.name,
                       }))}
-                      _selectedItems={selectedItems.tag}
+                      _selectedItems={selectedItems.tags}
                       onSelectedItemsChange={(changes) =>
-                        handleSelectedItemChange(changes.selectedItems, "tag")
+                        handleSelectedItemChange(changes.selectedItems, "tags")
                       }
                     />
                   </Card>

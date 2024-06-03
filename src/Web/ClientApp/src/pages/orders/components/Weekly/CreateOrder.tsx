@@ -60,7 +60,7 @@ const CreateOrder = ({
     branch: [],
     arrangement: [],
     deliveryType: [],
-    tag: [],
+    tags: [],
   });
 
   const [properties, setProperties] = useState({
@@ -121,7 +121,7 @@ const CreateOrder = ({
           label: deliveryTypeData[0].name,
         },
       ],
-      tag: [
+      tags: [
         {
           value: tagData[0],
           label: tagData[0].name,
@@ -450,9 +450,9 @@ const CreateOrder = ({
                       value: item,
                       label: item.name,
                     }))}
-                    _selectedItems={selectedItems.tag}
+                    _selectedItems={selectedItems.tags}
                     onSelectedItemsChange={(changes) =>
-                      handleSelectedItemChange(changes.selectedItems, "tag")
+                      handleSelectedItemChange(changes.selectedItems, "tags")
                     }
                   />
                 </Card>
