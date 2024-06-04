@@ -398,7 +398,7 @@ const UpdateOrder = ({
                       onChange={(e) => {
                         setProperties({
                           ...properties,
-                          orderStatus: e.target.value as unknown as OrderStatus,
+                          orderStatus: Number(e.target.value) as OrderStatus,
                         });
                       }}
                     >
@@ -502,9 +502,7 @@ const UpdateOrder = ({
                       onChange={(e) => {
                         setProperties({
                           ...properties,
-                          paymentStatus: Number(
-                            e.target.value
-                          ) as unknown as PaymentStatus,
+                          paymentStatus: Number(e.target.value) as PaymentStatus,
                         });
                       }}
                     >

@@ -29,14 +29,14 @@ const OrdersViewHeader = ({ colorMode, mode, _paddingX }) => {
           width="fit-content"
           margin={0}
         >
-          Pedidos
+          Ordenes
         </Text>
       </Flex>
       <Box display="flex" marginLeft="auto">
         <TagPopover colorMode={colorMode} mode={mode} />
         <ButtonGroup isAttached variant="outline" marginLeft="auto">
           <Tooltip
-            label="Pedidos por semana"
+            label="Ordenes por semana"
             fontSize="md"
             placement="bottom-start"
           >

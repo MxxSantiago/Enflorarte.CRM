@@ -6,7 +6,7 @@ import UsersLayout from "./pages/users/UsersLayout";
 
 const mainRoutes = [
   {
-    name: "Pedidos",
+    name: "Ordenes",
     path: "/ordenes/*",
     element: <OrdersLayout />,
   },

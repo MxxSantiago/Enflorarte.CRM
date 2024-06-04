@@ -151,6 +151,7 @@ const ArrangementsView = () => {
                   arrangementTypeData={arrangementTypesData}
                   wrappingVariantData={wrapperVariantsData}
                   flowerVariantData={flowerVariantsData}
+                  arrangementsData={arrangementsData}
                 />
               ))}
             </SimpleGrid>
