@@ -87,17 +87,6 @@ const UpdateOrder = ({
     onClose: onCloseprint,
   } = useDisclosure();
 
-  const [deliveryDate, setDeliveryDate] = useState(
-    typeof order.deliveryDate === "string"
-      ? order.deliveryDate
-      : toLocalISOString(order.deliveryDate)
-  );
-  const [orderDate, setOrderDate] = useState(
-    typeof order.orderDate === "string"
-      ? order.orderDate
-      : toLocalISOString(order.orderDate)
-  );
-
   const cancelRef = React.useRef();
   const {
     isOpen: isOpenDelete,
@@ -142,34 +131,10 @@ const UpdateOrder = ({
   }, [isOpen]);
 
   const {
-    isSuccess,
-    execute,
-    isLoading: isUpdateLoading,
-  } = usePutQuery(
-    "order",
-    {
-      ...properties,
-      referenceImage: properties.referenceImage,
-      deliveryDate: new Date(deliveryDate as any),
-      orderDate: new Date(orderDate as any),
-    },
-    cacheKey
-  );
-
-  const {
     isSuccess: isDeleteSuccess,
     execute: deleteEntity,
     isLoading: isDeleteLoading,
   } = useDeleteQuery("order", order.id!, cacheKey);
-
-  const isLoading = isUpdateLoading || isDeleteLoading;
-
-  useEffect(() => {
-    if (isSuccess) {
-      refetch();
-      onClose();
-    }
-  }, [isSuccess]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -178,17 +143,10 @@ const UpdateOrder = ({
     onClose();
   }, [isDeleteSuccess]);
 
-  const handleUpdate = (event) => {
-    event.preventDefault();
-    execute();
-  };
-
   const handleSelectedItemChange = (
     propertySelectedItems: any[],
     property: string
   ) => {
-    console.log(propertySelectedItems);
-
     if (propertySelectedItems.length) {
       setSelectedItems({
         ...selectedItems,
@@ -211,8 +169,8 @@ const UpdateOrder = ({
   };
 
   const printData = {
-    orderDate: orderDate,
-    deliveryDate: deliveryDate,
+    //orderDate: orderDate,
+    //deliveryDate: deliveryDate,
     responsible: selectedItems.responsible.map(
       (item: { label: string }) => item.label
     ),
@@ -235,6 +193,46 @@ const UpdateOrder = ({
     tag: selectedItems.tags.map((item: { label: string }) => item.label),
     branch: selectedItems.branch.map((item: { label: string }) => item.label),
   };
+
+  const [deliveryDate, setDeliveryDate] = useState(
+    typeof order.deliveryDate === "string"
+      ? order.deliveryDate
+      : toLocalISOString(order.deliveryDate)
+  );
+  const [orderDate, setOrderDate] = useState(
+    typeof order.orderDate === "string"
+      ? order.orderDate
+      : toLocalISOString(order.orderDate)
+  );
+
+  const {
+    isSuccess,
+    execute,
+    isLoading: isUpdateLoading,
+  } = usePutQuery(
+    "order",
+    {
+      ...properties,
+      referenceImage: properties.referenceImage,
+      deliveryDate: deliveryDate,
+      orderDate: orderDate,
+    },
+    cacheKey
+  );
+
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    execute();
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+      onClose();
+    }
+  }, [isSuccess]);
+
+  const isLoading = isUpdateLoading || isDeleteLoading;
 
   return (
     <>
@@ -310,7 +308,7 @@ const UpdateOrder = ({
                       onChange={(e) => setDeliveryDate(e.target.value)}
                     />
                   </Card>
-                  
+
                   <Card p={4} mt={4}>
                     <CardHeader>
                       <Heading size="md" display="flex" justifyContent="center">
@@ -341,7 +339,7 @@ const UpdateOrder = ({
                         })
                       }
                     />
-                      <Text marginY={2} marginTop={8}>
+                    <Text marginY={2} marginTop={8}>
                       Forma de Comunicación
                     </Text>
                     <AutocompleteMultiSelect
@@ -502,7 +500,9 @@ const UpdateOrder = ({
                       onChange={(e) => {
                         setProperties({
                           ...properties,
-                          paymentStatus: Number(e.target.value) as PaymentStatus,
+                          paymentStatus: Number(
+                            e.target.value
+                          ) as PaymentStatus,
                         });
                       }}
                     >

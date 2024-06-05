@@ -136,17 +136,7 @@ const MonthlyOrdersCalendar = ({
             fontWeight="bold"
             color={colorMode === "dark" ? "gray.300" : "gray.600"}
           >
-            Pedidos -&nbsp;
-            {!isLoadingData && selectedDayOrders.length > 0
-              ? (selectedDayOrders as any)[0].orderDate.toLocaleDateString(
-                  "es-ES",
-                  {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                  }
-                )
-              : "No hay pedidos"}
+            Pedidos
           </Text>
           <IconButton
             isDisabled={isLoadingData}
