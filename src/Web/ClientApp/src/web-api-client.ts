@@ -519,7 +519,7 @@ export class AuthClient {
         return Promise.resolve<IdentityRole[]>(null as any);
     }
 
-    auth_GetUsers(): Promise<UserDto[]> {
+    auth_GetUsers(): Promise<AllUserDto[]> {
         let url_ = this.baseUrl + "/api/Auth/users";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -535,7 +535,7 @@ export class AuthClient {
         });
     }
 
-    protected processAuth_GetUsers(response: Response): Promise<UserDto[]> {
+    protected processAuth_GetUsers(response: Response): Promise<AllUserDto[]> {
         followIfLoginRedirect(response);
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
@@ -546,7 +546,7 @@ export class AuthClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(UserDto.fromJS(item));
+                    result200!.push(AllUserDto.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -558,7 +558,89 @@ export class AuthClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserDto[]>(null as any);
+        return Promise.resolve<AllUserDto[]>(null as any);
+    }
+
+    auth_UpdateUser(request: UpdateCommand): Promise<UserDto> {
+        let url_ = this.baseUrl + "/api/Auth/updateUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAuth_UpdateUser(_response);
+        });
+    }
+
+    protected processAuth_UpdateUser(response: Response): Promise<UserDto> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserDto>(null as any);
+    }
+
+    auth_DeleteUser(request: DeleteCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Auth/deleteUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAuth_DeleteUser(_response);
+        });
+    }
+
+    protected processAuth_DeleteUser(response: Response): Promise<FileResponse> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(null as any);
     }
 
     auth_Register(request: RegisterCommand): Promise<UserDto> {
@@ -3588,6 +3670,158 @@ export class IdentityRole extends IdentityRoleOfString implements IIdentityRole 
 }
 
 export interface IIdentityRole extends IIdentityRoleOfString {
+}
+
+export class AllUserDto implements IAllUserDto {
+    id?: string;
+    email?: string;
+    userName?: string;
+    password?: string;
+    roles?: string[];
+
+    constructor(data?: IAllUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.email = _data["email"];
+            this.userName = _data["userName"];
+            this.password = _data["password"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): AllUserDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AllUserDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["email"] = this.email;
+        data["userName"] = this.userName;
+        data["password"] = this.password;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IAllUserDto {
+    id?: string;
+    email?: string;
+    userName?: string;
+    password?: string;
+    roles?: string[];
+}
+
+export class UpdateCommand implements IUpdateCommand {
+    id?: string;
+    userName?: string;
+    email?: string;
+    roles?: string[];
+
+    constructor(data?: IUpdateCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userName = _data["userName"];
+            this.email = _data["email"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userName"] = this.userName;
+        data["email"] = this.email;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IUpdateCommand {
+    id?: string;
+    userName?: string;
+    email?: string;
+    roles?: string[];
+}
+
+export class DeleteCommand implements IDeleteCommand {
+    id?: string;
+
+    constructor(data?: IDeleteCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): DeleteCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IDeleteCommand {
+    id?: string;
 }
 
 export class RegisterCommand implements IRegisterCommand {

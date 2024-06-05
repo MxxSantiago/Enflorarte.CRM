@@ -3,6 +3,8 @@ import useGetUsers from '../hooks/useGetUsers.tsx';
 import { Grid, Box, Text } from "@chakra-ui/react";
 import UsersTable from "./UsersTable";
 import {useGetRoles} from "../hooks/useGetRoles.tsx";
+import CreateUser from "./CreateUser";
+
 const UsersView = () => {
     const {
         users,
@@ -33,6 +35,11 @@ const UsersView = () => {
                 >
                     Usuarios
                 </Text>
+                <CreateUser
+                    refetch={refetch}
+                    roles={roles}
+                    marginLeft="auto"
+                />
             </Box>
             <UsersTable
                 users={users}

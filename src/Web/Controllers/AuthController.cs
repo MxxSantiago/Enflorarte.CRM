@@ -55,20 +55,21 @@ public class AuthController(
 
     [HttpGet("users")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<List<UserDto>> GetUsers()
+    public async Task<List<AllUserDto>> GetUsers()
     {
         List<ApplicationUser> users = await userManager.Users.ToListAsync();
 
-        List<UserDto> usersDtos = new();
+        List<AllUserDto> usersDtos = new();
 
         foreach (ApplicationUser user in users)
         {
             IList<string> roles = await userManager.GetRolesAsync(user);
 
-            usersDtos.Add(new UserDto(
+            usersDtos.Add(new AllUserDto(
                 user.Id,
+                user.Email ?? "noemail",
                 user.UserName ?? "Anonymous",
-                user.Email ?? "noemail@noemail.com",
+                user.PasswordHash ?? "nopassword",
                 roles.ToList()
             ));
         }
@@ -252,6 +253,14 @@ public class AuthController(
         string Id,
         string UserName,
         string Email,
+        List<string> Roles
+    );
+
+    public record AllUserDto(
+        string Id,
+        string Email,
+        string UserName,
+        string Password,
         List<string> Roles
     );
 

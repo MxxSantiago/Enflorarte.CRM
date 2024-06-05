@@ -379,7 +379,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDto"
+                    "$ref": "#/components/schemas/AllUserDto"
                   }
                 }
               }
@@ -1538,7 +1538,6 @@
         "tags": [
           "Order"
         ],
-<<<<<<< HEAD
         "operationId": "Order_GetWeekOrders",
         "parameters": [
           {
@@ -1786,8 +1785,6 @@
         "tags": [
           "Responsible"
         ],
-=======
->>>>>>> develop
         "operationId": "Responsible_Post",
         "requestBody": {
           "x-name": "entity",
@@ -1806,7 +1803,6 @@
             "description": "",
             "content": {
               "application/json": {
-<<<<<<< HEAD
                 "schema": {
                   "type": "integer",
                   "format": "int32"
@@ -1914,11 +1910,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Responsible"
-=======
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
->>>>>>> develop
                 }
               }
             }
@@ -2615,6 +2606,30 @@
           "concurrencyStamp": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "AllUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
