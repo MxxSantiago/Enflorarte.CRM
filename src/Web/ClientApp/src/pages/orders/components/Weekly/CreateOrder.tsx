@@ -66,6 +66,8 @@ const CreateOrder = ({
 
   const [properties, setProperties] = useState({
     ...OrderEntity,
+    orderDate: toLocalISOString(new Date(date)),
+    deliveryDate: toLocalISOString(new Date(date)),
   });
 
   const initializeMockProperties = () => {

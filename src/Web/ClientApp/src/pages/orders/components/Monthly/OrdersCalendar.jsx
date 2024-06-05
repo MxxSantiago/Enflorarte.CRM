@@ -29,10 +29,6 @@ export const OrdersCalendar = ({
   const [tabIndex, setTabIndex] = useState(queryDate.getMonth() + 1);
   const { colorMode } = useColorMode();
 
-  useEffect(() => {
-    setSelectedDay(new Date(queryDate).toLocaleDateString());
-  }, []);
-
   const prevMonth = () => {
     const newMonth = new Date(
       currentMonth.getFullYear(),
