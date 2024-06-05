@@ -23,6 +23,10 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useDisclosure,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { AutocompleteMultiSelect } from "../../../components/shared/AutocompleteSelect";
 import {
@@ -44,6 +48,7 @@ function UpdateArrangement({
   wrappingVariantData,
   flowerVariantData,
   refetch,
+  arrangementsData,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
@@ -112,6 +117,21 @@ function UpdateArrangement({
     }
   };
 
+  const [alreadyExists, setAlreadyExists] = useState(false);
+
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
+    const nameAlreadyExists = arrangementsData.some(
+      (item) => item.name.toLowerCase() === newName.toLowerCase()
+    );
+
+    setAlreadyExists(nameAlreadyExists);
+    setProperties({
+      ...properties,
+      name: newName,
+    });
+  };
+
   return (
     <>
       <Modal
@@ -151,17 +171,21 @@ function UpdateArrangement({
                 overflow="auto"
               >
                 <Box p="10px">
-                  <Text marginY={2}>Nombre</Text>
-                  <Input
-                    size={{ base: "md", md: "lg" }}
-                    value={properties.name ?? ""}
-                    onChange={(e) =>
-                      setProperties({
-                        ...properties,
-                        name: e.target.value,
-                      })
-                    }
-                  />
+                <Text marginY={2}>Nombre</Text>
+                <Input
+                  size={{ base: "md", md: "lg" }}
+                  value={properties.name ?? ""}
+                  onChange={handleNameChange}
+                />
+                {alreadyExists && (
+                  <Alert status="warning">
+                    <AlertIcon />
+                    <AlertTitle>Advertencia</AlertTitle>
+                    <AlertDescription>
+                      Este nombre de arreglo ya existe.
+                    </AlertDescription>
+                  </Alert>
+                )}
                   <Text marginY={2} marginTop={8}>
                     URL Imagen de Referencia
                   </Text>

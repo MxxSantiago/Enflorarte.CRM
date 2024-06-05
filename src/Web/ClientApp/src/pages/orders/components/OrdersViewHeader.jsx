@@ -27,7 +27,7 @@ const OrdersViewHeader = ({ colorMode, mode, _paddingX, refetchTags }) => {
           width="fit-content"
           margin={0}
         >
-          Pedidos
+          Ordenes
         </Text>
       </Flex>
       <Box display="flex" marginLeft="auto">
@@ -38,7 +38,7 @@ const OrdersViewHeader = ({ colorMode, mode, _paddingX, refetchTags }) => {
         />
         <ButtonGroup isAttached variant="outline" marginLeft="auto">
           <Tooltip
-            label="Pedidos por semana"
+            label="Ordenes por semana"
             fontSize="md"
             placement="bottom-start"
           >

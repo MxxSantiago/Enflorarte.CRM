@@ -396,7 +396,7 @@ const UpdateOrder = ({
                       onChange={(e) => {
                         setProperties({
                           ...properties,
-                          orderStatus: e.target.value as unknown as OrderStatus,
+                          orderStatus: Number(e.target.value) as OrderStatus,
                         });
                       }}
                     >
