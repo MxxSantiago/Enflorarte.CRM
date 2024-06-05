@@ -17,23 +17,47 @@ import {
 
 type MethodNames = "Post" | "Get" | "GetAll" | "Put" | "Delete";
 
+/**
+ * Manages caching of data in memory.
+ */
 class CacheManager {
   private cache: { [key: string]: any } = {};
 
+  /**
+   * Retrieves the cached result for a given cache key.
+   * @param cacheKey - The key used to identify the cached result.
+   * @param refresh - Determines whether to refresh the cache or not.
+   * @returns The cached result if it exists and `refresh` is `false`, otherwise `undefined`.
+   */
   public getCachedResult(cacheKey: string, refresh: boolean) {
     if (!refresh && this.cache[cacheKey]) {
       return this.cache[cacheKey];
     }
   }
 
+  /**
+   * Updates the cache with a new value for a given cache key.
+   * @param cacheKey - The key used to identify the cache entry.
+   * @param value - The new value to be stored in the cache.
+   */
   public updateCache(cacheKey: string, value: any) {
     this.cache[cacheKey] = value;
   }
 
+  /**
+   * Removes a cache entry for a given cache key.
+   * @param cacheKey - The key used to identify the cache entry to be removed.
+   */
   public removeCache(cacheKey: string) {
     delete this.cache[cacheKey];
   }
 
+  /**
+   * Adds an entity to the cache for a given cache key.
+   * If the cache entry does not exist, it will be created.
+   * @param cacheKey - The key used to identify the cache entry.
+   * @param entity - The entity to be added to the cache.
+   */
   public addEntityToCache(cacheKey: string, entity: any) {
     if (!this.cache[cacheKey]) {
       this.cache[cacheKey] = [];
@@ -41,6 +65,12 @@ class CacheManager {
     this.cache[cacheKey] = [...this.cache[cacheKey], entity];
   }
 
+  /**
+   * Removes an entity from the cache for a given cache key and entity ID.
+   * If the cache entry does not exist, it will be created.
+   * @param cacheKey - The key used to identify the cache entry.
+   * @param id - The ID of the entity to be removed from the cache.
+   */
   public removeEntityFromCache(cacheKey: string, id: number) {
     if (!this.cache[cacheKey]) {
       this.cache[cacheKey] = [];
@@ -50,6 +80,12 @@ class CacheManager {
     ];
   }
 
+  /**
+   * Updates an entity in the cache for a given cache key.
+   * If the cache entry does not exist, it will be created.
+   * @param cacheKey - The key used to identify the cache entry.
+   * @param entity - The updated entity to be stored in the cache.
+   */
   public updateEntityInCache(cacheKey: string, entity: any) {
     if (!this.cache[cacheKey]) {
       this.cache[cacheKey] = [];
@@ -61,6 +97,9 @@ class CacheManager {
     ];
   }
 
+  /**
+   * Clears the entire cache.
+   */
   public clearCache() {
     this.cache = {};
   }
