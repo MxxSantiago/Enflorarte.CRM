@@ -20,6 +20,7 @@ const TagPopoverManager = ({
   refetch,
   setIsEditing,
   setTagToEdit,
+  refetchTags,
 }) => {
   const [properties, setProperties] = useState({
     name: "",
@@ -30,6 +31,7 @@ const TagPopoverManager = ({
 
   useEffect(() => {
     if (isSuccess) {
+      refetchTags();
       refetch();
     }
   }, [isSuccess]);
@@ -58,6 +60,7 @@ const TagPopoverManager = ({
                   refetch={refetch}
                   setTagToEdit={setTagToEdit}
                   setIsEditing={setIsEditing}
+                  refetchTags={refetchTags}
                 />
               ))
             )}

@@ -5,12 +5,19 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useDeleteQuery } from "../../../../../core/hooks/useApiClientHooks.tsx";
 import { getAppropiateTextColor } from "../../../../../core/helpers/adjustColor.helper.ts";
 
-const TagTemplate = ({ tag, refetch, setIsEditing, setTagToEdit }) => {
+const TagTemplate = ({
+  tag,
+  refetch,
+  setIsEditing,
+  setTagToEdit,
+  refetchTags,
+}) => {
   const { isSuccess, execute, isLoading } = useDeleteQuery("tag", tag.id);
   const textColor = getAppropiateTextColor(tag.color);
 
   useEffect(() => {
     if (isSuccess) {
+      refetchTags();
       refetch();
     }
   }, [isSuccess]);

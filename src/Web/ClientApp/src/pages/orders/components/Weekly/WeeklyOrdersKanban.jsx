@@ -1,6 +1,6 @@
 import GridColumn from "./GridColumn";
 import { Grid } from "@chakra-ui/react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useGetOrdersByPeriod from "../../hooks/useGetOrdersByPeriod.tsx";
 import WeeklyOrdersFooter from "../OrderViewFooter.jsx";
 
@@ -14,7 +14,7 @@ const daysOfWeek = [
   "Domingo",
 ];
 
-const WeekHandler = ({ children }) => {
+const WeekHandler = ({ children, tagData }) => {
   const [queryDate, setQueryDate] = useState(() => {
     const now = new Date();
     now.setHours(0, 0, 0, 0); // Set to midnight, this to avoid timezone issues
@@ -39,6 +39,10 @@ const WeekHandler = ({ children }) => {
     refetch,
     cacheKey,
   } = useGetOrdersByPeriod("Week", queryDate);
+
+  useEffect(() => {
+    refetch(true);
+  }, [tagData]);
 
   const weekDates = useMemo(() => {
     return new Array(7).fill(null).map((_, index) => {
@@ -137,7 +141,7 @@ const WeeklyOrdersKanban = ({
   tagData,
   _paddingX,
 }) => (
-  <WeekHandler>
+  <WeekHandler tagData={tagData}>
     {({
       weekDates,
       ordersByDay,

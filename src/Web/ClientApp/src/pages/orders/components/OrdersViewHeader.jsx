@@ -10,13 +10,11 @@ import {
 import { MdCalendarViewWeek, MdCalendarViewMonth } from "react-icons/md";
 import TagPopover from "./Weekly/Tags/TagPopover";
 
-const OrdersViewHeader = ({ colorMode, mode, _paddingX }) => {
+const OrdersViewHeader = ({ colorMode, mode, _paddingX, refetchTags }) => {
   const navigate = useNavigate();
 
   return (
-    <Flex paddingY="1rem" width="100%" alignItems="center"
-      paddingX={_paddingX}
-    >
+    <Flex paddingY="1rem" width="100%" alignItems="center" paddingX={_paddingX}>
       <Flex alignItems="center">
         <Text
           fontSize={{
@@ -33,7 +31,11 @@ const OrdersViewHeader = ({ colorMode, mode, _paddingX }) => {
         </Text>
       </Flex>
       <Box display="flex" marginLeft="auto">
-        <TagPopover colorMode={colorMode} mode={mode} />
+        <TagPopover
+          colorMode={colorMode}
+          mode={mode}
+          refetchTags={refetchTags}
+        />
         <ButtonGroup isAttached variant="outline" marginLeft="auto">
           <Tooltip
             label="Pedidos por semana"
