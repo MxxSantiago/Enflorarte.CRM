@@ -519,7 +519,7 @@ export class AuthClient {
         return Promise.resolve<IdentityRole[]>(null as any);
     }
 
-    auth_GetUsers(): Promise<AllUserDto[]> {
+    auth_GetUsers(): Promise<UserDto[]> {
         let url_ = this.baseUrl + "/api/Auth/users";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -535,7 +535,7 @@ export class AuthClient {
         });
     }
 
-    protected processAuth_GetUsers(response: Response): Promise<AllUserDto[]> {
+    protected processAuth_GetUsers(response: Response): Promise<UserDto[]> {
         followIfLoginRedirect(response);
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
@@ -546,7 +546,7 @@ export class AuthClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(AllUserDto.fromJS(item));
+                    result200!.push(UserDto.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -558,7 +558,7 @@ export class AuthClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<AllUserDto[]>(null as any);
+        return Promise.resolve<UserDto[]>(null as any);
     }
 
     auth_UpdateUser(request: UpdateCommand): Promise<UserDto> {
@@ -3672,70 +3672,11 @@ export class IdentityRole extends IdentityRoleOfString implements IIdentityRole 
 export interface IIdentityRole extends IIdentityRoleOfString {
 }
 
-export class AllUserDto implements IAllUserDto {
-    id?: string;
-    email?: string;
-    userName?: string;
-    password?: string;
-    roles?: string[];
-
-    constructor(data?: IAllUserDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.email = _data["email"];
-            this.userName = _data["userName"];
-            this.password = _data["password"];
-            if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
-                for (let item of _data["roles"])
-                    this.roles!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): AllUserDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AllUserDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["email"] = this.email;
-        data["userName"] = this.userName;
-        data["password"] = this.password;
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IAllUserDto {
-    id?: string;
-    email?: string;
-    userName?: string;
-    password?: string;
-    roles?: string[];
-}
-
 export class UpdateCommand implements IUpdateCommand {
     id?: string;
     userName?: string;
     email?: string;
+    password?: string;
     roles?: string[];
 
     constructor(data?: IUpdateCommand) {
@@ -3752,6 +3693,7 @@ export class UpdateCommand implements IUpdateCommand {
             this.id = _data["id"];
             this.userName = _data["userName"];
             this.email = _data["email"];
+            this.password = _data["password"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -3772,6 +3714,7 @@ export class UpdateCommand implements IUpdateCommand {
         data["id"] = this.id;
         data["userName"] = this.userName;
         data["email"] = this.email;
+        data["password"] = this.password;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -3785,6 +3728,7 @@ export interface IUpdateCommand {
     id?: string;
     userName?: string;
     email?: string;
+    password?: string;
     roles?: string[];
 }
 

@@ -7,6 +7,7 @@ import {
     AlertDialogHeader,
     AlertDialogOverlay,
     Box,
+    useToast,
     Button,
     IconButton,
     Input,
@@ -15,12 +16,11 @@ import {
 import {FaRegEdit} from "react-icons/fa";
 import {AutocompleteMultiSelect, AutocompleteSelect} from "../../../components/shared/AutocompleteSelect.jsx";
 import {cancelChangesText, modifierColorScheme, saveChangesText, saveColorScheme,} from "../../../core/constants.ts";
-
 import {useUpdateUser} from "../hooks/useUpdateUser.tsx";
-import {useGetRoles} from "../hooks/useGetRoles.tsx";
 
 function ModifyUsers({user, refetch, roles}) {
     const [properties, setProperties] = useState({ ...user });
+    const toast = useToast();
     const [selectedItems, setSelectedItems] = useState({ roles: [], });
     const {isOpen, onOpen, onClose} = useDisclosure();
     const cancelRef = useRef();
@@ -57,10 +57,19 @@ function ModifyUsers({user, refetch, roles}) {
         Object.values(properties).some(value => value == null || value.toString().trim() === "");
 
     const handleSubmit = async () => {
-        await execute(properties);
-        if (!isError) {
+        try {
+            await execute(properties);
             refetch();
             onClose();
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: `Error al modificar el usuario: ${error.message}`,
+                position: "bottom-right",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     };
 
@@ -80,7 +89,7 @@ function ModifyUsers({user, refetch, roles}) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize="xl" fontWeight="bold">
-                            Modificar Usuario '{properties.userName}'
+                            Modificar Usuario '{user.userName}'
                         </AlertDialogHeader>
                         <AlertDialogBody>
                             <Box width="100%">
@@ -96,6 +105,41 @@ function ModifyUsers({user, refetch, roles}) {
                                         setProperties({
                                             ...properties,
                                             userName: e.target.value,
+                                        })
+                                    }
+                                />
+                            </Box>
+                            <Box width="100%">
+                                <Box mb={2} mt={7} display="flex">
+                                    <label htmlFor="name">Nuevo email</label>
+                                </Box>
+                                <Input
+                                    id="name"
+                                    size={{base: "md", md: "lg"}}
+                                    width={{base: "100%", md: "400px"}}
+                                    value={properties.email ?? ""}
+                                    onChange={(e) =>
+                                        setProperties({
+                                            ...properties,
+                                            email: e.target.value,
+                                        })
+                                    }
+                                />
+                            </Box>
+                            <Box width="100%">
+                                <Box mb={2} mt={7} display="flex">
+                                    <label htmlFor="name">Nueva contraseña</label>
+                                </Box>
+                                <Input
+                                    id="name"
+                                    size={{base: "md", md: "lg"}}
+                                    type={"password"}
+                                    width={{base: "100%", md: "400px"}}
+                                    value={properties.password ?? ""}
+                                    onChange={(e) =>
+                                        setProperties({
+                                            ...properties,
+                                            password: e.target.value,
                                         })
                                     }
                                 />

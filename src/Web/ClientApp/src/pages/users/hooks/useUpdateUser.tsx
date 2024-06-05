@@ -21,11 +21,13 @@ export const useUpdateUser = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Error al actualizar el usuario');
+                const errorData = await response.json(); // Obtén la respuesta del error
+                throw new Error(errorData.message || 'Error al crear el usuario'); // Lanza el error
             }
             setIsSuccess(true);
         } catch (error) {
             setIsError(true);
+            throw error;
         } finally {
             setIsLoading(false);
         }

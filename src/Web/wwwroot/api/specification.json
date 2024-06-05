@@ -379,7 +379,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AllUserDto"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               }
@@ -2609,30 +2609,6 @@
           }
         }
       },
-      "AllUserDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "userName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "roles": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
       "UpdateCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -2644,6 +2620,9 @@
             "type": "string"
           },
           "email": {
+            "type": "string"
+          },
+          "password": {
             "type": "string"
           },
           "roles": {

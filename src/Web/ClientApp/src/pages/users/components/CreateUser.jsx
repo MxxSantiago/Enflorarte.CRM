@@ -28,7 +28,7 @@ import {IoMdAdd} from "react-icons/io";
 const user = {
     userName: "",
     email: "",
-    password: "",
+    password: "Default123!",
     roles: [],
 };
 
@@ -71,15 +71,14 @@ function CreateUser({roles, refetch}) {
         Object.values(properties).some(value => value == null || value.toString().trim() === "");
 
     const handleSubmit = async () => {
-
-        await execute(properties);
-        if (isSuccess) {
+        try {
+            await execute(properties);
             refetch();
             onClose();
-        } else {
+        } catch (error) {
             toast({
                 title: "Error",
-                description: "Error al crear el usuario",
+                description: `Error al crear el usuario: ${error.message}`,
                 position: "bottom-right",
                 status: "error",
                 duration: 9000,
@@ -152,6 +151,7 @@ function CreateUser({roles, refetch}) {
                                     size={{base: "md", md: "lg"}}
                                     type={"password"}
                                     width={{base: "100%", md: "400px"}}
+                                    isDisabled={true}
                                     value={properties.password ?? ""}
                                     onChange={(e) =>
                                         setProperties({

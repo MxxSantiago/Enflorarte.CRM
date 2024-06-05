@@ -55,21 +55,20 @@ public class AuthController(
 
     [HttpGet("users")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<List<AllUserDto>> GetUsers()
+    public async Task<List<UserDto>> GetUsers()
     {
         List<ApplicationUser> users = await userManager.Users.ToListAsync();
 
-        List<AllUserDto> usersDtos = new();
+        List<UserDto> usersDtos = new();
 
         foreach (ApplicationUser user in users)
         {
             IList<string> roles = await userManager.GetRolesAsync(user);
 
-            usersDtos.Add(new AllUserDto(
+            usersDtos.Add(new UserDto(
                 user.Id,
-                user.Email ?? "noemail",
                 user.UserName ?? "Anonymous",
-                user.PasswordHash ?? "nopassword",
+                user.Email ?? "noemail",
                 roles.ToList()
             ));
         }
@@ -87,7 +86,32 @@ public class AuthController(
             return NotFound("Usuario no encontrado");
         }
 
+        if(request.UserName.Length < 3 || request.UserName.Length > 20)
+        {
+            return BadRequest("El nombre de usuario debe tener entre 3 y 20 caracteres");
+        }
+
+        if(request.Password.Length < 6)
+        {
+            return BadRequest("La contraseña mas de 6 caracters");
+        }
+
+        if(request.Email.Contains('@') == false)
+        {
+            return BadRequest("El correo electrónico no es válido");
+        }
+
+        await CheckDuplicateEmail(request.Email);
+        await CheckDuplicateUsername(request.UserName);
+
+        user.Email = request.Email;
         user.UserName = request.UserName;
+
+        if (await userManager.CheckPasswordAsync(user, request.Password) )
+        {
+            user.UserName = request.UserName;
+            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, request.Password);
+        }
 
         IdentityResult transactionResult = await userManager.UpdateAsync(user);
         if (!transactionResult.Succeeded)
@@ -139,6 +163,21 @@ public class AuthController(
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult<UserDto>> Register(RegisterCommand request)
     {
+        if(request.UserName.Length < 3 || request.UserName.Length > 20)
+        {
+            return BadRequest("El nombre de usuario debe tener entre 3 y 20 caracteres");
+        }
+
+        if(request.Password.Length < 6)
+        {
+            return BadRequest("La contraseña mas de 6 caracters");
+        }
+
+        if(request.Email.Contains('@') == false)
+        {
+            return BadRequest("El correo electrónico no es válido");
+        }
+
         ApplicationUser user = await CreateUser(request);
 
         IdentityResult transactionResult = await userManager.CreateAsync(user, request.Password);
@@ -253,6 +292,7 @@ public class AuthController(
         string Id,
         string UserName,
         string Email,
+        string Password,
         List<string> Roles
     );
 
