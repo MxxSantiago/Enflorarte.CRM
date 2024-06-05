@@ -87,6 +87,38 @@ const UpdateOrder = ({
     onClose: onCloseprint,
   } = useDisclosure();
 
+  useEffect(() => {
+    if (isOpen) {
+      setProperties({ ...order });
+      setSelectedItems({
+        responsible: order.responsible!.map((item) => ({
+          value: item,
+          label: item.name,
+        })),
+        communicationType: order.communicationType!.map((item) => ({
+          value: item,
+          label: item.name,
+        })),
+        branch: order.branch!.map((item) => ({
+          value: item,
+          label: item.name,
+        })),
+        arrangement: order.arrangement!.map((item) => ({
+          value: item,
+          label: item.name,
+        })),
+        deliveryType: order.deliveryType!.map((item) => ({
+          value: item,
+          label: item.name,
+        })),
+        tags: order.tags!.map((item) => ({
+          value: item,
+          label: item.name,
+        })),
+      });
+    }
+  }, [isOpen]);
+
   const cancelRef = React.useRef();
   const {
     isOpen: isOpenDelete,
@@ -400,6 +432,8 @@ const UpdateOrder = ({
                         });
                       }}
                     >
+                      <option>--------</option>
+
                       {Object.entries(OrderStatus).map(([key]) => {
                         if (isNaN(Number(key))) {
                           return (
@@ -502,14 +536,12 @@ const UpdateOrder = ({
                           ...properties,
                           paymentStatus: Number(
                             e.target.value
-<<<<<<< Updated upstream
-                          ) as unknown as PaymentStatus,
-=======
                           ) as PaymentStatus,
->>>>>>> Stashed changes
                         });
                       }}
                     >
+                      <option>--------</option>
+
                       {Object.entries(PaymentStatus).map(([key]) => {
                         if (isNaN(Number(key))) {
                           return (

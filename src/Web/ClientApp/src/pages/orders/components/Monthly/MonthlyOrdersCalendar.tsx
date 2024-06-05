@@ -138,12 +138,7 @@ const MonthlyOrdersCalendar = ({
             fontWeight="bold"
             color={colorMode === "dark" ? "gray.300" : "gray.600"}
           >
-            Pedidos -&nbsp;
-            {new Date(selectedDay).toLocaleDateString("es-ES", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
+            Pedidos
           </Text>
           <IconButton
             isDisabled={isLoadingData}
