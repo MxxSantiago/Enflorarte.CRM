@@ -105,6 +105,9 @@ class CacheManager {
   }
 }
 
+/**
+ * Represents a client for making API requests.
+ */
 class ApiClient {
   private clients = {
     arrangement: new ArrangementClient(),
@@ -125,11 +128,22 @@ class ApiClient {
 
   constructor(private cacheManager = new CacheManager()) {}
 
+  /**
+   * Retrieves the current user.
+   * @returns A promise that resolves to the current user.
+   */
   public async getCurrentUser() {
     const user = await this.clients.auth.auth_GetCurrentUser();
     return user;
   }
 
+  /**
+   * Retrieves all entities of a given type.
+   * @param entityName - The name of the entity type.
+   * @param removeReferences - Optional. Specifies whether to remove reference ID properties from the entities. Default is false.
+   * @param refresh - Optional. Specifies whether to refresh the cache. Default is false.
+   * @returns A promise that resolves to an array of entities.
+   */
   public async getAllEntities(
     entityName: string,
     removeReferences: boolean = false,
@@ -152,6 +166,13 @@ class ApiClient {
     return result;
   }
 
+  /**
+   * Retrieves an entity by its ID.
+   * @param entityName - The name of the entity type.
+   * @param id - The ID of the entity.
+   * @param refresh - Optional. Specifies whether to refresh the cache. Default is false.
+   * @returns A promise that resolves to the entity.
+   */
   public async getEntity(
     entityName: string,
     id: number,
@@ -170,6 +191,13 @@ class ApiClient {
     return result;
   }
 
+  /**
+   * Deletes an entity by its ID.
+   * @param entityName - The name of the entity type.
+   * @param id - The ID of the entity.
+   * @param customCacheKey - Optional. The custom cache key to use. If provided, it will be used instead of the default cache key.
+   * @returns A promise that resolves to the result of the delete operation.
+   */
   public deleteEntity = async (
     entityName: string,
     id: number,
@@ -188,6 +216,13 @@ class ApiClient {
     return result;
   };
 
+  /**
+   * Updates an entity.
+   * @param entityName - The name of the entity type.
+   * @param args - The arguments for the update operation.
+   * @param customCacheKey - Optional. The custom cache key to use. If provided, it will be used instead of the default cache key.
+   * @returns A promise that resolves to the result of the update operation.
+   */
   public updateEntity = async (
     entityName: string,
     args: any,
@@ -206,6 +241,13 @@ class ApiClient {
     return result;
   };
 
+  /**
+   * Creates a new entity.
+   * @param entityName - The name of the entity type.
+   * @param args - The arguments for the create operation.
+   * @param customCacheKey - Optional. The custom cache key to use. If provided, it will be used instead of the default cache key.
+   * @returns A promise that resolves to the ID of the created entity.
+   */
   public createEntity = async (
     entityName: string,
     args: any,
@@ -224,6 +266,15 @@ class ApiClient {
     return id;
   };
 
+  /**
+   * Executes a custom method on an entity.
+   * @param entityName - The name of the entity type.
+   * @param customMethodName - The name of the custom method.
+   * @param refresh - Optional. Specifies whether to refresh the cache. Default is false.
+   * @param args - The arguments for the custom method.
+   * @param cacheKey - The cache key for the custom method result.
+   * @returns A promise that resolves to the result of the custom method.
+   */
   public async executeCustomMethod(
     entityName: string,
     customMethodName: string,
@@ -260,6 +311,14 @@ class ApiClient {
     }
   }
 
+  /**
+   * Executes an HTTP method on the specified entity client.
+   * @param entityName - The name of the entity.
+   * @param methodName - The name of the method to execute.
+   * @param args - Additional arguments to pass to the method.
+   * @returns A promise that resolves to the result of the method execution.
+   * @throws Error if the entity name is invalid or if the method does not exist on the entity client.
+   */
   private async executeHttpMethod(
     entityName: string,
     methodName: MethodNames,
@@ -297,6 +356,12 @@ class ApiClient {
 export const apiClient = new ApiClient();
 
 // Utils
+
+/**
+ * Removes reference ID properties from the payload object.
+ * @param payload - The payload object from which to remove reference ID properties.
+ * @returns The new payload object without the reference ID properties.
+ */
 export function removeReferenceIdProperties(payload: any) {
   const idProperties = Object.keys(payload)
     .filter((key) => key.indexOf("Id") !== -1 && key !== "id")
@@ -311,6 +376,11 @@ export function removeReferenceIdProperties(payload: any) {
   return newPayload;
 }
 
+/**
+ * Removes reference object properties from the payload.
+ * @param payload - The payload object from which reference object properties will be removed.
+ * @returns The new payload object without reference object properties.
+ */
 export function removeReferenceObjectProperties(payload: any) {
   const idProperties = Object.keys(payload)
     .filter((key) => key.endsWith("Id"))
@@ -325,6 +395,11 @@ export function removeReferenceObjectProperties(payload: any) {
   return newPayload;
 }
 
+/**
+ * Converts empty strings to null in an object.
+ * @param obj - The object to convert.
+ * @returns The object with empty strings converted to null.
+ */
 export function convertEmptyStringToNullInObject(obj: { [key: string]: any }): {
   [key: string]: any;
 } {
@@ -339,6 +414,11 @@ export function convertEmptyStringToNullInObject(obj: { [key: string]: any }): {
   return newObj;
 }
 
+/**
+ * Creates a payload for a lookup entity.
+ * @param properties - The properties of the lookup entity.
+ * @returns The payload object.
+ */
 export function createLookupEntityPayload(properties: any) {
   const payload = {
     ...Object.entries(properties).reduce(
