@@ -22,7 +22,7 @@ export const useCreateUser = () => {
 
             if (!response.ok) {
                 const errorData = await response.json(); // Obtén la respuesta del error
-                throw new Error(errorData.message || 'Error al crear el usuario'); // Lanza el error
+                throw new Error(errorData.error || 'Error al crear el usuario'); // Lanza el error
             }
             setIsSuccess(true);
         } catch (error) {

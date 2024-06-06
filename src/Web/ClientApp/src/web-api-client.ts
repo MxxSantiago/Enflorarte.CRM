@@ -3771,7 +3771,7 @@ export interface IDeleteCommand {
 export class RegisterCommand implements IRegisterCommand {
     email?: string;
     userName?: string;
-    password?: string;
+    password?: string | undefined;
     roles?: string[];
 
     constructor(data?: IRegisterCommand) {
@@ -3820,7 +3820,7 @@ export class RegisterCommand implements IRegisterCommand {
 export interface IRegisterCommand {
     email?: string;
     userName?: string;
-    password?: string;
+    password?: string | undefined;
     roles?: string[];
 }
 

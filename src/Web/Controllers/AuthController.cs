@@ -1,6 +1,8 @@
 ﻿using Enflorarte.CRM.Application.Common.Interfaces;
 using Enflorarte.CRM.Domain.Constants;
 using Enflorarte.CRM.Infrastructure.Identity;
+using Enflorarte.CRM.Web.Controllers.AuthValidator;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +16,9 @@ namespace Enflorarte.CRM.Web.Controllers;
 public class AuthController(
     IUser userInSession,
     UserManager<ApplicationUser> userManager,
-    RoleManager<IdentityRole> roleManager
+    RoleManager<IdentityRole> roleManager,
+    IValidator<AuthController.RegisterCommand> registerCommandValidator,
+    IValidator<AuthController.UpdateCommand> updateCommandValidator
 ) : ControllerBase
 {
     [HttpGet]
@@ -80,37 +84,34 @@ public class AuthController(
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult<UserDto>> UpdateUser(UpdateCommand request)
     {
+        var validationResult = await updateCommandValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
         ApplicationUser? user = await userManager.FindByIdAsync(request.Id);
         if (user is null)
         {
             return NotFound("Usuario no encontrado");
         }
 
-        if(request.UserName.Length < 3 || request.UserName.Length > 20)
+        if(request.Email != user.Email)
         {
-            return BadRequest("El nombre de usuario debe tener entre 3 y 20 caracteres");
+            await CheckDuplicateEmail(request.Email);
+            user.Email = request.Email;
         }
 
-        if(request.Password.Length < 6)
+        if(request.UserName != user.UserName)
         {
-            return BadRequest("La contraseña mas de 6 caracters");
+            await CheckDuplicateUsername(request.UserName);
+            user.UserName = request.UserName;
         }
-
-        if(request.Email.Contains('@') == false)
-        {
-            return BadRequest("El correo electrónico no es válido");
-        }
-
-        await CheckDuplicateEmail(request.Email);
-        await CheckDuplicateUsername(request.UserName);
-
-        user.Email = request.Email;
-        user.UserName = request.UserName;
 
         if (await userManager.CheckPasswordAsync(user, request.Password) )
         {
-            user.UserName = request.UserName;
-            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, request.Password);
+            await userManager.RemovePasswordAsync(user);
+            await userManager.AddPasswordAsync(user, request.Password);
         }
 
         IdentityResult transactionResult = await userManager.UpdateAsync(user);
@@ -163,20 +164,13 @@ public class AuthController(
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult<UserDto>> Register(RegisterCommand request)
     {
-        if(request.UserName.Length < 3 || request.UserName.Length > 20)
+        var validationResult = await registerCommandValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
         {
-            return BadRequest("El nombre de usuario debe tener entre 3 y 20 caracteres");
+            return BadRequest(validationResult.Errors[0]);
         }
 
-        if(request.Password.Length < 6)
-        {
-            return BadRequest("La contraseña mas de 6 caracters");
-        }
-
-        if(request.Email.Contains('@') == false)
-        {
-            return BadRequest("El correo electrónico no es válido");
-        }
+        request = request with { Password = char.ToUpper(request.UserName[0]) + request.UserName.Substring(1) + "123!" };
 
         ApplicationUser user = await CreateUser(request);
 
@@ -307,11 +301,12 @@ public class AuthController(
     public record RegisterCommand(
         string Email,
         string UserName,
-        string Password,
+        string? Password,
         List<string> Roles
     );
 
     public record RemoveRoleToUserCommand(string Id, string Role);
 
     public record AddRoleToUserCommand(string Id, string Role);
+
 }

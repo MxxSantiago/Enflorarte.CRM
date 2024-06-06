@@ -78,7 +78,7 @@ function CreateUser({roles, refetch}) {
         } catch (error) {
             toast({
                 title: "Error",
-                description: `Error al crear el usuario: ${error.message}`,
+                description: `Error al crear el usuario`,
                 position: "bottom-right",
                 status: "error",
                 duration: 9000,
@@ -110,12 +110,13 @@ function CreateUser({roles, refetch}) {
                         <AlertDialogBody>
                             <Box width="100%">
                                 <Box mb={2} mt={7} display="flex">
-                                    <label htmlFor="name">Nombre</label>
+                                    <label htmlFor="name">Username</label>
                                 </Box>
                                 <Input
                                     id="name"
                                     size={{base: "md", md: "lg"}}
                                     width={{base: "100%", md: "400px"}}
+                                    type={"email"}
                                     value={properties.userName ?? ""}
                                     onChange={(e) =>
                                         setProperties({
@@ -132,6 +133,7 @@ function CreateUser({roles, refetch}) {
                                 <Input
                                     id="name"
                                     size={{base: "md", md: "lg"}}
+                                    type={"email"}
                                     width={{base: "100%", md: "400px"}}
                                     value={properties.email ?? ""}
                                     onChange={(e) =>
@@ -143,15 +145,12 @@ function CreateUser({roles, refetch}) {
                                 />
                             </Box>
                             <Box width="100%">
-                                <Box mb={2} mt={7} display="flex">
-                                    <label htmlFor="name">Contraseña</label>
-                                </Box>
                                 <Input
                                     id="name"
                                     size={{base: "md", md: "lg"}}
                                     type={"password"}
                                     width={{base: "100%", md: "400px"}}
-                                    isDisabled={true}
+                                    hidden={true}
                                     value={properties.password ?? ""}
                                     onChange={(e) =>
                                         setProperties({

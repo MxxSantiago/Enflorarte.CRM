@@ -64,7 +64,7 @@ function ModifyUsers({user, refetch, roles}) {
         } catch (error) {
             toast({
                 title: "Error",
-                description: `Error al modificar el usuario: ${error.message}`,
+                description: `Error al modificar el usuario`,
                 position: "bottom-right",
                 status: "error",
                 duration: 9000,
@@ -100,6 +100,7 @@ function ModifyUsers({user, refetch, roles}) {
                                     id="name"
                                     size={{base: "md", md: "lg"}}
                                     width={{base: "100%", md: "400px"}}
+                                    type={"email"}
                                     value={properties.userName ?? ""}
                                     onChange={(e) =>
                                         setProperties({
@@ -117,6 +118,7 @@ function ModifyUsers({user, refetch, roles}) {
                                     id="name"
                                     size={{base: "md", md: "lg"}}
                                     width={{base: "100%", md: "400px"}}
+                                    type={"email"}
                                     value={properties.email ?? ""}
                                     onChange={(e) =>
                                         setProperties({
@@ -127,13 +129,11 @@ function ModifyUsers({user, refetch, roles}) {
                                 />
                             </Box>
                             <Box width="100%">
-                                <Box mb={2} mt={7} display="flex">
-                                    <label htmlFor="name">Nueva contraseña</label>
-                                </Box>
                                 <Input
                                     id="name"
                                     size={{base: "md", md: "lg"}}
                                     type={"password"}
+                                    hidden={true}
                                     width={{base: "100%", md: "400px"}}
                                     value={properties.password ?? ""}
                                     onChange={(e) =>

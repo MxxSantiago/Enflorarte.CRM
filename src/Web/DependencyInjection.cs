@@ -1,6 +1,9 @@
 ﻿using Enflorarte.CRM.Application.Common.Interfaces;
 using Enflorarte.CRM.Infrastructure.Data;
+using Enflorarte.CRM.Web.Controllers;
+using Enflorarte.CRM.Web.Controllers.AuthValidator;
 using Enflorarte.CRM.Web.Services;
+using FluentValidation;
 
 namespace Enflorarte.CRM.Web;
 
@@ -11,6 +14,8 @@ public static class DependencyInjection
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddScoped<IUser, CurrentUser>();
+        services.AddTransient<IValidator<AuthController.RegisterCommand>, RegisterCommandValidator>();
+        services.AddTransient<IValidator<AuthController.UpdateCommand>, UpdateCommandValidator>();
 
         services.AddHttpContextAccessor();
 
