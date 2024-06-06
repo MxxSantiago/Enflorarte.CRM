@@ -71,10 +71,17 @@ public class DatabaseInitializer
                 {
                     flowers = new List<Flower>
                     {
-                        new() {  Name = "Rose" },
-                        new() {  Name = "Daisy" },
-                        new() {  Name = "Tulip" },
-                        new() {  Name = "Sunflower" }
+                        new() { Name = "Lirio" },
+new() { Name = "Orquídea" },
+new() { Name = "Hortensia" },
+new() { Name = "Clavel" },
+new() { Name = "Iris" },
+new() { Name = "Dalia" },
+new() { Name = "Peonía" },
+new() { Name = "Fresia" },
+new() { Name = "Jacinto" },
+new() { Name = "Amapola" }
+
                     };
                     _context.Flower.AddRange(flowers);
                     await _context.SaveChangesAsync();
@@ -90,7 +97,7 @@ public class DatabaseInitializer
                     foreach (var flower in flowers)
                     {
                         _context.FlowerVariant.Add(
-                            new FlowerVariant {  Name = "flowerVar" + i , FlowerId = flower.Id }
+            new FlowerVariant { Name = "Variante de " + flower.Name, FlowerId = flower.Id }
                         );
                         i++;
                     }
@@ -102,10 +109,11 @@ public class DatabaseInitializer
             if (!await _context.DeliveryType.AnyAsync())
             {
                 _context.DeliveryType.AddRange(
-                    new DeliveryType {  Name = "Express" },
-                    new DeliveryType {  Name = "Standard" },
-                    new DeliveryType {  Name = "Economy" },
-                    new DeliveryType {  Name = "Same Day" }
+                    new DeliveryType { Name = "Entrega al Día Siguiente" },
+new DeliveryType { Name = "Internacional" },
+new DeliveryType { Name = "Recoger en Sucursal" },
+new DeliveryType { Name = "Programada" },
+new DeliveryType { Name = "Domicilio" }
                 );
             }
 
@@ -116,11 +124,17 @@ public class DatabaseInitializer
                 {
                     communicationTypes = new List<CommunicationType>
                     {
-                        new() {  Name = "Email" },
-                        new() {  Name = "Phone" },
-                        new() {  Name = "SMS" },
-                        new() {  Name = "WhatsApp" }
-                    };
+                        new() { Name = "Correo Electrónico" },
+   new() { Name = "Teléfono" },
+   new() { Name = "SMS" },
+   new() { Name = "WhatsApp" },
+   new() { Name = "Telegram" },
+   new() { Name = "Señal" },
+   new() { Name = "Mensajería Instantánea" },
+   new() { Name = "Fax" },
+   new() { Name = "Carta" },
+   new() { Name = "Videollamada"} 
+   };
                     _context.CommunicationType.AddRange(communicationTypes);
                     await _context.SaveChangesAsync();
                 }
@@ -132,10 +146,76 @@ public class DatabaseInitializer
                 if (!await _context.Client.AnyAsync())
                 {
                     _context.Client.AddRange(
-                        new Client {  Name = "John Doe", Address = "123 Main St", PhoneNumber = "1234567890", CommunicationTypeId = communicationTypes[0].Id },
-                        new Client {  Name = "Jane Doe", Address = "456 Elm St", PhoneNumber = "0987654321", CommunicationTypeId = communicationTypes[1].Id },
-                        new Client {  Name = "Alice Smith", Address = "789 Oak St", PhoneNumber = "1357924680", CommunicationTypeId = communicationTypes[2].Id },
-                        new Client {  Name = "Bob Smith", Address = "012 Pine St", PhoneNumber = "2468135790", CommunicationTypeId = communicationTypes[3].Id }
+                        new Client
+   {
+       Name = "Juan Pérez",
+       Address = "Calle Principal 123",
+       PhoneNumber = "5512345678",
+       CommunicationTypeId = communicationTypes[0].Id // Correo Electrónico
+   },
+   new Client
+   {
+       Name = "María García",
+       Address = "Avenida Elm 456",
+       PhoneNumber = "5587654321",
+       CommunicationTypeId = communicationTypes[1].Id // Teléfono
+   },
+   new Client
+   {
+       Name = "Alicia Rodríguez",
+       Address = "Calle Roble 789",
+       PhoneNumber = "5513579246",
+       CommunicationTypeId = communicationTypes[2].Id // SMS
+   },
+   new Client
+   {
+       Name = "Roberto Hernández",
+       Address = "Calle Pino 012",
+       PhoneNumber = "5524681357",
+       CommunicationTypeId = communicationTypes[3].Id // WhatsApp
+   },
+   new Client
+   {
+       Name = "Ana López",
+       Address = "Avenida Maple 567",
+       PhoneNumber = "5598765432",
+       CommunicationTypeId = communicationTypes[4].Id // Telegram
+   },
+   new Client
+   {
+       Name = "Javier Ramírez",
+       Address = "Calle Cedro 890",
+       PhoneNumber = "5513476285",
+       CommunicationTypeId = communicationTypes[5].Id // Señal
+   },
+   new Client
+   {
+       Name = "Sofía Torres",
+       Address = "Calle Palma 147",
+       PhoneNumber = "5525839614",
+       CommunicationTypeId = communicationTypes[6].Id // Mensajería Instantánea
+   },
+   new Client
+   {
+       Name = "Carlos Fernández",
+       Address = "Avenida Ciprés 258",
+       PhoneNumber = "5536974125",
+       CommunicationTypeId = communicationTypes[7].Id // Fax
+   },
+   new Client
+   {
+       Name = "Laura Gómez",
+       Address = "Calle Nogal 369",
+       PhoneNumber = "5514728596",
+       CommunicationTypeId = communicationTypes[8].Id // Carta
+   },
+   new Client
+   {
+       Name = "Pedro Sánchez",
+       Address = "Avenida Olmo 741",
+       PhoneNumber = "5528963175",
+       CommunicationTypeId = communicationTypes[9].Id // Videollamada
+   }
                     );
                 }
             }
@@ -148,10 +228,16 @@ public class DatabaseInitializer
                 {
                     wrappers = new List<Wrapper>
                     {
-                        new() {  Name = "Paper" },
-                        new() {  Name = "Plastic" },
-                        new() {  Name = "Fabric" },
-                        new() {  Name = "Metal" }
+                            new() { Name = "Papel" },
+    new() { Name = "Plástico" },
+    new() { Name = "Tela" },
+    new() { Name = "Metálico" },
+    new() { Name = "Burbuja" },
+    new() { Name = "Celofán" },
+    new() { Name = "Papel de Seda" },
+    new() { Name = "Papel Kraft" },
+    new() { Name = "Vinilo" },
+    new() { Name = "Aluminio" }
                     };
                     _context.Wrapper.AddRange(wrappers);
                     await _context.SaveChangesAsync();
@@ -167,7 +253,7 @@ public class DatabaseInitializer
                     foreach (var wrapper in wrappers)
                     {
                         _context.WrapperVariant.Add(
-                            new WrapperVariant {  Name = "wrapperVar" + i, WrapperId = wrapper.Id }
+                            new WrapperVariant { Name = "Variante de " + wrapper.Name, WrapperId = wrapper.Id }
                         );
                         i++;
                     }
@@ -198,52 +284,56 @@ public class DatabaseInitializer
             if (!await _context.Tag.AnyAsync())
             {
                 _context.Tag.AddRange(
-                    new Tag {  Name = "Tag 1", Color = "#dd2020" },
-                    new Tag {  Name = "Tag 2", Color = "#3020dd" },
-                    new Tag {  Name = "Tag 3", Color = "#179124" },
-                    new Tag {  Name = "Tag 4", Color = "#681791" }
+                   new Tag { Name = "Importante", Color = "#ffa500" },
+   new Tag { Name = "Urgente", Color = "#800080" },
+   new Tag { Name = "Promoción", Color = "#008000" },
+   new Tag { Name = "Nuevo", Color = "#ff0000" },
+   new Tag { Name = "Descuento", Color = "#00ff00" },
+   new Tag { Name = "Oferta", Color = "#0000ff" },
+   new Tag { Name = "San Valentín", Color = "#ff69b4" },
+   new Tag { Name = "Navidad", Color = "#008000" },
+   new Tag { Name = "Año Nuevo", Color = "#ffd700" },
+   new Tag { Name = "Pascua", Color = "#ffa07a" },
+   new Tag { Name = "Halloween", Color = "#ffa500" }
                 );
             }
             
             if (!await _context.Arrangement.AnyAsync())
             {
                 _context.Arrangement.AddRange(
-                    new Arrangement
-                    {
-                        
-                        Name = "Arrangement 1",
-                        IsTemplate = true,
-                        Extras = "extra1, extra2",
-                        ReferenceImage = "https://tableclothsfactory.com/cdn/shop/products/Royal-Blue-Artificial-Premium-Silk-Blossomed-Rose-Flowers.jpg?crop=center&height=900&v=1705969360&width=900",
-                        IsAvailable = true
-                    },
-                    new Arrangement
-                    {
-                        
-                        Name = "Arrangement 2",
-                        IsTemplate = false,
-                        Extras = "extra3, extra4",
-                        ReferenceImage = "https://i.pinimg.com/736x/5c/3a/37/5c3a37c36edc7020110f14258cf20b02.jpg",
-                        IsAvailable = true
-                    },
-                    new Arrangement
-                    {
-                        
-                        Name = "Arrangement 3",
-                        IsTemplate = true,
-                        Extras = "extra5, extra6",
-                        ReferenceImage = "https://th.bing.com/th/id/OIP.woaplxBsaqPj7NiHnaFZPQHaJ4?rs=1&pid=ImgDetMain",
-                        IsAvailable = true
-                    },
-                    new Arrangement
-                    {
-                        
-                        Name = "Arrangement 4",
-                        IsTemplate = false,
-                        Extras = "extra7, extra8",
-                        ReferenceImage = "https://th.bing.com/th/id/OIP.jhDoQH_cNgvyWYy9yH6eKQHaG8?rs=1&pid=ImgDetMain",
-                        IsAvailable = true
-                    }
+                   new Arrangement
+{
+    Name = "Decoración Elegante",
+    IsTemplate = true,
+    Extras = "Envoltura de papel, lazo decorativo",
+    ReferenceImage = "https://tableclothsfactory.com/cdn/shop/products/Royal-Blue-Artificial-Premium-Silk-Blossomed-Rose-Flowers.jpg?crop=center&height=900&v=1705969360&width=900",
+    IsAvailable = true
+},
+new Arrangement
+{
+    Name = "Caja de Sorpresas",
+    IsTemplate = false,
+    Extras = "Caja de regalo, tarjeta personalizada",
+    ReferenceImage = "https://i.pinimg.com/736x/5c/3a/37/5c3a37c36edc7020110f14258cf20b02.jpg",
+    IsAvailable = true
+},
+new Arrangement
+{
+    Name = "Arte Floral",
+    IsTemplate = true,
+    Extras = "Envoltura de celofán, tarjeta de felicitación",
+    ReferenceImage = "https://th.bing.com/th/id/OIP.woaplxBsaqPj7NiHnaFZPQHaJ4?rs=1&pid=ImgDetMain",
+    IsAvailable = true
+},
+new Arrangement
+{
+    Name = "Elegancia Natural",
+    IsTemplate = false,
+    Extras = "Caja de madera, cinta de rafia",
+    ReferenceImage = "https://th.bing.com/th/id/OIP.jhDoQH_cNgvyWYy9yH6eKQHaG8?rs=1&pid=ImgDetMain",
+    IsAvailable = true
+}
+
                 );
             }
             
@@ -251,10 +341,16 @@ public class DatabaseInitializer
             {
                 List<ArrangementType> arrangementTypes = new()
                 {
-                    new ArrangementType { Name = "Arrangement Type 1" },
-                    new ArrangementType { Name = "Arrangement Type 2" },
-                    new ArrangementType { Name = "Arrangement Type 3" },
-                    new ArrangementType { Name = "Arrangement Type 4" }
+                    new ArrangementType { Name = "Ramo de Flores" },
+   new ArrangementType { Name = "Arreglo en Canasta" },
+   new ArrangementType { Name = "Arreglo en Maceta" },
+   new ArrangementType { Name = "Arreglo en Caja" },
+   new ArrangementType { Name = "Bouquet de Novia" },
+   new ArrangementType { Name = "Arreglo Fúnebre" },
+   new ArrangementType { Name = "Arreglo de Cumpleaños" },
+   new ArrangementType { Name = "Arreglo de Aniversario" },
+   new ArrangementType { Name = "Arreglo de Bienvenida" },
+   new ArrangementType { Name = "Arreglo de Agradecimiento" }
                 };
                 _context.ArrangementType.AddRange(arrangementTypes);
             }
@@ -264,54 +360,58 @@ public class DatabaseInitializer
                 List<Order> orders = new()
                 {
                     new Order
-                    {
-                        DeliveryDate = DateTime.Now.AddDays(7),
-                        OrderDate = DateTime.Now,
-                        PaymentStatus = PaymentStatus.Pending,
-                        OrderStatus = OrderStatus.Pending,
-                        Address = "123 Main St",
-                        Description = "Test order",
-                        OrderPrice = 100.0m,
-                        RecipientName = "John Doe",
-                        RecipientCellphoneNumber = "1234567890",
-                        ReferenceImage = "https://picsum.photos/1000?random",
-                    },
-                    new Order {
-                        DeliveryDate = DateTime.Now.AddDays(7),
-                        OrderDate = DateTime.Now,
-                        PaymentStatus = PaymentStatus.Pending,
-                        OrderStatus = OrderStatus.Pending,
-                        Address = "456 Elm St",
-                        Description = "Test order 2",
-                        OrderPrice = 200.0m,
-                        RecipientName = "Jane Doe",
-                        RecipientCellphoneNumber = "0987654321",
-                        ReferenceImage = "https://picsum.photos/1000?random",
-                    },
-                    new Order {
-                        DeliveryDate = DateTime.Now.AddDays(7),
-                        OrderDate = DateTime.Now,
-                        PaymentStatus = PaymentStatus.Pending,
-                        OrderStatus = OrderStatus.Pending,
-                        Address = "789 Oak St",
-                        Description = "Test order 3",
-                        OrderPrice = 300.0m,
-                        RecipientName = "Alice Smith",
-                        RecipientCellphoneNumber = "1357924680",
-                        ReferenceImage = "https://picsum.photos/1000?random",
-                    },
-                    new Order {
-                        DeliveryDate = DateTime.Now.AddDays(7),
-                        OrderDate = DateTime.Now,
-                        PaymentStatus = PaymentStatus.Pending,
-                        OrderStatus = OrderStatus.Pending,
-                        Address = "012 Pine St",
-                        Description = "Test order 4",
-                        OrderPrice = 400.0m,
-                        RecipientName = "Bob Smith",
-                        RecipientCellphoneNumber = "2468135790",
-                        ReferenceImage = "https://picsum.photos/1000?random",
-                    }
+{
+    DeliveryDate = DateTime.Now.AddDays(7),
+    OrderDate = DateTime.Now,
+    PaymentStatus = PaymentStatus.Pending,
+    OrderStatus = OrderStatus.Pending,
+    Address = "123 Calle Principal",
+    Description = "Flores de temporada para decoración de la sala de estar.",
+    OrderPrice = 100.0m,
+    RecipientName = "Juan Pérez",
+    RecipientCellphoneNumber = "1234567890",
+    ReferenceImage = "https://picsum.photos/1000?random",
+},
+new Order
+{
+    DeliveryDate = DateTime.Now.AddDays(7),
+    OrderDate = DateTime.Now,
+    PaymentStatus = PaymentStatus.Pending,
+    OrderStatus = OrderStatus.Pending,
+    Address = "456 Calle Olmo",
+    Description = "Arreglo floral para cumpleaños de un ser querido.",
+    OrderPrice = 200.0m,
+    RecipientName = "Juana Pérez",
+    RecipientCellphoneNumber = "0987654321",
+    ReferenceImage = "https://picsum.photos/1000?random",
+},
+new Order
+{
+    DeliveryDate = DateTime.Now.AddDays(7),
+    OrderDate = DateTime.Now,
+    PaymentStatus = PaymentStatus.Pending,
+    OrderStatus = OrderStatus.Pending,
+    Address = "789 Calle Roble",
+    Description = "Ramo de flores para una boda en el jardín.",
+    OrderPrice = 300.0m,
+    RecipientName = "Ana Gómez",
+    RecipientCellphoneNumber = "1357924680",
+    ReferenceImage = "https://picsum.photos/1000?random",
+},
+new Order
+{
+    DeliveryDate = DateTime.Now.AddDays(7),
+    OrderDate = DateTime.Now,
+    PaymentStatus = PaymentStatus.Pending,
+    OrderStatus = OrderStatus.Pending,
+    Address = "012 Calle Pino",
+    Description = "Arreglo floral para decorar la mesa del comedor.",
+    OrderPrice = 400.0m,
+    RecipientName = "Roberto Gómez",
+    RecipientCellphoneNumber = "2468135790",
+    ReferenceImage = "https://picsum.photos/1000?random"
+}
+
                 };
                 _context.Order.AddRange(orders);
             }
