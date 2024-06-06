@@ -100,6 +100,7 @@ public class OrderDAO : BaseDAO<Order>, IOrderDAO
         existingEntity.OrderPrice = entity.OrderPrice;
         existingEntity.RecipientName = entity.RecipientName;
         existingEntity.RecipientCellphoneNumber = entity.RecipientCellphoneNumber;
+        existingEntity.OrderStatus = entity.OrderStatus;
 
         existingEntity.Arrangement.Clear();
         existingEntity.Responsible.Clear();

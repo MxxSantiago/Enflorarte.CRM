@@ -17,6 +17,7 @@ import { Order } from "../../../../web-api-client.ts";
 import { spinnerConfiguration } from "../../../../core/constants.ts";
 import CreateOrder from "../Weekly/CreateOrder.tsx";
 import { AddIcon } from "@chakra-ui/icons";
+import { toLocalISOString } from "../../../../core/helpers/dates.helper.ts";
 
 const MonthlyOrdersCalendar = ({
   colorMode,
@@ -46,6 +47,10 @@ const MonthlyOrdersCalendar = ({
     cacheKey,
   } = useGetOrdersByPeriod("Month", queryDate);
 
+    useEffect(() => {
+      refetch(true);
+    }, [tagData]);
+
   const ordersByDate:
     | {
         [key: string]: Order[];
@@ -65,7 +70,8 @@ const MonthlyOrdersCalendar = ({
 
   const [selectedDayOrders, setSelectedDayOrders] = useState<Order[]>([]);
 
-  const handleDayClick = (date: string | number) => {
+  const handleDayClick = (date: string) => {
+    setSelectedDay(date);
     const orders = ordersByDate[date] || [];
     setSelectedDayOrders(orders);
   };
@@ -137,16 +143,11 @@ const MonthlyOrdersCalendar = ({
             color={colorMode === "dark" ? "gray.300" : "gray.600"}
           >
             Pedidos -&nbsp;
-            {!isLoadingData && selectedDayOrders.length > 0
-              ? (selectedDayOrders as any)[0].orderDate.toLocaleDateString(
-                  "es-ES",
-                  {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                  }
-                )
-              : "No hay pedidos"}
+            {new Date(selectedDay).toLocaleDateString("es-ES", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+            })}
           </Text>
           <IconButton
             isDisabled={isLoadingData}
@@ -199,7 +200,7 @@ const MonthlyOrdersCalendar = ({
         {!isLoadingData && (
           <CreateOrder
             isOpen={isOpen}
-            date={new Date(selectedDay as any) || new Date()}
+            date={toLocalISOString(queryDate) || toLocalISOString(new Date())}
             onClose={onClose}
             arrangementData={arrangementData}
             responsibleData={responsibleData}

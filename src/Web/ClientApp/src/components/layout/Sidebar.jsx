@@ -17,6 +17,13 @@ import {
 import { UserSessionContext } from "../../core/auth/UserSessionContext.jsx";
 const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
+/**
+ * Sidebar component that displays a navigation menu with buttons based on the provided routes.
+ *
+ * @component
+ * @param {Object[]} routes - An array of route objects.
+ * @returns {JSX.Element} The rendered Sidebar component.
+ */
 const Sidebar = ({ routes }) => {
   const { userHasRole } = useContext(UserSessionContext);
   const location = useLocation();

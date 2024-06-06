@@ -13,7 +13,7 @@ import TagPopoverManager from "./TagPopoverManager";
 import TagPopoverEditor from "./TagPopoverEditor";
 import { useState } from "react";
 
-const TagPopover = ({ colorMode, mode }) => {
+const TagPopover = ({ colorMode, mode, refetchTags }) => {
   const { data: tags, isLoading, refetch } = useGetQuery("tag");
   const [tagToEdit, setTagToEdit] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -45,12 +45,14 @@ const TagPopover = ({ colorMode, mode }) => {
             refetch={refetch}
             tag={tagToEdit}
             setIsEditing={setIsEditing}
+            refetchTags={refetchTags}
           />
         ) : (
           <TagPopoverManager
             tags={tags}
             isLoading={isLoading}
             refetch={refetch}
+            refetchTags={refetchTags}
             setIsEditing={setIsEditing}
             setTagToEdit={setTagToEdit}
           />

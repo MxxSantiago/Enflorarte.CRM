@@ -1,4 +1,7 @@
-﻿const translations = {
+﻿/**
+ * Translations object containing key-value pairs for different translations.
+ */
+const translations = {
   name: "Nombre",
   flowerid: "Flor",
   flower: "Flor",

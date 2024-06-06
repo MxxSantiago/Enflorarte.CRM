@@ -7,6 +7,7 @@ const ArrangementCard = ({
   wrappingVariantData,
   flowerVariantData,
   refetch,
+  arrangementsData,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -61,6 +62,7 @@ const ArrangementCard = ({
         arrangementTypeData={arrangementTypeData}
         wrappingVariantData={wrappingVariantData}
         flowerVariantData={flowerVariantData}
+        arrangementsData={arrangementsData}
       />
     </>
   );

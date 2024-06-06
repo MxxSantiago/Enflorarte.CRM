@@ -26,6 +26,14 @@ import { useContext, useState } from "react";
 import { UserSessionContext } from "../../core/auth/UserSessionContext.jsx";
 const logo = process.env.PUBLIC_URL + "/LogoFloreria.png";
 
+/**
+ * Represents the header component of the application.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.showSidebar - Determines whether the sidebar should be shown.
+ * @returns {JSX.Element} The rendered header component.
+ */
 const Header = ({ showSidebar }) => {
   const { userHasRole } = useContext(UserSessionContext);
   const [imageLoading, setImageLoading] = useState(true);

@@ -7,7 +7,7 @@ import {
   saveChangesText,
 } from "../../../../../core/constants.ts";
 
-const TagPopoverEditor = ({ tag, refetch, setIsEditing }) => {
+const TagPopoverEditor = ({ tag, refetch, setIsEditing, refetchTags }) => {
   const [properties, setProperties] = useState({
     id: tag.id,
     name: tag.name,
@@ -18,6 +18,7 @@ const TagPopoverEditor = ({ tag, refetch, setIsEditing }) => {
 
   useEffect(() => {
     if (isSuccess) {
+      refetchTags();
       refetch();
       setIsEditing(false);
     }

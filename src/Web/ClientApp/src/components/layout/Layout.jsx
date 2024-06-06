@@ -10,6 +10,15 @@ import Sidebar from "./Sidebar";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "../api-authorization/ProtectedRoute.jsx";
 
+/**
+ * Renders the layout component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Array} props.routes - The routes array.
+ * @param {boolean} props.showSidebar - Indicates whether to show the sidebar.
+ * @returns {JSX.Element} The rendered layout component.
+ */
 const Layout = ({ routes, showSidebar }) => (
   <Grid
     gridTemplateColumns={{

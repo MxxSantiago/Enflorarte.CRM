@@ -27,6 +27,6 @@ public class ArrangementValidator : AbstractValidator<Arrangement>
             .MaximumLength(100).WithMessage("La longitud del nombre del arreglo tiene un máximo de 100 caracteres.");
 
         RuleFor(arrangement => arrangement.IsAvailable)
-            .Must(x => x == false || x == true).WithMessage("El valor de 'EstaDisponible' debe ser verdadero o falso.");
+            .Must(x => x == false || x == true).WithMessage("El valor de 'Disponible' debe ser verdadero o falso.");
     }
 }

@@ -1,3 +1,8 @@
+/**
+ * Calculates the appropriate text color based on the given background color.
+ * @param color - The background color in hexadecimal format (e.g., "#000000").
+ * @returns The appropriate text color ("white" or "black").
+ */
 export const getAppropiateTextColor = (color: string = "#000000") => {
   const hex = color.replace("#", "");
   const r = parseInt(hex.slice(0, 2), 16);
