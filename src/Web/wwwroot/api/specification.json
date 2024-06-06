@@ -2622,6 +2622,9 @@
           "email": {
             "type": "string"
           },
+          "password": {
+            "type": "string"
+          },
           "roles": {
             "type": "array",
             "items": {
@@ -2650,7 +2653,8 @@
             "type": "string"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "roles": {
             "type": "array",

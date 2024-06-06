@@ -1,6 +1,6 @@
 ﻿import {useCallback, useState} from "react";
 
-export const useUpdateUser = () => {
+export const useCreateUser = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -12,8 +12,8 @@ export const useUpdateUser = () => {
         setIsSuccess(false);
 
         try {
-            const response = await fetch('/api/Auth/updateUser', {
-                method: 'PUT',
+            const response = await fetch('/api/Auth/createUser', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -22,7 +22,7 @@ export const useUpdateUser = () => {
 
             if (!response.ok) {
                 const errorData = await response.json(); // Obtén la respuesta del error
-                throw new Error(errorData.message || 'Error al crear el usuario'); // Lanza el error
+                throw new Error(errorData.error || 'Error al crear el usuario'); // Lanza el error
             }
             setIsSuccess(true);
         } catch (error) {
@@ -39,3 +39,5 @@ export const useUpdateUser = () => {
 
     return {isLoading, isError, isSuccess, execute, refetch};
 }
+
+export default useCreateUser;

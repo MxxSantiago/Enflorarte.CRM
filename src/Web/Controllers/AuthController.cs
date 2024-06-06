@@ -1,6 +1,8 @@
 ﻿using Enflorarte.CRM.Application.Common.Interfaces;
 using Enflorarte.CRM.Domain.Constants;
 using Enflorarte.CRM.Infrastructure.Identity;
+using Enflorarte.CRM.Web.Controllers.AuthValidator;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +16,9 @@ namespace Enflorarte.CRM.Web.Controllers;
 public class AuthController(
     IUser userInSession,
     UserManager<ApplicationUser> userManager,
-    RoleManager<IdentityRole> roleManager
+    RoleManager<IdentityRole> roleManager,
+    IValidator<AuthController.RegisterCommand> registerCommandValidator,
+    IValidator<AuthController.UpdateCommand> updateCommandValidator
 ) : ControllerBase
 {
     [HttpGet]
@@ -68,7 +72,7 @@ public class AuthController(
             usersDtos.Add(new UserDto(
                 user.Id,
                 user.UserName ?? "Anonymous",
-                user.Email ?? "noemail@noemail.com",
+                user.Email ?? "noemail",
                 roles.ToList()
             ));
         }
@@ -80,13 +84,35 @@ public class AuthController(
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult<UserDto>> UpdateUser(UpdateCommand request)
     {
+        var validationResult = await updateCommandValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
         ApplicationUser? user = await userManager.FindByIdAsync(request.Id);
         if (user is null)
         {
             return NotFound("Usuario no encontrado");
         }
 
-        user.UserName = request.UserName;
+        if(request.Email != user.Email)
+        {
+            await CheckDuplicateEmail(request.Email);
+            user.Email = request.Email;
+        }
+
+        if(request.UserName != user.UserName)
+        {
+            await CheckDuplicateUsername(request.UserName);
+            user.UserName = request.UserName;
+        }
+
+        if (await userManager.CheckPasswordAsync(user, request.Password) )
+        {
+            await userManager.RemovePasswordAsync(user);
+            await userManager.AddPasswordAsync(user, request.Password);
+        }
 
         IdentityResult transactionResult = await userManager.UpdateAsync(user);
         if (!transactionResult.Succeeded)
@@ -138,6 +164,14 @@ public class AuthController(
     [Authorize(Roles = Roles.Administrator)]
     public async Task<ActionResult<UserDto>> Register(RegisterCommand request)
     {
+        var validationResult = await registerCommandValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors[0]);
+        }
+
+        request = request with { Password = char.ToUpper(request.UserName[0]) + request.UserName.Substring(1) + "123!" };
+
         ApplicationUser user = await CreateUser(request);
 
         IdentityResult transactionResult = await userManager.CreateAsync(user, request.Password);
@@ -252,17 +286,27 @@ public class AuthController(
         string Id,
         string UserName,
         string Email,
+        string Password,
         List<string> Roles
     );
 
-    public record RegisterCommand(
+    public record AllUserDto(
+        string Id,
         string Email,
         string UserName,
         string Password,
         List<string> Roles
     );
 
+    public record RegisterCommand(
+        string Email,
+        string UserName,
+        string? Password,
+        List<string> Roles
+    );
+
     public record RemoveRoleToUserCommand(string Id, string Role);
 
     public record AddRoleToUserCommand(string Id, string Role);
+
 }

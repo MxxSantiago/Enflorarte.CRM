@@ -7,27 +7,41 @@ import {
     AlertDialogHeader,
     AlertDialogOverlay,
     Box,
-    useToast,
     Button,
     IconButton,
     Input,
-    useDisclosure
+    useDisclosure,
+    useToast
 } from "@chakra-ui/react";
 import {FaRegEdit} from "react-icons/fa";
-import {AutocompleteMultiSelect, AutocompleteSelect} from "../../../components/shared/AutocompleteSelect.jsx";
-import {cancelChangesText, modifierColorScheme, saveChangesText, saveColorScheme,} from "../../../core/constants.ts";
-import {useUpdateUser} from "../hooks/useUpdateUser.tsx";
+import {AutocompleteMultiSelect} from "../../../components/shared/AutocompleteSelect.jsx";
+import {
+    cancelChangesText,
+    createColorScheme,
+    modifierColorScheme,
+    saveChangesText,
+    saveColorScheme,
+} from "../../../core/constants.ts";
+import useCreateUser from "../hooks/useCreateUser.tsx";
+import {IoMdAdd} from "react-icons/io";
 
-function ModifyUsers({user, refetch, roles}) {
-    const [properties, setProperties] = useState({ ...user });
+const user = {
+    userName: "",
+    email: "",
+    password: "Default123!",
+    roles: [],
+};
+
+function CreateUser({roles, refetch}) {
+    const [properties, setProperties] = useState({...user});
     const toast = useToast();
-    const [selectedItems, setSelectedItems] = useState({ roles: [], });
+    const [selectedItems, setSelectedItems] = useState({roles: [],});
     const {isOpen, onOpen, onClose} = useDisclosure();
     const cancelRef = useRef();
-    const {isLoading, isError, isSuccess, execute} = useUpdateUser();
+    const {isLoading, isError, isSuccess, execute} = useCreateUser();
 
     useEffect(() => {
-        setProperties({ ...user });
+        setProperties({...user});
         setSelectedItems(user.roles || []);
     }, [user]);
 
@@ -64,7 +78,7 @@ function ModifyUsers({user, refetch, roles}) {
         } catch (error) {
             toast({
                 title: "Error",
-                description: `Error al modificar el usuario`,
+                description: `Error al crear el usuario`,
                 position: "bottom-right",
                 status: "error",
                 duration: 9000,
@@ -75,12 +89,14 @@ function ModifyUsers({user, refetch, roles}) {
 
     return (
         <>
-            <IconButton
-                icon={<FaRegEdit/>}
-                colorScheme={modifierColorScheme}
+            <Button
+                colorScheme={createColorScheme}
                 onClick={onOpen}
-                size="sm"
-            />
+                display={{ base: "none", md: "flex" }}
+                marginLeft={"auto"}
+            >
+                Crear usuario
+            </Button>
             <AlertDialog
                 isOpen={isOpen}
                 leastDestructiveRef={cancelRef}
@@ -89,12 +105,12 @@ function ModifyUsers({user, refetch, roles}) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize="xl" fontWeight="bold">
-                            Modificar Usuario '{user.userName}'
+                            Crear usuario
                         </AlertDialogHeader>
                         <AlertDialogBody>
                             <Box width="100%">
                                 <Box mb={2} mt={7} display="flex">
-                                    <label htmlFor="name">Nombre</label>
+                                    <label htmlFor="name">Username</label>
                                 </Box>
                                 <Input
                                     id="name"
@@ -112,13 +128,13 @@ function ModifyUsers({user, refetch, roles}) {
                             </Box>
                             <Box width="100%">
                                 <Box mb={2} mt={7} display="flex">
-                                    <label htmlFor="name">Nuevo email</label>
+                                    <label htmlFor="name">Email</label>
                                 </Box>
                                 <Input
                                     id="name"
                                     size={{base: "md", md: "lg"}}
-                                    width={{base: "100%", md: "400px"}}
                                     type={"email"}
+                                    width={{base: "100%", md: "400px"}}
                                     value={properties.email ?? ""}
                                     onChange={(e) =>
                                         setProperties({
@@ -133,8 +149,8 @@ function ModifyUsers({user, refetch, roles}) {
                                     id="name"
                                     size={{base: "md", md: "lg"}}
                                     type={"password"}
-                                    hidden={true}
                                     width={{base: "100%", md: "400px"}}
+                                    hidden={true}
                                     value={properties.password ?? ""}
                                     onChange={(e) =>
                                         setProperties({
@@ -181,4 +197,4 @@ function ModifyUsers({user, refetch, roles}) {
     );
 }
 
-export default ModifyUsers;
+export default CreateUser;
