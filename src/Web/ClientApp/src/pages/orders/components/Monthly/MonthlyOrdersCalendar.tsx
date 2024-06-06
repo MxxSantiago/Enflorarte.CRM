@@ -47,6 +47,10 @@ const MonthlyOrdersCalendar = ({
     cacheKey,
   } = useGetOrdersByPeriod("Month", queryDate);
 
+    useEffect(() => {
+      refetch(true);
+    }, [tagData]);
+
   const ordersByDate:
     | {
         [key: string]: Order[];
