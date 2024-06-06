@@ -53,6 +53,26 @@ function UpdateArrangement({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
 
+  useEffect(() => {
+    if (isOpenUpdate) {
+      setProperties({ ...arrangement });
+      setSelectedItems({
+        arrangementTypes: arrangement.arrangementTypes.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+        wrapperVariants: arrangement.wrapperVariants.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+        flowerVariants: arrangement.flowerVariants.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+      });
+    }
+  }, [isOpenUpdate]);
+
   const [selectedItems, setSelectedItems] = useState({
     arrangementTypes: arrangement.arrangementTypes.map((item) => ({
       value: item.id,
